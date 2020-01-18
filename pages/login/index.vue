@@ -2,6 +2,7 @@
   <div class="login">
     <button
       class="absolute flex items-center bg-blue-800 w-4/6 justify-center py-2 rounded-full max-w-xl shadow-xl hover:bg-blue-700 lg:w-1/2"
+      @click="login"
     >
       <span class="mr-2 uppercase text-white">Log In</span>
       <span>
@@ -15,6 +16,11 @@
 export default {
   head: {
     title: 'Log In'
+  },
+  methods: {
+    login() {
+      this.$auth.loginWith('facebook')
+    }
   }
 }
 </script>

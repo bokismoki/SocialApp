@@ -9,7 +9,7 @@
           <h1 class="uppercase text-2xl">Social App</h1>
         </div>
       </nuxt-link>
-      <div v-if="!loggedIn">
+      <div v-if="!$auth.loggedIn">
         <nuxt-link :to="{name: 'login'}">
           <div class="flex items-center">
             <img class="w-8 lg:mr-2" src="~/assets/img/login.svg" alt="White login icon" />
@@ -33,7 +33,7 @@
           @click="isDropdownMenuOpen = !isDropdownMenuOpen"
         />
       </div>
-      <div v-if="loggedIn" class="hidden sm:flex items-center">
+      <div v-if="$auth.loggedIn" class="hidden sm:flex items-center">
         <div class="lg:mr-10">
           <nuxt-link :to="{name: 'index'}">
             <div class="flex items-center">
@@ -70,14 +70,14 @@
             </div>
           </nuxt-link>
         </div>
-        <div class="flex items-center lg:mr-10 cursor-pointer opacity-50">
+        <div class="flex items-center lg:mr-10 cursor-pointer opacity-50" @click="logout">
           <img class="w-8 lg:mr-2" src="~/assets/img/logout.svg" alt="White logout icon" />
           <span class="hidden lg:inline text-sm uppercase">Logout</span>
         </div>
       </div>
     </div>
     <div class="sm:hidden">
-      <DropdownMenu v-if="isDropdownMenuOpen && loggedIn" />
+      <DropdownMenu @logout="logout" v-if="isDropdownMenuOpen && $auth.loggedIn" />
     </div>
   </nav>
 </template>
@@ -90,8 +90,13 @@ export default {
   },
   data() {
     return {
-      isDropdownMenuOpen: false,
-      loggedIn: false
+      isDropdownMenuOpen: false
+    }
+  },
+  methods: {
+    async logout() {
+      await this.$auth.logout()
+      this.$router.push({ name: 'login' })
     }
   }
 }

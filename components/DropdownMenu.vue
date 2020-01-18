@@ -33,7 +33,7 @@
       </nuxt-link>
     </li>
     <li class="p-2 bg-blue-700">
-      <div class="flex items-center cursor-pointer opacity-50">
+      <div @click="$emit('logout')" class="flex items-center cursor-pointer opacity-50">
         <img class="w-8 mr-5" src="~/assets/img/logout.svg" alt="White logout icon" />
         <span class="text-white uppercase">Logout</span>
       </div>
