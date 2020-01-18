@@ -91,7 +91,7 @@ export default {
   data() {
     return {
       isDropdownMenuOpen: false,
-      loggedIn: true
+      loggedIn: false
     }
   }
 }
