@@ -17,8 +17,8 @@ export default {
 *,
 *:before,
 *:after {
-  margin: 0;
-  padding: 0;
+  @apply m-0;
+  @apply p-0;
   box-sizing: border-box;
 }
 body {
