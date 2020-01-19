@@ -41,3 +41,6 @@ start()
 
 const userRoutes = require('./routes/user')
 app.use('/api/user', userRoutes)
+
+const postRoutes = require('./routes/post')
+app.use('/api/post', postRoutes)

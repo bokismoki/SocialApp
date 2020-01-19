@@ -24,5 +24,6 @@ export default {
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   scroll-behavior: smooth;
+  @apply bg-blue-100;
 }
 </style>
