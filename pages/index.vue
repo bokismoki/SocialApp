@@ -6,7 +6,8 @@
 export default {
   head: {
     title: 'Home'
-  }
+  },
+  middleware: 'auth'
 }
 </script>
 

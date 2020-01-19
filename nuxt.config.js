@@ -62,6 +62,7 @@ module.exports = {
     }
   },
   axios: {
+    baseURL: 'http://localhost:3000/api'
   },
   /*
   ** Build configuration

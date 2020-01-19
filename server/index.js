@@ -1,7 +1,13 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
+const bodyParser = require('body-parser')
 const app = express()
+
+require('./db/mysql')
+
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
+app.use(express.json({ limit: '50mb' }))
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -32,3 +38,6 @@ async function start () {
   })
 }
 start()
+
+const userRoutes = require('./routes/user')
+app.use('/api/user', userRoutes)
