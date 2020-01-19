@@ -3,7 +3,7 @@
     <div class="container mx-auto">
       <div
         class="relative h-40 max-w-5xl mx-auto"
-        :style="{'background': `url(${profile_background}) center/cover no-repeat`}"
+        :style="{'background': `url(${profileBackground}) center/cover no-repeat`}"
       >
         <img
           class="profile_image absolute w-32 h-32 rounded-full border-4"
@@ -13,9 +13,9 @@
       </div>
       <div class="py-16 px-5 max-w-5xl mx-auto">
         <h1
-          class="text-gray-800 uppercase font-black text-3xl"
+          class="text-gray-800 uppercase font-black text-3xl leading-none"
         >{{user.first_name}} {{user.last_name}}</h1>
-        <div class="flex items-end">
+        <div class="flex items-end mt-1">
           <img class="w-4 mr-1" src="~/assets/img/email.svg" alt />
           <h3 class="text-gray-800 text-xs font-semibold">{{user.email}}</h3>
         </div>
@@ -41,11 +41,11 @@
                 </div>
               </div>
             </div>
-            <form>
+            <form @submit.prevent="post">
               <textarea
                 class="px-2 py-1 mt-2 placeholder-black w-full"
                 placeholder="What's on your mind?"
-                v-model="body_text"
+                v-model="bodyText"
               ></textarea>
               <div class="flex items-center justify-end my-3">
                 <span class="mr-2 uppercase text-xs font-semibold">Share globally:</span>
@@ -57,12 +57,15 @@
                   @click="isPrivate = !isPrivate"
                 />
               </div>
-              <div v-if="containsImage">
-                <input class="hidden" type="file" id="file" />
+              <div class="flex items-start" v-if="containsImage">
+                <input class="hidden" type="file" id="file" @change="processFile" />
                 <label
-                  class="bg-gray-800 text-white rounded-full cursor-pointer uppercase text-xs px-2 py-1 inline-block hover:bg-gray-700"
+                  class="bg-gray-800 text-white rounded-full cursor-pointer uppercase text-xs px-2 py-1 inline-block mr-3 hover:bg-gray-700"
                   for="file"
                 >Add image</label>
+                <div v-if="bodyImage">
+                  <img class="body_image w-32" :src="bodyImage" alt="Body_image" />
+                </div>
               </div>
               <button
                 class="uppercase text-sm bg-blue-600 w-full text-white mt-2 font-semibold tracking-wide py-1 rounded-full hover:bg-blue-500"
@@ -70,8 +73,9 @@
               >Post</button>
             </form>
           </div>
-          <div class="mt-20 lg:w-2/3 lg:mt-0">
+          <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
+            <h1 v-if="posts.length === 0">No posts to display, please add one.</h1>
             <div v-for="post in posts" :key="post.id">
               <PostItem :post="post" :user="user" />
             </div>
@@ -93,10 +97,59 @@ export default {
   },
   data() {
     return {
-      profile_background: require('~/assets/img/profile_background.jpg'),
-      body_text: '',
+      profileBackground: require('~/assets/img/profile_background.jpg'),
+      bodyText: '',
       containsImage: false,
+      bodyImage: '',
       isPrivate: false
+    }
+  },
+  methods: {
+    processFile(e) {
+      const img = document.querySelector('.body_image')
+      const file = e.target.files[0]
+
+      const reader = new FileReader()
+
+      reader.addEventListener('load', () => {
+        this.bodyImage = reader.result
+      })
+
+      if (file.type.includes('image')) {
+        reader.readAsDataURL(file)
+      } else {
+        console.error('Please select the right image format!')
+        this.bodyImage = ''
+      }
+    },
+    post() {
+      if (this.bodyText) {
+        this.$axios
+          .post(
+            '/post/add',
+            {
+              body_text: this.bodyText,
+              body_image: this.bodyImage,
+              is_private: Number(this.isPrivate),
+              user_id: this.$auth.user.id
+            },
+            {
+              headers: {
+                'content-type': 'application/json'
+              }
+            }
+          )
+          .then(response => {
+            this.posts.unshift(response.data.post)
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }
+      this.bodyText = ''
+      this.bodyImage = ''
+      this.isPrivate = false
+      this.containsImage = false
     }
   },
   async asyncData({ $axios, $auth }) {

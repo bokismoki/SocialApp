@@ -1,12 +1,16 @@
 <template>
-  <div class="post_item mb-10 border-2 border-gray-300 rounded-lg p-5">
+  <div class="post_item mb-10 border-2 border-gray-300 rounded-lg p-5 bg-white">
     <div class="relative">
       <div class="flex items-center">
-        <img class="rounded-full mr-2" :src="user.image" alt="My Facebook profile image" />
+        <img
+          class="rounded-full mr-2 border-2 border-blue-300"
+          :src="user.image"
+          alt="My Facebook profile image"
+        />
         <div>
           <h1 class="font-semibold">{{user.first_name}} {{user.last_name}}</h1>
           <div class="flex items-center">
-            <p class="font-semibold text-xs mr-2">{{post.post_created_at}}</p>
+            <p class="font-semibold text-xs mr-2">{{formatDate(post.created_at)}}</p>
             <img
               class="w-4"
               src="~/assets/img/network.svg"
@@ -23,7 +27,7 @@
       />
     </div>
     <p class="mt-3">{{truncate(post.body_text)}}</p>
-    <img class="mt-2" :src="post.body_image" alt="Post image" />
+    <img v-if="post.body_image" class="mt-2" :src="post.body_image" alt="Post image" />
   </div>
 </template>
 
@@ -37,6 +41,9 @@ export default {
         return text.substring(0, 100) + '...'
       }
       return text
+    },
+    formatDate(date) {
+      return date.substring(0, 10)
     }
   }
 }
