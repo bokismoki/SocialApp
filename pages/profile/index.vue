@@ -21,7 +21,7 @@
         </div>
         <div class="lg:flex lg:items-start lg:mt-10">
           <div class="lg:w-1/3 lg:mr-10">
-            <Form @newPost="newPost" />
+            <NewPostForm @newPost="newPost" />
           </div>
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
@@ -43,7 +43,7 @@ export default {
   },
   middleware: 'auth',
   components: {
-    Form: () => import('~/components/Form'),
+    NewPostForm: () => import('~/components/NewPostForm'),
     PostItem: () => import('~/components/PostItem')
   },
   data() {

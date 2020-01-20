@@ -3,7 +3,7 @@
     <div class="container mx-auto pt-5 pb-16 px-5 max-w-5xl">
       <div class="lg:flex">
         <div class="lg:mr-10 lg:w-1/3 lg:mt-6">
-          <Form @newPost="newPost" />
+          <NewPostForm @newPost="newPost" />
         </div>
         <div class="mt-20 lg:mt-0 lg:w-2/3">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Public Posts</h1>
@@ -23,7 +23,7 @@ export default {
   },
   middleware: 'auth',
   components: {
-    Form: () => import('~/components/Form'),
+    NewPostForm: () => import('~/components/NewPostForm'),
     PostItem: () => import('~/components/PostItem')
   },
   methods: {
