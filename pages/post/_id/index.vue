@@ -35,11 +35,13 @@ export default {
       this.comments.unshift(payload)
     }
   },
-  async asyncData({ $axios, params, redirect }) {
+  async asyncData({ $axios, $auth, params, redirect }) {
     try {
       const postAndComments = await $axios.get(`/post/by_id/${params.id}`)
-      if (postAndComments.data.response[0].post.is_private === 1) {
-        return redirect({ name: 'index' })
+      if ($auth.user.id !== postAndComments.data.response[0].post.user_id) {
+        if (postAndComments.data.response[0].post.is_private === 1) {
+          return redirect({ name: 'index' })
+        }
       }
       return {
         post: postAndComments.data.response[0].post,

@@ -35,17 +35,33 @@
         class="absolute top-0 right-0 w-5 cursor-pointer"
         src="~/assets/img/edit.svg"
         alt="Three dots icon"
+        @click="toggleOptionsModal"
       />
+      <div
+        class="options_modal absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
+      >
+        <nuxt-link
+          :to="{name: 'post-id', params: {id: post.post_id}}"
+          class="w-full uppercase text-xs font-semibold px-2 py-1"
+        >View Post</nuxt-link>
+        <div v-if="displayEdit" class="w-full uppercase text-xs font-semibold px-2 py-1">Edit</div>
+      </div>
     </div>
     <p class="mt-3">{{truncate(post.body_text)}}</p>
     <img v-if="post.body_image" class="mt-2" :src="post.body_image" alt="Post image" />
     <div class="flex mt-3">
-      <button class="bg-blue-200 rounded-lg mr-1 px-2 py-1 flex justify-center b">
+      <nuxt-link
+        :to="{name: 'post-id', params: {id: post.post_id}}"
+        class="bg-blue-200 rounded-lg mr-1 px-2 py-1 flex justify-center b"
+      >
         <img class="w-4" src="~/assets/img/like.svg" alt="Gray like icon" />
-      </button>
-      <button class="bg-blue-200 rounded-lg px-2 py-1 flex justify-center b">
+      </nuxt-link>
+      <nuxt-link
+        :to="{name: 'post-id', params: {id: post.post_id}}"
+        class="bg-blue-200 rounded-lg px-2 py-1 flex justify-center b"
+      >
         <img class="w-4" src="~/assets/img/comments.svg" alt="Gray comments icon" />
-      </button>
+      </nuxt-link>
     </div>
   </div>
 </template>
@@ -54,6 +70,15 @@
 export default {
   name: 'PostItem',
   props: ['post', 'user'],
+  computed: {
+    displayEdit() {
+      if (this.$route.name !== 'profile') {
+        return this.$auth.user.id === this.post.user_id
+      } else {
+        return true
+      }
+    }
+  },
   methods: {
     truncate(text) {
       if (text) {
@@ -66,6 +91,14 @@ export default {
     formatDate(date) {
       if (date) {
         return date.substring(0, 10)
+      }
+    },
+    toggleOptionsModal(e) {
+      const optionModal = e.target.nextElementSibling
+      if (optionModal.classList.contains('hidden')) {
+        optionModal.classList.remove('hidden')
+      } else {
+        optionModal.classList.add('hidden')
       }
     }
   }

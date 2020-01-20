@@ -2,7 +2,7 @@ const sql = require('../db/mysql')
 
 exports.getByUser = (req, res) => {
     const user_id = req.params.id
-    const queryCheckForPost = `SELECT id, body_text, body_image, created_at, is_private
+    const queryCheckForPost = `SELECT id AS post_id, body_text, body_image, created_at, is_private
     FROM posts WHERE user_id = '${user_id}'
     ORDER BY created_at DESC`
     sql.query(queryCheckForPost, (err, result) => {
@@ -44,8 +44,8 @@ exports.getById = (req, res) => {
 }
 
 exports.getPublic = (req, res) => {
-    const queryGetPublicPosts = `SELECT posts.id, posts.body_text, posts.body_image, posts.created_at,
-    posts.is_private, users.first_name, users.last_name, users.image
+    const queryGetPublicPosts = `SELECT posts.id AS post_id, posts.body_text, posts.body_image, 
+    posts.created_at, posts.is_private, users.id AS user_id, users.first_name, users.last_name, users.image
     FROM posts JOIN users ON users.id = posts.user_id
     WHERE posts.is_private = 0
     ORDER BY posts.created_at DESC`
