@@ -9,9 +9,22 @@ exports.getByUser = (req, res) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryCheckForPost' })
         } else {
-            if (result.length > 0) {
-                res.send({ success: true, posts: result })
-            }
+            res.send({ success: true, posts: result })
+        }
+    })
+}
+
+exports.getPublic = (req, res) => {
+    const queryGetPublicPosts = `SELECT posts.id, posts.body_text, posts.body_image, posts.created_at,
+    posts.is_private, users.first_name, users.last_name, users.image
+    FROM posts JOIN users ON users.id = posts.user_id
+    WHERE posts.is_private = 0
+    ORDER BY posts.created_at DESC`
+    sql.query(queryGetPublicPosts, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetPublicPosts' })
+        } else {
+            res.send({ success: true, posts: result })
         }
     })
 }
@@ -26,7 +39,7 @@ exports.add = (req, res) => {
         } else {
             const id = result.insertId
             const queryGetNewPost = `SELECT id, body_text, body_image, created_at, is_private
-            FROM posts WHERE id = '${id}'`
+            FROM posts WHERE id = ${id}`
             sql.query(queryGetNewPost, (err, result) => {
                 if (err) {
                     res.send({ success: false, msg: 'Error on queryGetNewPost' })
