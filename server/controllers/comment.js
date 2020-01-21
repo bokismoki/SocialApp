@@ -23,3 +23,19 @@ exports.add = (req, res) => {
         }
     })
 }
+
+exports.getById = (req, res) => {
+    const post_id = req.params.id
+    const queryCheckForComments = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
+    users.id AS user_id, users.first_name, users.last_name, users.image
+    FROM comments JOIN users ON comments.user_id = users.id
+    WHERE comments.post_id = ${post_id}
+    ORDER BY comments.created_at DESC`
+    sql.query(queryCheckForComments, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryCheckForComments' })
+        } else {
+            res.send({ comments: result })
+        }
+    })
+}

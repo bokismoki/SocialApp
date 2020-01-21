@@ -16,29 +16,15 @@ exports.getByUser = (req, res) => {
 
 exports.getById = (req, res) => {
     const post_id = req.params.id
-    const response = []
     const queryCheckForPost = `SELECT posts.id AS post_id, posts.body_text, posts.body_image, posts.created_at,
     posts.is_private, users.id AS user_id, users.first_name, users.last_name, users.image
     FROM posts JOIN users ON posts.user_id = users.id
     WHERE posts.id = ${post_id}`
-    const queryCheckForComments = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
-    users.id AS user_id, users.first_name, users.last_name, users.image
-    FROM comments JOIN users ON comments.user_id = users.id
-    WHERE comments.post_id = ${post_id}
-    ORDER BY comments.created_at DESC`
     sql.query(queryCheckForPost, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryCheckForPost' })
         } else {
-            response.push({ post: result[0] })
-            sql.query(queryCheckForComments, (err, result) => {
-                if (err) {
-                    res.send({ success: false, msg: 'Error on queryCheckForComments' })
-                } else {
-                    response.push({ comments: result })
-                    res.send({ success: true, response })
-                }
-            })
+            res.send({ post: result[0] })
         }
     })
 }
