@@ -53,18 +53,30 @@
     </div>
     <p class="mt-3">{{truncate(post.body_text)}}</p>
     <img v-if="post.body_image" class="mt-2" :src="post.body_image" alt="Post image" />
-    <div class="flex mt-3">
+    <div class="flex mt-5">
       <nuxt-link
         :to="{name: 'post-id', params: {id: post.post_id}}"
-        class="bg-blue-200 rounded-lg mr-1 px-2 py-1 flex justify-center b"
+        class="bg-blue-200 rounded-lg mr-4 px-2 py-1 flex justify-center"
       >
-        <img class="w-4" src="~/assets/img/like.svg" alt="Gray like icon" />
+        <div class="relative">
+          <div
+            class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
+            v-if="$route.name === 'post-id'"
+          >{{likes_count}}</div>
+          <img class="w-4" src="~/assets/img/like.svg" alt="Gray like icon" />
+        </div>
       </nuxt-link>
       <nuxt-link
         :to="{name: 'post-id', params: {id: post.post_id}}"
-        class="bg-blue-200 rounded-lg px-2 py-1 flex justify-center b"
+        class="bg-blue-200 rounded-lg px-2 py-1 flex justify-center"
       >
-        <img class="w-4" src="~/assets/img/comments.svg" alt="Gray comments icon" />
+        <div class="relative">
+          <div
+            class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
+            v-if="$route.name === 'post-id'"
+          >1</div>
+          <img class="w-4" src="~/assets/img/comments.svg" alt="Gray comments icon" />
+        </div>
       </nuxt-link>
     </div>
   </div>
@@ -73,7 +85,7 @@
 <script>
 export default {
   name: 'PostItem',
-  props: ['post', 'user'],
+  props: ['post', 'user', 'likes_count'],
   computed: {
     displayEdit() {
       if (this.$route.name !== 'profile') {
@@ -119,4 +131,8 @@ export default {
 </script>
 
 <style scoped>
+.count {
+  top: -80%;
+  right: -100%;
+}
 </style>

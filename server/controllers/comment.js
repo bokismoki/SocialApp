@@ -35,7 +35,7 @@ exports.getById = (req, res) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryCheckForComments' })
         } else {
-            res.send({ comments: result })
+            res.send({ success: true, comments: result })
         }
     })
 }

@@ -24,7 +24,7 @@ exports.getById = (req, res) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryCheckForPost' })
         } else {
-            res.send({ post: result[0] })
+            res.send({ success: true, post: result[0] })
         }
     })
 }
