@@ -58,7 +58,7 @@
         :to="{name: 'post-id', params: {id: post.post_id}}"
         class="bg-blue-200 rounded-lg mr-4 px-2 py-1 flex justify-center"
       >
-        <div class="relative" @click="like">
+        <div class="relative" @click="likeDislike">
           <div
             class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
             v-if="$route.name === 'post-id'"
@@ -126,7 +126,7 @@ export default {
         optionModal.classList.add('hidden')
       }
     },
-    like() {
+    likeDislike() {
       if (this.$route.name === 'post-id') {
         this.$axios
           .post(
