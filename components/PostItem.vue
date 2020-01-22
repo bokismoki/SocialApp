@@ -58,7 +58,7 @@
         :to="{name: 'post-id', params: {id: post.post_id}}"
         class="bg-blue-200 rounded-lg mr-4 px-2 py-1 flex justify-center"
       >
-        <div class="relative">
+        <div class="relative" @click="like">
           <div
             class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
             v-if="$route.name === 'post-id'"
@@ -124,6 +124,31 @@ export default {
         optionModal.classList.remove('hidden')
       } else {
         optionModal.classList.add('hidden')
+      }
+    },
+    like() {
+      if (this.$route.name === 'post-id') {
+        this.$axios
+          .post(
+            '/like/set',
+            { post_id: this.$route.params.id, user_id: this.$auth.user.id },
+            {
+              headers: {
+                'content-type': 'application/json'
+              }
+            }
+          )
+          .then(response => {
+            const { liked, disliked } = response.data
+            if (liked) {
+              this.$emit('liked')
+            } else if (disliked) {
+              this.$emit('disliked')
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
       }
     }
   }

@@ -1,7 +1,13 @@
 <template>
   <div class="post">
     <div class="container mx-auto pt-5 pb-16 px-5 lg:max-w-3xl">
-      <PostItem :post="post" :likes_count="likes_count" :comments_count="comments.length" />
+      <PostItem
+        :post="post"
+        :likes_count="likes_count"
+        :comments_count="comments.length"
+        @liked="liked"
+        @disliked="disliked"
+      />
       <div class="max-w-lg">
         <div v-if="$auth.user.id !== post.user_id">
           <CommentForm @newComment="comment" />
@@ -33,6 +39,12 @@ export default {
   methods: {
     comment(payload) {
       this.comments.unshift(payload)
+    },
+    liked() {
+      this.likes_count++
+    },
+    disliked() {
+      this.likes_count--
     }
   },
   async asyncData({ $axios, $auth, params, redirect }) {
