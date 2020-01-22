@@ -42,7 +42,7 @@
         @click="toggleOptionsModal"
       />
       <div
-        class="options_modal absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
+        class="absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
       >
         <nuxt-link
           :to="{name: 'post-id', params: {id: post.post_id}}"
@@ -51,7 +51,8 @@
         <div v-if="displayEdit" class="w-full uppercase text-xs font-semibold px-2 py-1">Edit</div>
       </div>
     </div>
-    <p class="mt-3">{{truncate(post.body_text)}}</p>
+    <p v-if="$route.name !== 'post-id'" class="mt-3">{{truncate(post.body_text)}}</p>
+    <p v-else class="mt-3">{{post.body_text}}</p>
     <img v-if="post.body_image" class="mt-2" :src="post.body_image" alt="Post image" />
     <div class="flex mt-5">
       <nuxt-link

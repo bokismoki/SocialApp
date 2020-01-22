@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <p class="mt-3">{{truncate(comment.body_text)}}</p>
+      <p class="mt-3">{{comment.body_text}}</p>
     </div>
   </div>
 </template>
@@ -28,14 +28,6 @@ export default {
   name: 'CommentItem',
   props: ['comment'],
   methods: {
-    truncate(text) {
-      if (text) {
-        if (text.length >= 100) {
-          return text.substring(0, 100) + '...'
-        }
-        return text
-      }
-    },
     formatDate(date) {
       if (date) {
         return date.substring(0, 10)

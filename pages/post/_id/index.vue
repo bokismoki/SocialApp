@@ -14,7 +14,8 @@
         </div>
         <div class="mt-10">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Comments</h1>
-          <div v-for="comment in comments" :key="comment.comment_id">
+          <p v-if="comments.length === 0">No comments to display</p>
+          <div v-else v-for="comment in comments" :key="comment.comment_id">
             <CommentItem :comment="comment" />
           </div>
         </div>
@@ -27,7 +28,7 @@
 export default {
   head() {
     return {
-      title: `Post: ${this.post.post_id}`
+      title: `Post ${this.post.post_id}`
     }
   },
   middleware: 'auth',
