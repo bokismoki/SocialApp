@@ -74,7 +74,7 @@
           <div
             class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
             v-if="$route.name === 'post-id'"
-          >1</div>
+          >{{comments_count}}</div>
           <img class="w-4" src="~/assets/img/comments.svg" alt="Gray comments icon" />
         </div>
       </nuxt-link>
@@ -85,7 +85,7 @@
 <script>
 export default {
   name: 'PostItem',
-  props: ['post', 'user', 'likes_count'],
+  props: ['post', 'user', 'likes_count', 'comments_count'],
   computed: {
     displayEdit() {
       if (this.$route.name !== 'profile') {

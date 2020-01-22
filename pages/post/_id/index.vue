@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <div class="container mx-auto pt-5 pb-16 px-5 lg:max-w-3xl">
-      <PostItem :post="post" :likes_count="likes_count" />
+      <PostItem :post="post" :likes_count="likes_count" :comments_count="comments.length" />
       <div class="max-w-lg">
         <div v-if="$auth.user.id !== post.user_id">
           <CommentForm @newComment="comment" />
@@ -38,7 +38,7 @@ export default {
   async asyncData({ $axios, $auth, params, redirect }) {
     try {
       const post = await $axios.get(`/post/by_id/${params.id}`)
-      const comments = await $axios.get(`/comment/by_id/${params.id}`)
+      const comments = await $axios.get(`/comment/by_post/${params.id}`)
       const likes = await $axios.get(`/like/by_post/${post.data.post.post_id}`)
       if ($auth.user.id !== post.data.post.user_id) {
         if (post.data.post.is_private === 1) {
