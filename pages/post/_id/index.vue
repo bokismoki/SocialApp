@@ -14,7 +14,7 @@
         </div>
         <div class="mt-10">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Comments</h1>
-          <p v-if="comments.length === 0">No comments to display</p>
+          <p v-if="comments.length === 0">No comments to display.</p>
           <div v-else v-for="comment in comments" :key="comment.comment_id">
             <CommentItem :comment="comment" />
           </div>

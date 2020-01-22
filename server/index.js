@@ -50,3 +50,6 @@ app.use('/api/comment', commentRoutes)
 
 const likeRoutes = require('./routes/like')
 app.use('/api/like', likeRoutes)
+
+const followRoutes = require('./routes/follow')
+app.use('/api/follow', followRoutes)

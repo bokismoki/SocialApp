@@ -41,6 +41,7 @@ export default {
           )
           .then(response => {
             this.$emit('newComment', response.data.comment)
+            this.bodyText = ''
           })
           .catch(err => {
             console.error(err)
