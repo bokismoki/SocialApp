@@ -2,9 +2,9 @@ const router = require('express').Router()
 
 const commentController = require('../controllers/comment')
 
-router.post('/add', commentController.add)
+router.get('/get/by_post/:id', commentController.getByPost)
 
-router.get('/by_post/:id', commentController.getById)
+router.post('/add', commentController.add)
 
 router.delete('/delete/:id', commentController.delete)
 

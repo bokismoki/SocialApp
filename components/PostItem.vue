@@ -42,7 +42,7 @@
         @click="toggleOptionsModal"
       />
       <div
-        class="absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
+        class="options_modal absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
       >
         <nuxt-link
           :to="{name: 'post-id', params: {id: post.post_id}}"
@@ -91,7 +91,7 @@
 <script>
 export default {
   name: 'PostItem',
-  props: ['post', 'user', 'likes_count', 'comments_count'],
+  props: ['post', 'user', 'likes_count', 'comments_count', 'index'],
   computed: {
     displayEdit() {
       if (this.$route.name !== 'profile') {
@@ -157,10 +157,21 @@ export default {
           })
       }
     },
-    deletePost() {
-      this.$axios.delete(`/post/delete/${this.post.post_id}`).catch(err => {
-        console.error(err)
-      })
+    deletePost(e) {
+      this.$axios
+        .delete(`/post/delete/${this.post.post_id}`)
+        .then(response => {
+          if (this.$route.name === 'post-id') {
+            this.$router.push({ name: 'index' })
+          } else {
+            this.$emit('deletePost', this.index)
+            const optionsModals = document.querySelectorAll('.options_modal')
+            optionsModals.forEach(modal => modal.classList.add('hidden'))
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }

@@ -30,7 +30,10 @@
         class="absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
       >
         <div class="w-full uppercase text-xs font-semibold px-2 py-1">Edit</div>
-        <button class="w-full uppercase text-xs font-semibold px-2 py-1" @click="deleteComment">Delete</button>
+        <button
+          class="w-full uppercase text-xs font-semibold px-2 py-1"
+          @click="deleteComment"
+        >Delete</button>
       </div>
     </div>
   </div>
@@ -39,7 +42,7 @@
 <script>
 export default {
   name: 'CommentItem',
-  props: ['comment'],
+  props: ['comment', 'index'],
   computed: {
     displayEdit() {
       return this.comment.user_id === this.$auth.user.id
@@ -62,6 +65,9 @@ export default {
     deleteComment() {
       this.$axios
         .delete(`/comment/delete/${this.comment.comment_id}`)
+        .then(response => {
+          this.$emit('deleteComment', this.index)
+        })
         .catch(err => {
           console.error(err)
         })

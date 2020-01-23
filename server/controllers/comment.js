@@ -2,11 +2,11 @@ const sql = require('../db/mysql')
 
 exports.add = (req, res) => {
     const { body_text, post_id, user_id } = req.body
-    const queryAddNewComment = `INSERT INTO comments (body_text, post_id, user_id)
+    const queryAddComment = `INSERT INTO comments (body_text, post_id, user_id)
     VALUES ('${body_text}', ${post_id}, '${user_id}')`
-    sql.query(queryAddNewComment, (err, result) => {
+    sql.query(queryAddComment, (err, result) => {
         if (err) {
-            res.send({ success: false, msg: 'Error on queryAddNewComment' })
+            res.send({ success: false, msg: 'Error on queryAddComment' })
         } else {
             const id = result.insertId
             const queryGetNewComment = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
@@ -24,16 +24,16 @@ exports.add = (req, res) => {
     })
 }
 
-exports.getById = (req, res) => {
+exports.getByPost = (req, res) => {
     const post_id = req.params.id
-    const queryCheckForComments = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
+    const queryGetComments = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
     users.id AS user_id, users.first_name, users.last_name, users.image
     FROM comments JOIN users ON comments.user_id = users.id
     WHERE comments.post_id = ${post_id}
     ORDER BY comments.created_at DESC`
-    sql.query(queryCheckForComments, (err, result) => {
+    sql.query(queryGetComments, (err, result) => {
         if (err) {
-            res.send({ success: false, msg: 'Error on queryCheckForComments' })
+            res.send({ success: false, msg: 'Error on queryGetComments' })
         } else {
             res.send({ success: true, comments: result })
         }

@@ -86,13 +86,13 @@ export default {
   async asyncData({ $axios, $auth, redirect, params }) {
     try {
       const user = await $axios.get(`/user/get/${params.id}`)
-      const isFollowing = await $axios.get(
-        `/follow/by_user/${user.data.user.id}/${$auth.user.id}`
-      )
       if (user.data.user.id === $auth.user.id) {
         redirect({ name: 'profile' })
       } else {
-        const posts = await $axios.get(`/post/by_user/${user.data.user.id}`)
+        const isFollowing = await $axios.get(
+          `/follow/get/by_user/${user.data.user.id}/${$auth.user.id}`
+        )
+        const posts = await $axios.get(`/post/get/by_user/${user.data.user.id}`)
         const publicPosts = posts.data.posts.filter(
           post => post.is_private === 0
         )

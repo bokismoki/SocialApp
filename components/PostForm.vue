@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <form @submit.prevent="post">
+    <form @submit.prevent="newPost">
       <textarea
         class="px-2 py-1 mt-2 placeholder-black w-full"
         placeholder="What's on your mind?"
@@ -83,7 +83,7 @@ export default {
         this.bodyImage = ''
       }
     },
-    post() {
+    newPost() {
       if (this.bodyText) {
         this.$axios
           .post(

@@ -1,6 +1,6 @@
 <template>
   <div class="comment_form">
-    <form @submit.prevent="comment">
+    <form @submit.prevent="newComment">
       <textarea
         class="px-2 py-1 placeholder-black w-full"
         placeholder="Write a comment"
@@ -23,7 +23,7 @@ export default {
     }
   },
   methods: {
-    comment() {
+    newComment() {
       if (this.bodyText) {
         this.$axios
           .post(

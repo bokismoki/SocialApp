@@ -21,13 +21,13 @@
         </div>
         <div class="lg:flex lg:items-start lg:mt-10">
           <div class="lg:w-1/3 lg:mr-10">
-            <NewPostForm @newPost="newPost" />
+            <PostForm @newPost="newPost" />
           </div>
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display, please add one.</h1>
             <div v-for="post in posts" :key="post.id">
-              <PostItem :post="post" :user="user" />
+              <PostItem :post="post" :user="user" @deletePost="deletePost" />
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@ export default {
   },
   middleware: 'auth',
   components: {
-    NewPostForm: () => import('~/components/NewPostForm'),
+    PostForm: () => import('~/components/PostForm'),
     PostItem: () => import('~/components/PostItem')
   },
   data() {
@@ -54,12 +54,15 @@ export default {
   methods: {
     newPost(payload) {
       this.posts.unshift(payload)
+    },
+    deletePost(payload) {
+      this.posts.splice(payload, 1)
     }
   },
   async asyncData({ $axios, $auth }) {
     try {
       const user = await $axios.get(`/user/get/${$auth.user.id}`)
-      const posts = await $axios.get(`/post/by_user/${$auth.user.id}`)
+      const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}`)
       return {
         user: user.data.user,
         posts: posts.data.posts
