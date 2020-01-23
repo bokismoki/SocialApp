@@ -46,9 +46,13 @@
       >
         <nuxt-link
           :to="{name: 'post-id', params: {id: post.post_id}}"
-          class="w-full uppercase text-xs font-semibold px-2 py-1"
+          class="w-full inline-block uppercase text-xs font-semibold px-2 py-1"
         >View Post</nuxt-link>
-        <div v-if="displayEdit" class="w-full uppercase text-xs font-semibold px-2 py-1">Edit</div>
+        <nuxt-link
+          :to="{name: 'post-id-edit', params: {id: post.post_id}}"
+          v-if="displayEdit"
+          class="w-full inline-block uppercase text-xs font-semibold px-2 py-1"
+        >Edit</nuxt-link>
         <button
           v-if="displayEdit"
           class="w-full flex uppercase text-xs font-semibold px-2 py-1"
@@ -157,13 +161,14 @@ export default {
           })
       }
     },
-    deletePost(e) {
+    deletePost() {
       this.$axios
         .delete(`/post/delete/${this.post.post_id}`)
         .then(response => {
           if (this.$route.name === 'post-id') {
             this.$router.push({ name: 'index' })
           } else {
+            console.log(this.index)
             this.$emit('deletePost', this.index)
             const optionsModals = document.querySelectorAll('.options_modal')
             optionsModals.forEach(modal => modal.classList.add('hidden'))

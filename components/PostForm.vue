@@ -49,7 +49,7 @@
       <button
         class="uppercase text-sm bg-blue-600 w-full text-white mt-2 font-semibold tracking-wide py-1 rounded-full hover:bg-blue-500"
         type="submit"
-      >Post</button>
+      >{{$route.name === 'post-id-edit' ? 'Finish editing' : 'Post'}}</button>
     </form>
   </div>
 </template>
@@ -85,32 +85,47 @@ export default {
     },
     newPost() {
       if (this.bodyText) {
-        this.$axios
-          .post(
-            '/post/add',
-            {
+        if (this.$route.name === 'post-id-edit') {
+          this.$axios
+            .put(`/post/update/${this.$route.params.id}`, {
               body_text: this.bodyText,
               body_image: this.bodyImage,
-              is_private: Number(this.isPrivate),
-              user_id: this.$auth.user.id
-            },
-            {
-              headers: {
-                'content-type': 'application/json'
+              is_private: Number(this.isPrivate)
+            })
+            .then(response => {
+              this.$router.push({ name: 'index' })
+            })
+            .catch(err => {
+              console.error(err)
+            })
+        } else {
+          this.$axios
+            .post(
+              '/post/add',
+              {
+                body_text: this.bodyText,
+                body_image: this.bodyImage,
+                is_private: Number(this.isPrivate),
+                user_id: this.$auth.user.id
+              },
+              {
+                headers: {
+                  'content-type': 'application/json'
+                }
               }
-            }
-          )
-          .then(response => {
-            this.$emit('newPost', response.data.post)
-          })
-          .catch(err => {
-            console.error(err)
-          })
+            )
+            .then(response => {
+              this.$emit('newPost', response.data.post)
+            })
+            .catch(err => {
+              console.error(err)
+            })
+        }
+        this.bodyText = ''
+        this.bodyImage = ''
+        this.isPrivate = false
+        this.containsImage = false
       }
-      this.bodyText = ''
-      this.bodyImage = ''
-      this.isPrivate = false
-      this.containsImage = false
     }
   }
 }

@@ -66,6 +66,21 @@ exports.add = (req, res) => {
     })
 }
 
+exports.update = (req, res) => {
+    const post_id = req.params.id
+    const { body_text, body_image, is_private } = req.body
+    const queryUpdatePost = `UPDATE posts
+    SET body_text = '${body_text}', body_image = '${body_image}', is_private = '${is_private}'
+    WHERE id = ${post_id}`
+    sql.query(queryUpdatePost, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryUpdatePost' })
+        } else {
+            res.send({ success: true, msg: 'Successfully updated post' })
+        }
+    })
+}
+
 exports.delete = (req, res) => {
     const post_id = req.params.id
     const queryDeletePost = `DELETE FROM posts

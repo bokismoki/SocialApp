@@ -26,8 +26,8 @@
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display, please add one.</h1>
-            <div v-for="post in posts" :key="post.id">
-              <PostItem :post="post" :user="user" @deletePost="deletePost" />
+            <div v-for="(post, index) in posts" :key="post.id">
+              <PostItem :post="post" :user="user" :index="index" @deletePost="deletePost" />
             </div>
           </div>
         </div>

@@ -1,14 +1,14 @@
 <template>
   <div class="home">
     <div class="container mx-auto pt-5 pb-16 px-5">
-      <div class="lg:flex">
+      <div class="max-w-5xl mx-auto lg:flex">
         <div class="lg:mr-10 lg:w-1/3 lg:mt-6">
           <PostForm @newPost="newPost" />
         </div>
         <div class="mt-20 lg:mt-0 lg:w-2/3">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Public Posts</h1>
-          <div v-for="post in posts" :key="post.post_id">
-            <PostItem :post="post" @deletePost="deletePost" />
+          <div v-for="(post, index) in posts" :key="post.post_id">
+            <PostItem :post="post" :index="index" @deletePost="deletePost" />
           </div>
         </div>
       </div>

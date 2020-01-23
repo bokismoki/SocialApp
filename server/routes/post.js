@@ -10,6 +10,8 @@ router.get('/get/public', postController.getPublic)
 
 router.post('/add', postController.add)
 
+router.put('/update/:id', postController.update)
+
 router.delete('/delete/:id', postController.delete)
 
 module.exports = router
