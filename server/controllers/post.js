@@ -53,7 +53,7 @@ exports.add = (req, res) => {
             res.send({ success: false, msg: 'Error on queryAddPost' })
         } else {
             const id = result.insertId
-            const queryGetNewPost = `SELECT id AS post_id, body_text, body_image, created_at, is_private
+            const queryGetNewPost = `SELECT id AS post_id, body_text, body_image, created_at, is_private, user_id
             FROM posts WHERE id = ${id}`
             sql.query(queryGetNewPost, (err, result) => {
                 if (err) {

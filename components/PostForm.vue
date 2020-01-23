@@ -36,7 +36,14 @@
           @click="isPrivate = !isPrivate"
         />
       </div>
-      <div class="flex items-start" v-if="containsImage">
+      <div class="relative flex items-start" v-if="containsImage">
+        <button
+          v-if="bodyImage"
+          class="absolute w-5 h-5 bg-gray-800 rounded-full mt-10"
+          @click="removeImage"
+        >
+          <img class="w-full h-full" src="~/assets/img/cross.svg" alt="White cross icon" />
+        </button>
         <input class="hidden" type="file" id="file" @change="processFile" />
         <label
           class="bg-gray-800 text-white rounded-full cursor-pointer uppercase text-xs px-2 py-1 inline-block mr-3 hover:bg-gray-700"
@@ -82,6 +89,9 @@ export default {
         console.error('Please select the right image format!')
         this.bodyImage = ''
       }
+    },
+    removeImage() {
+      this.bodyImage = ''
     },
     newPost() {
       if (this.bodyText) {
