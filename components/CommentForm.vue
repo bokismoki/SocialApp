@@ -25,27 +25,40 @@ export default {
   methods: {
     newComment() {
       if (this.bodyText) {
-        this.$axios
-          .post(
-            '/comment/add',
-            {
-              body_text: this.bodyText,
-              post_id: this.$route.params.id,
-              user_id: this.$auth.user.id
-            },
-            {
-              headers: {
-                'content-type': 'application/json'
+        if (this.$route.name === 'comment-id-edit') {
+          this.$axios
+            .put(`/comment/update/${this.$route.params.id}`, {
+              body_text: this.bodyText
+            })
+            .then(response => {
+              this.$router.push({ name: 'index' })
+            })
+            .catch(err => {
+              console.error(err)
+            })
+        } else {
+          this.$axios
+            .post(
+              '/comment/add',
+              {
+                body_text: this.bodyText,
+                post_id: this.$route.params.id,
+                user_id: this.$auth.user.id
+              },
+              {
+                headers: {
+                  'content-type': 'application/json'
+                }
               }
-            }
-          )
-          .then(response => {
-            this.$emit('newComment', response.data.comment)
-            this.bodyText = ''
-          })
-          .catch(err => {
-            console.error(err)
-          })
+            )
+            .then(response => {
+              this.$emit('newComment', response.data.comment)
+              this.bodyText = ''
+            })
+            .catch(err => {
+              console.error(err)
+            })
+        }
       }
     }
   }

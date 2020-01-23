@@ -24,6 +24,21 @@ exports.add = (req, res) => {
     })
 }
 
+exports.getById = (req, res) => {
+    const comment_id = req.params.id
+    const queryGetComment = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
+    users.id AS user_id, users.first_name, users.last_name, users.image
+    FROM comments JOIN users ON comments.user_id = users.id
+    WHERE comments.id = ${comment_id}`
+    sql.query(queryGetComment, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetComment' })
+        } else {
+            res.send({ success: true, comment: result[0] })
+        }
+    })
+}
+
 exports.getByPost = (req, res) => {
     const post_id = req.params.id
     const queryGetComments = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
@@ -36,6 +51,20 @@ exports.getByPost = (req, res) => {
             res.send({ success: false, msg: 'Error on queryGetComments' })
         } else {
             res.send({ success: true, comments: result })
+        }
+    })
+}
+
+exports.update = (req, res) => {
+    const comment_id = req.params.id
+    const { body_text } = req.body
+    const queryUpdateComment = `UPDATE comments SET body_text = '${body_text}'
+    WHERE id = ${comment_id}`
+    sql.query(queryUpdateComment, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryUpdateComment' })
+        } else {
+            res.send({ success: true, msg: 'Successfully updated comment' })
         }
     })
 }

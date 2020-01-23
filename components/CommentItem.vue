@@ -29,9 +29,12 @@
       <div
         class="absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
       >
-        <div class="w-full uppercase text-xs font-semibold px-2 py-1">Edit</div>
-        <button
+        <nuxt-link
+          :to="{name: 'comment-id-edit', params: {id: this.comment.comment_id}}"
           class="w-full uppercase text-xs font-semibold px-2 py-1"
+        >Edit</nuxt-link>
+        <button
+          class="w-full flex uppercase text-xs font-semibold px-2 py-1"
           @click="deleteComment"
         >Delete</button>
       </div>
