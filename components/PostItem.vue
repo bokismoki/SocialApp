@@ -49,6 +49,11 @@
           class="w-full uppercase text-xs font-semibold px-2 py-1"
         >View Post</nuxt-link>
         <div v-if="displayEdit" class="w-full uppercase text-xs font-semibold px-2 py-1">Edit</div>
+        <button
+          v-if="displayEdit"
+          class="w-full flex uppercase text-xs font-semibold px-2 py-1"
+          @click="deletePost"
+        >Delete</button>
       </div>
     </div>
     <p v-if="$route.name !== 'post-id'" class="mt-3">{{truncate(post.body_text)}}</p>
@@ -151,6 +156,11 @@ export default {
             console.error(err)
           })
       }
+    },
+    deletePost() {
+      this.$axios.delete(`/post/delete/${this.post.post_id}`).catch(err => {
+        console.error(err)
+      })
     }
   }
 }

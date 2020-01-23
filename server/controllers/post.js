@@ -65,3 +65,16 @@ exports.add = (req, res) => {
         }
     })
 }
+
+exports.delete = (req, res) => {
+    const post_id = req.params.id
+    const queryDeletePost = `DELETE FROM posts
+    WHERE id = ${post_id}`
+    sql.query(queryDeletePost, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryDeletePost' })
+        } else {
+            res.send({ success: true, msg: 'Post successfully deleted' })
+        }
+    })
+}

@@ -39,3 +39,16 @@ exports.getById = (req, res) => {
         }
     })
 }
+
+exports.delete = (req, res) => {
+    const comment_id = req.params.id
+    const queryDeleteComment = `DELETE FROM comments
+    WHERE id = ${comment_id}`
+    sql.query(queryDeleteComment, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryDeleteComment' })
+        } else {
+            res.send({ success: true, msg: 'Comment successfully deleted' })
+        }
+    })
+}
