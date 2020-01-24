@@ -44,6 +44,8 @@ export default {
           last_name,
           image: this.$auth.user.picture.data.url
         })
+        this.likes.unshift({ likes_count: 0 })
+        this.comments.unshift({ comments_count: 0 })
       }
     },
     deletePost(payload) {

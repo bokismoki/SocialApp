@@ -63,6 +63,8 @@ export default {
   methods: {
     newPost(payload) {
       this.posts.unshift(payload)
+      this.likes.unshift({ likes_count: 0 })
+      this.comments.unshift({ comments_count: 0 })
     },
     deletePost(payload) {
       this.posts.splice(payload, 1)
