@@ -1,64 +1,8 @@
 <template>
   <div class="post_item mb-5 border-2 border-gray-300 rounded-lg p-5 bg-white">
     <div class="relative">
-      <div class="flex items-center">
-        <nuxt-link :to="href">
-          <img
-            v-if="post.image"
-            class="rounded-full w-12 h-12 mr-2 border-2 border-blue-300"
-            :src="post.image"
-            alt="Facebook profile image"
-          />
-          <img
-            v-else
-            class="rounded-full w-12 h-12 mr-2 border-2 border-blue-300"
-            :src="user.image"
-            alt="My Facebook profile image"
-          />
-        </nuxt-link>
-        <div>
-          <nuxt-link :to="href">
-            <h1
-              v-if="post.first_name && post.last_name"
-              class="font-semibold"
-            >{{post.first_name}} {{post.last_name}}</h1>
-            <h1 v-else class="font-semibold">{{user.first_name}} {{user.last_name}}</h1>
-          </nuxt-link>
-          <div class="flex items-center">
-            <p class="font-semibold text-xs mr-2">{{formatDate(post.created_at)}}</p>
-            <img
-              class="w-4"
-              src="~/assets/img/network.svg"
-              alt="Gray network icon"
-              :class="{'opacity-50': post.is_private}"
-            />
-          </div>
-        </div>
-      </div>
-      <img
-        class="absolute top-0 right-0 w-5 cursor-pointer"
-        src="~/assets/img/edit.svg"
-        alt="Three dots icon"
-        @click="toggleOptionsModal"
-      />
-      <div
-        class="options_modal absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
-      >
-        <nuxt-link
-          :to="{name: 'post-id', params: {id: post.post_id}}"
-          class="w-full inline-block uppercase text-xs font-semibold px-2 py-1"
-        >View Post</nuxt-link>
-        <nuxt-link
-          :to="{name: 'post-id-edit', params: {id: post.post_id}}"
-          v-if="displayEdit"
-          class="w-full inline-block uppercase text-xs font-semibold px-2 py-1"
-        >Edit</nuxt-link>
-        <button
-          v-if="displayEdit"
-          class="w-full flex uppercase text-xs font-semibold px-2 py-1"
-          @click="deletePost"
-        >Delete</button>
-      </div>
+      <PostAuthor :post="post" :user="user" />
+      <PostOptionsModal :post="post" :index="index" @deletePost="deletePost" />
     </div>
     <p v-if="$route.name !== 'post-id'" class="mt-3">{{truncate(post.body_text)}}</p>
     <p v-else class="mt-3">{{post.body_text}}</p>
@@ -96,23 +40,9 @@
 export default {
   name: 'PostItem',
   props: ['post', 'user', 'likes_count', 'comments_count', 'index'],
-  computed: {
-    displayEdit() {
-      if (this.$route.name !== 'profile') {
-        return this.$auth.user.id === this.post.user_id
-      } else {
-        return true
-      }
-    },
-    href() {
-      if (this.$route.name === 'profile') {
-        return { name: this.$route.name }
-      } else if (this.$route.name === 'profile-id') {
-        return { name: this.$route.name, params: { id: this.$route.params.id } }
-      } else {
-        return { name: 'profile-id', params: { id: this.post.user_id } }
-      }
-    }
+  components: {
+    PostAuthor: () => import('~/components/PostAuthor'),
+    PostOptionsModal: () => import('~/components/PostOptionsModal')
   },
   methods: {
     truncate(text) {
@@ -121,19 +51,6 @@ export default {
           return text.substring(0, 100) + '...'
         }
         return text
-      }
-    },
-    formatDate(date) {
-      if (date) {
-        return date.substring(0, 10)
-      }
-    },
-    toggleOptionsModal(e) {
-      const optionModal = e.target.nextElementSibling
-      if (optionModal.classList.contains('hidden')) {
-        optionModal.classList.remove('hidden')
-      } else {
-        optionModal.classList.add('hidden')
       }
     },
     likeDislike() {
@@ -161,22 +78,8 @@ export default {
           })
       }
     },
-    deletePost() {
-      this.$axios
-        .delete(`/post/delete/${this.post.post_id}`)
-        .then(response => {
-          if (this.$route.name === 'post-id') {
-            this.$router.push({ name: 'index' })
-          } else {
-            console.log(this.index)
-            this.$emit('deletePost', this.index)
-            const optionsModals = document.querySelectorAll('.options_modal')
-            optionsModals.forEach(modal => modal.classList.add('hidden'))
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
+    deletePost(payload) {
+      this.$emit('deletePost', payload)
     }
   }
 }
