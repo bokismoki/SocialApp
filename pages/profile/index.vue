@@ -33,6 +33,8 @@
                 :index="index"
                 :likes_count="likes[index].likes_count"
                 :comments_count="comments[index].comments_count"
+                @liked="liked"
+                @disliked="disliked"
                 @deletePost="deletePost"
               />
             </div>
@@ -64,6 +66,12 @@ export default {
     },
     deletePost(payload) {
       this.posts.splice(payload, 1)
+    },
+    liked(payload) {
+      this.likes[payload].likes_count++
+    },
+    disliked(payload) {
+      this.likes[payload].likes_count--
     }
   },
   async asyncData({ $axios, $auth }) {

@@ -33,8 +33,11 @@
               <PostItem
                 :post="post"
                 :user="user"
+                :index="index"
                 :likes_count="likes[index].likes_count"
                 :comments_count="comments[index].comments_count"
+                @liked="liked"
+                @disliked="disliked"
               />
             </div>
           </div>
@@ -86,6 +89,12 @@ export default {
         .catch(err => {
           console.error(err)
         })
+    },
+    liked(payload) {
+      this.likes[payload].likes_count++
+    },
+    disliked(payload) {
+      this.likes[payload].likes_count--
     }
   },
   async asyncData({ $axios, $auth, redirect, params }) {
