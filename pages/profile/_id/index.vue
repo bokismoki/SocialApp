@@ -29,8 +29,13 @@
               class="uppercase text-gray-800 font-semibold text-2xl mb-5 mt-10"
             >{{user.first_name}}'s Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display.</h1>
-            <div v-for="post in posts" :key="post.id">
-              <PostItem :post="post" :user="user" />
+            <div v-for="(post, index) in posts" :key="post.id">
+              <PostItem
+                :post="post"
+                :user="user"
+                :likes_count="likes[index].likes_count"
+                :comments_count="comments[index].comments_count"
+              />
             </div>
           </div>
         </div>
@@ -96,10 +101,16 @@ export default {
         const publicPosts = posts.data.posts.filter(
           post => post.is_private === 0
         )
+        const likes = await $axios.get(`/like/get/public_by_user/${params.id}`)
+        const comments = await $axios.get(
+          `/comment/get/public_by_user/${params.id}`
+        )
         return {
           user: user.data.user,
           posts: publicPosts,
-          isFollowing: isFollowing.data.isFollowing
+          isFollowing: isFollowing.data.isFollowing,
+          likes: likes.data.likes,
+          comments: comments.data.comments
         }
       }
     } catch (err) {

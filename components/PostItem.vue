@@ -15,7 +15,6 @@
         <div class="relative" @click="likeDislike">
           <div
             class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
-            v-if="$route.name === 'post-id'"
           >{{likes_count}}</div>
           <img class="w-4" src="~/assets/img/like.svg" alt="Gray like icon" />
         </div>
@@ -27,7 +26,6 @@
         <div class="relative">
           <div
             class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
-            v-if="$route.name === 'post-id'"
           >{{comments_count}}</div>
           <img class="w-4" src="~/assets/img/comments.svg" alt="Gray comments icon" />
         </div>

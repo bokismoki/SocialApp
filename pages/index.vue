@@ -8,7 +8,13 @@
         <div class="mt-20 lg:mt-0 lg:w-2/3">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Public Posts</h1>
           <div v-for="(post, index) in posts" :key="post.post_id">
-            <PostItem :post="post" :index="index" @deletePost="deletePost" />
+            <PostItem
+              :post="post"
+              :index="index"
+              :likes_count="likes[index].likes_count"
+              :comments_count="comments[index].comments_count"
+              @deletePost="deletePost"
+            />
           </div>
         </div>
       </div>
@@ -45,8 +51,12 @@ export default {
   async asyncData({ $axios }) {
     try {
       const posts = await $axios.get('/post/get/public')
+      const likes = await $axios.get('/like/get/public')
+      const comments = await $axios.get('/comment/get/public')
       return {
-        posts: posts.data.posts
+        posts: posts.data.posts,
+        likes: likes.data.likes,
+        comments: comments.data.comments
       }
     } catch (err) {
       console.error(err)

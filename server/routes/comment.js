@@ -6,6 +6,12 @@ router.get('/get/by_id/:id', commentController.getById)
 
 router.get('/get/by_post/:id', commentController.getByPost)
 
+router.get('/get/public', commentController.public)
+
+router.get('/get/for_profile/:id', commentController.getForProfile)
+
+router.get('/get/public_by_user/:id', commentController.getPublicByUser)
+
 router.post('/add', commentController.add)
 
 router.put('/update/:id', commentController.update)

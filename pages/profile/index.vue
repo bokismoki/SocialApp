@@ -27,7 +27,14 @@
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display, please add one.</h1>
             <div v-for="(post, index) in posts" :key="post.id">
-              <PostItem :post="post" :user="user" :index="index" @deletePost="deletePost" />
+              <PostItem
+                :post="post"
+                :user="user"
+                :index="index"
+                :likes_count="likes[index].likes_count"
+                :comments_count="comments[index].comments_count"
+                @deletePost="deletePost"
+              />
             </div>
           </div>
         </div>
@@ -63,9 +70,15 @@ export default {
     try {
       const user = await $axios.get(`/user/get/${$auth.user.id}`)
       const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}`)
+      const likes = await $axios.get(`/like/get/for_profile/${$auth.user.id}`)
+      const comments = await $axios.get(
+        `/comment/get/for_profile/${$auth.user.id}`
+      )
       return {
         user: user.data.user,
-        posts: posts.data.posts
+        posts: posts.data.posts,
+        likes: likes.data.likes,
+        comments: comments.data.comments
       }
     } catch (err) {
       console.error(err)
