@@ -36,6 +36,7 @@ export default {
       title: `Comment Edit ${this.comment.comment_id}`
     }
   },
+  middleware: 'auth',
   components: {
     CommentForm: () => import('~/components/CommentForm')
   },

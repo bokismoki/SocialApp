@@ -47,6 +47,7 @@ export default {
       title: `Post Edit ${this.post.post_id}`
     }
   },
+  middleware: 'auth',
   components: {
     PostForm: () => import('~/components/PostForm')
   },
