@@ -2,24 +2,30 @@
   <div class="post_edit">
     <div class="container mx-auto max-w-5xl pt-5 pb-16 px-5">
       <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Post Editing</h1>
-      <div class="mb-10">
+      <div class="mb-10 max-w-lg border-2 border-gray-300 rounded-lg p-5 bg-white">
         <h2 class="uppercase text-gray-800 font-semibold mb-5">Current Post:</h2>
-        <div class="flex items-center">
-          <img
-            class="rounded-full w-12 h-12 mr-2 border-2 border-blue-300"
-            :src="post.image"
-            alt="My Facebook profile image"
-          />
-          <div>
-            <h1 class="font-semibold">{{post.first_name}} {{post.last_name}}</h1>
-            <div class="flex items-center">
-              <p class="font-semibold text-xs mr-2">{{formatDate(post.created_at)}}</p>
+        <div>
+          <div class="flex items-center">
+            <nuxt-link :to="{name: 'profile'}">
               <img
-                class="w-4"
-                src="~/assets/img/network.svg"
-                alt="Gray network icon"
-                :class="{'opacity-50': post.is_private}"
+                class="rounded-full w-12 h-12 mr-2 border-2 border-blue-300"
+                :src="post.image"
+                alt="My Facebook profile image"
               />
+            </nuxt-link>
+            <div>
+              <nuxt-link :to="{name: 'profile'}">
+                <h1 class="font-semibold">{{post.first_name}} {{post.last_name}}</h1>
+              </nuxt-link>
+              <div class="flex items-center">
+                <p class="font-semibold text-xs mr-2">{{formatDate(post.created_at)}}</p>
+                <img
+                  class="w-4"
+                  src="~/assets/img/network.svg"
+                  alt="Gray network icon"
+                  :class="{'opacity-50': post.is_private}"
+                />
+              </div>
             </div>
           </div>
         </div>
