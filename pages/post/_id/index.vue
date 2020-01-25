@@ -13,9 +13,18 @@
         <div class="mt-10">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Comments</h1>
           <p v-if="comments.length === 0">No comments to display.</p>
-          <div v-else v-for="(comment, index) in comments" :key="comment.comment_id">
+          <div v-else v-for="(comment, index) in displayedComments" :key="comment.comment_id">
             <CommentItem :comment="comment" :index="index" @deleteComment="deleteComment" />
           </div>
+        </div>
+        <div>
+          <button
+            class="bg-blue-700 text-white mx-1 px-2 rounded-sm font-semibold"
+            :class="{'px-3 py-1': activePaginationIndex === index}"
+            v-for="(btn, index) in paginationButtonsCount"
+            :key="index"
+            @click="updatePagination(index)"
+          >{{index + 1}}</button>
         </div>
       </div>
     </div>
@@ -35,6 +44,19 @@ export default {
     CommentForm: () => import('~/components/CommentForm'),
     CommentItem: () => import('~/components/CommentItem')
   },
+  data() {
+    return {
+      activePaginationIndex: 0
+    }
+  },
+  computed: {
+    paginationButtonsCount() {
+      return Math.ceil(this.comments.length / 10)
+    },
+    displayedComments() {
+      return this.comments.slice().splice(this.activePaginationIndex * 10, 10)
+    }
+  },
   methods: {
     newComment(payload) {
       this.comments.unshift(payload)
@@ -47,6 +69,9 @@ export default {
     },
     deleteComment(payload) {
       this.comments.splice(payload, 1)
+    },
+    updatePagination(index) {
+      this.activePaginationIndex = index
     }
   },
   async asyncData({ $axios, $auth, params, redirect }) {

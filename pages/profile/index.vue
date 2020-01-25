@@ -26,7 +26,7 @@
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display, please add one.</h1>
-            <div v-for="(post, index) in posts" :key="post.id">
+            <div v-for="(post, index) in displayedPosts" :key="post.id">
               <PostItem
                 :post="post"
                 :user="user"
@@ -37,6 +37,15 @@
                 @disliked="disliked"
                 @deletePost="deletePost"
               />
+            </div>
+            <div>
+              <button
+                class="bg-blue-700 text-white mx-1 px-2 rounded-sm font-semibold"
+                :class="{'px-3 py-1': activePaginationIndex === index}"
+                v-for="(btn, index) in paginationButtonsCount"
+                :key="index"
+                @click="updatePagination(index)"
+              >{{index + 1}}</button>
             </div>
           </div>
         </div>
@@ -57,7 +66,16 @@ export default {
   },
   data() {
     return {
-      profileBackground: require('~/assets/img/profile_background.jpg')
+      profileBackground: require('~/assets/img/profile_background.jpg'),
+      activePaginationIndex: 0
+    }
+  },
+  computed: {
+    paginationButtonsCount() {
+      return Math.ceil(this.posts.length / 15)
+    },
+    displayedPosts() {
+      return this.posts.slice().splice(this.activePaginationIndex * 15, 15)
     }
   },
   methods: {
@@ -74,6 +92,9 @@ export default {
     },
     disliked(payload) {
       this.likes[payload].likes_count--
+    },
+    updatePagination(index) {
+      this.activePaginationIndex = index
     }
   },
   async asyncData({ $axios, $auth }) {
