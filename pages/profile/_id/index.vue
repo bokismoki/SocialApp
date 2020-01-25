@@ -19,10 +19,15 @@
           <img class="w-4 mr-1" src="~/assets/img/email.svg" alt />
           <h3 class="text-gray-800 text-xs font-semibold">{{user.email}}</h3>
         </div>
-        <button
-          class="uppercase mt-3 rounded-full px-5 py-1 bg-blue-700 text-white font-semibold tracking-widest shadow-lg hover:bg-blue-600"
-          @click="follow"
-        >{{isFollowing ? 'Unfollow' : 'Follow'}}</button>
+        <div class="flex items-end">
+          <button
+            class="uppercase mt-3 rounded-full px-5 py-1 bg-blue-700 text-white font-semibold tracking-widest shadow-lg hover:bg-blue-600"
+            @click="follow"
+          >{{isFollowing ? 'Unfollow' : 'Follow'}}</button>
+          <div class="ml-2 w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
+            <p class="m-auto">{{followers_count}}</p>
+          </div>
+        </div>
         <div class="lg:flex lg:items-start lg:mt-10">
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1
@@ -82,8 +87,10 @@ export default {
           const { followed, unfollowed } = response.data
           if (followed) {
             this.isFollowing = true
+            this.followers_count++
           } else if (unfollowed) {
             this.isFollowing = false
+            this.followers_count--
           }
         })
         .catch(err => {
@@ -114,12 +121,16 @@ export default {
         const comments = await $axios.get(
           `/comment/get/public_by_user/${params.id}`
         )
+        const followersCount = await $axios.get(
+          `follow/get/count/by_user/${params.id}`
+        )
         return {
           user: user.data.user,
           posts: publicPosts,
           isFollowing: isFollowing.data.isFollowing,
           likes: likes.data.likes,
-          comments: comments.data.comments
+          comments: comments.data.comments,
+          followers_count: followersCount.data.followersCount
         }
       }
     } catch (err) {
