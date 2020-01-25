@@ -12,9 +12,14 @@
         />
       </div>
       <div class="py-16 px-5 max-w-5xl mx-auto">
-        <h1
-          class="text-gray-800 uppercase font-black text-3xl leading-none"
-        >{{user.first_name}} {{user.last_name}}</h1>
+        <div class="flex items-center">
+          <h1
+            class="text-gray-800 uppercase font-black text-3xl leading-none"
+          >{{user.first_name}} {{user.last_name}}</h1>
+          <div class="ml-3 w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
+            <p class="m-auto">{{followers_count}}</p>
+          </div>
+        </div>
         <div class="flex items-end mt-1">
           <img class="w-4 mr-1" src="~/assets/img/email.svg" alt />
           <h3 class="text-gray-800 text-xs font-semibold">{{user.email}}</h3>
@@ -107,11 +112,15 @@ export default {
       const comments = await $axios.get(
         `/comment/get/count/for_profile/${$auth.user.id}`
       )
+      const followersCount = await $axios.get(
+        `follow/get/count/by_user/${$auth.user.id}`
+      )
       return {
         user: user.data.user,
         posts: posts.data.posts,
         likes: likes.data.likes,
-        comments: comments.data.comments
+        comments: comments.data.comments,
+        followers_count: followersCount.data.followersCount
       }
     } catch (err) {
       console.error(err)

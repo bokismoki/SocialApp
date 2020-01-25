@@ -1,5 +1,5 @@
 <template>
-  <div class="new_post_form">
+  <div class="post_form">
     <div class="mt-10 lg:mt-0">
       <div class="flex items-center">
         <div

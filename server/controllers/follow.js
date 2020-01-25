@@ -35,6 +35,20 @@ exports.getCountByUser = (req, res) => {
     })
 }
 
+exports.getFollowedUsers = (req, res) => {
+    const user_id = req.params.id
+    const queryGetFollowedUsers = `SELECT users.id, users.first_name, users.last_name, users.image
+    FROM follows JOIN users ON users.id = followee_id
+    WHERE follows.follower_id = '${user_id}'`
+    sql.query(queryGetFollowedUsers, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetFollowedUsers' })
+        } else {
+            res.send({ success: true, followedUsers: result })
+        }
+    })
+}
+
 exports.set = (req, res) => {
     const { followee_id, follower_id } = req.body
     const queryCheckForFollow = `SELECT * FROM follows
