@@ -6,11 +6,11 @@ router.get('/get/by_id/:id', commentController.getById)
 
 router.get('/get/by_post/:id', commentController.getByPost)
 
-router.get('/get/public', commentController.public)
+router.get('/get/count/public', commentController.getCountPublic)
 
-router.get('/get/for_profile/:id', commentController.getForProfile)
+router.get('/get/count/for_profile/:id', commentController.getCountForProfile)
 
-router.get('/get/public_by_user/:id', commentController.getPublicByUser)
+router.get('/get/count/public_by_user/:id', commentController.getCountPublicByUser)
 
 router.post('/add', commentController.add)
 

@@ -61,8 +61,8 @@ export default {
   async asyncData({ $axios }) {
     try {
       const posts = await $axios.get('/post/get/public')
-      const likes = await $axios.get('/like/get/public')
-      const comments = await $axios.get('/comment/get/public')
+      const likes = await $axios.get('/like/get/count/public')
+      const comments = await $axios.get('/comment/get/count/public')
       return {
         posts: posts.data.posts,
         likes: likes.data.likes,

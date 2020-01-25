@@ -117,9 +117,11 @@ export default {
         const publicPosts = posts.data.posts.filter(
           post => post.is_private === 0
         )
-        const likes = await $axios.get(`/like/get/public_by_user/${params.id}`)
+        const likes = await $axios.get(
+          `/like/get/count/public_by_user/${params.id}`
+        )
         const comments = await $axios.get(
-          `/comment/get/public_by_user/${params.id}`
+          `/comment/get/count/public_by_user/${params.id}`
         )
         const followersCount = await $axios.get(
           `follow/get/count/by_user/${params.id}`

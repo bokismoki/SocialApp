@@ -1,6 +1,6 @@
 const sql = require('../db/mysql')
 
-exports.getByPost = (req, res) => {
+exports.getCountByPost = (req, res) => {
     const post_id = req.params.id
     const queryGetLikesCount = `SELECT COUNT(*) AS likes_count FROM likes
     WHERE post_id = ${post_id}`
@@ -8,12 +8,12 @@ exports.getByPost = (req, res) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetLikesCount' })
         } else {
-            res.send({ success: true, likes: result[0] })
+            res.send({ success: true, likesCount: result[0].likes_count })
         }
     })
 }
 
-exports.public = (req, res) => {
+exports.getCountPublic = (req, res) => {
     const queryGetLikesCount = `SELECT COUNT(likes.created_at) AS likes_count FROM posts
     LEFT JOIN likes ON posts.id = likes.post_id
     WHERE posts.is_private = 0
@@ -28,7 +28,7 @@ exports.public = (req, res) => {
     })
 }
 
-exports.getForProfile = (req, res) => {
+exports.getCountForProfile = (req, res) => {
     const user_id = req.params.id
     const queryGetLikesCount = `SELECT COUNT(likes.created_at) AS likes_count FROM posts
     LEFT JOIN likes ON posts.id = likes.post_id
@@ -44,7 +44,7 @@ exports.getForProfile = (req, res) => {
     })
 }
 
-exports.getPublicByUser = (req, res) => {
+exports.getCountPublicByUser = (req, res) => {
     const user_id = req.params.id
     const queryGetLikesCount = `SELECT COUNT(likes.created_at) AS likes_count FROM posts
     LEFT JOIN likes ON posts.id = likes.post_id

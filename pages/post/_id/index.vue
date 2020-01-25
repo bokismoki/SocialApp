@@ -52,19 +52,19 @@ export default {
   async asyncData({ $axios, $auth, params, redirect }) {
     try {
       const post = await $axios.get(`/post/get/by_id/${params.id}`)
-      const comments = await $axios.get(`/comment/get/by_post/${params.id}`)
-      const likes = await $axios.get(
-        `/like/get/by_post/${post.data.post.post_id}`
-      )
       if ($auth.user.id !== post.data.post.user_id) {
         if (post.data.post.is_private === 1) {
           return redirect({ name: 'index' })
         }
       }
+      const comments = await $axios.get(`/comment/get/by_post/${params.id}`)
+      const likesCount = await $axios.get(
+        `/like/get/count/by_post/${post.data.post.post_id}`
+      )
       return {
         post: post.data.post,
         comments: comments.data.comments,
-        likes_count: likes.data.likes.likes_count
+        likes_count: likesCount.data.likesCount
       }
     } catch (err) {
       console.error(err)

@@ -2,13 +2,13 @@ const router = require('express').Router()
 
 const likeController = require('../controllers/like')
 
-router.get('/get/by_post/:id', likeController.getByPost)
+router.get('/get/count/by_post/:id', likeController.getCountByPost)
 
-router.get('/get/public', likeController.public)
+router.get('/get/count/public', likeController.getCountPublic)
 
-router.get('/get/for_profile/:id', likeController.getForProfile)
+router.get('/get/count/for_profile/:id', likeController.getCountForProfile)
 
-router.get('/get/public_by_user/:id', likeController.getPublicByUser)
+router.get('/get/count/public_by_user/:id', likeController.getCountPublicByUser)
 
 router.post('/set', likeController.set)
 

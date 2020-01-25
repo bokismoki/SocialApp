@@ -32,7 +32,7 @@ exports.getByPost = (req, res) => {
     })
 }
 
-exports.public = (req, res) => {
+exports.getCountPublic = (req, res) => {
     const queryGetCommentsCount = `SELECT COUNT(comments.created_at) AS comments_count FROM posts
     LEFT JOIN comments ON posts.id = comments.post_id
     WHERE posts.is_private = 0
@@ -47,7 +47,7 @@ exports.public = (req, res) => {
     })
 }
 
-exports.getForProfile = (req, res) => {
+exports.getCountForProfile = (req, res) => {
     const user_id = req.params.id
     const queryGetLikesCount = `SELECT COUNT(comments.created_at) AS comments_count FROM posts
     LEFT JOIN comments ON posts.id = comments.post_id
@@ -63,7 +63,7 @@ exports.getForProfile = (req, res) => {
     })
 }
 
-exports.getPublicByUser = (req, res) => {
+exports.getCountPublicByUser = (req, res) => {
     const user_id = req.params.id
     const queryGetCommentsCount = `SELECT COUNT(comments.created_at) AS comments_count FROM posts
     LEFT JOIN comments ON posts.id = comments.post_id

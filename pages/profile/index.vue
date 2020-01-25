@@ -80,9 +80,11 @@ export default {
     try {
       const user = await $axios.get(`/user/get/${$auth.user.id}`)
       const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}`)
-      const likes = await $axios.get(`/like/get/for_profile/${$auth.user.id}`)
+      const likes = await $axios.get(
+        `/like/get/count/for_profile/${$auth.user.id}`
+      )
       const comments = await $axios.get(
-        `/comment/get/for_profile/${$auth.user.id}`
+        `/comment/get/count/for_profile/${$auth.user.id}`
       )
       return {
         user: user.data.user,
