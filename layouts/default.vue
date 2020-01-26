@@ -1,7 +1,9 @@
 <template>
   <div class="app">
     <NavBar />
-    <OnlineUsers :onlineUsers="onlineUsers" />
+    <div v-if="$route.name !== 'login'">
+      <OnlineUsers :onlineUsers="onlineUsers" />
+    </div>
     <nuxt />
   </div>
 </template>
