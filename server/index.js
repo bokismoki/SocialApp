@@ -2,6 +2,8 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const bodyParser = require('body-parser')
+const http = require('http')
+const SocketIo = require('socket.io')
 const app = express()
 
 require('./db/mysql')
@@ -9,11 +11,14 @@ require('./db/mysql')
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 app.use(express.json({ limit: '50mb' }))
 
+const server = http.createServer(app)
+const io = SocketIo(server)
+
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
 
-async function start () {
+async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
@@ -31,7 +36,7 @@ async function start () {
   app.use(nuxt.render)
 
   // Listen the server
-  app.listen(port, host)
+  server.listen(port, host)
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true
@@ -39,6 +44,20 @@ async function start () {
 }
 start()
 
+// SOCKET.IO
+io.on('connection', socket => {
+  let userIndex
+  socket.on('newUserConnected', user => {
+    userIndex = user.index
+    io.emit('shareNewUser', user.user);
+  })
+
+  socket.on('disconnect', () => {
+    io.emit('shareDisconnectedUser', userIndex);
+  })
+})
+
+// ROUTES
 const userRoutes = require('./routes/user')
 app.use('/api/user', userRoutes)
 

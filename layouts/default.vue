@@ -1,14 +1,49 @@
 <template>
   <div class="app">
     <NavBar />
+    <OnlineUsers :onlineUsers="onlineUsers" />
     <nuxt />
   </div>
 </template>
 
 <script>
+import io from 'socket.io-client'
+
 export default {
   components: {
-    NavBar: () => import('~/components/NavBar')
+    NavBar: () => import('~/components/NavBar'),
+    OnlineUsers: () => import('~/components/OnlineUsers')
+  },
+  data() {
+    return {
+      socket: io('http://localhost:3000'),
+      onlineUsers: []
+    }
+  },
+  methods: {
+    listenSocket() {
+      this.socket.on('shareNewUser', user => {
+        const isOnline = this.onlineUsers.find(
+          user => user.id === this.$auth.user.id
+        )
+        if (typeof isOnline === 'undefined') {
+          this.onlineUsers.push(user)
+        }
+      })
+
+      this.socket.on('shareDisconnectedUser', index => {
+        if (this.onlineUsers[index].id !== this.$auth.user.id) {
+          this.onlineUsers.splice(index, 1)
+        }
+      })
+    }
+  },
+  mounted() {
+    this.socket.emit('newUserConnected', {
+      user: this.$auth.user,
+      index: this.onlineUsers.length
+    })
+    this.listenSocket()
   }
 }
 </script>

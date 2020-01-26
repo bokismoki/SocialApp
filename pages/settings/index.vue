@@ -13,19 +13,24 @@
         <div
           class="text-sm uppercase text-white mt-5 font-semibold px-2 py-1 block bg-blue-600 rounded-lg"
         >Following</div>
-        <div v-for="follow in followedUsers" :key="follow.id">
-          <div class="flex items-center mt-3">
-            <nuxt-link :to="{name: 'profile-id', params: {id: follow.id}}">
-              <img
-                class="rounded-full w-12 h-12 mr-2 border-2 border-blue-300"
-                :src="follow.image"
-                alt="Facebook profile image"
-              />
-            </nuxt-link>
-            <nuxt-link :to="{name: 'profile-id', params: {id: follow.id}}">
-              <h1 class="font-semibold">{{follow.first_name}} {{follow.last_name}}</h1>
-            </nuxt-link>
+        <div v-if="followedUsers.length > 0">
+          <div v-for="follow in followedUsers" :key="follow.id">
+            <div class="flex items-center mt-3">
+              <nuxt-link :to="{name: 'profile-id', params: {id: follow.id}}">
+                <img
+                  class="rounded-full w-12 h-12 mr-2 border-2 border-blue-300"
+                  :src="follow.image"
+                  alt="Facebook profile image"
+                />
+              </nuxt-link>
+              <nuxt-link :to="{name: 'profile-id', params: {id: follow.id}}">
+                <h1 class="font-semibold">{{follow.first_name}} {{follow.last_name}}</h1>
+              </nuxt-link>
+            </div>
           </div>
+        </div>
+        <div class="mt-2" v-else>
+          <p>No followers to display</p>
         </div>
       </div>
     </div>
