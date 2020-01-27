@@ -2,12 +2,7 @@ const mysql = require('mysql')
 
 require('dotenv').config()
 
-const mysqlConnection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: process.env.DB_PASSWORD,
-    database: 'social_app'
-})
+const mysqlConnection = mysql.createConnection(process.env.DB_CONNECT_URI)
 
 mysqlConnection.connect(err => {
     if(err) {

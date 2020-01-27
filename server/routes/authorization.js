@@ -4,7 +4,8 @@ require('dotenv').config()
 
 module.exports = async (req, res, next) => {
     const cookiesHeader = req.headers['cookie']
-    const cookieToken = cookiesHeader.split('; ')[5].split('=')[1]
+    
+    const cookieToken = cookiesHeader.split('; ').find(header => header.includes('jwt=')).split('=')[1]
 
     if (typeof cookiesHeader !== 'undefined') {
 
