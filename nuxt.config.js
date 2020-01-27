@@ -74,7 +74,7 @@ module.exports = {
     }
   },
   axios: {
-    baseURL: 'http://localhost:3000/api'
+    baseURL: 'https://social-app-social.herokuapp.com/api'
   },
   /*
   ** Build configuration
