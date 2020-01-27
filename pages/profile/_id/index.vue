@@ -93,7 +93,8 @@ export default {
           '/follow/set',
           {
             followee_id: this.$route.params.id,
-            follower_id: this.$auth.user.id
+            follower_id: this.$auth.user.id,
+            user_id: this.$auth.user.id
           },
           {
             headers: {

@@ -1,3 +1,5 @@
+const authorization = require('../routes/authorization')
+
 const router = require('express').Router()
 
 const commentController = require('../controllers/comment')
@@ -12,10 +14,10 @@ router.get('/get/count/for_profile/:id', commentController.getCountForProfile)
 
 router.get('/get/count/public_by_user/:id', commentController.getCountPublicByUser)
 
-router.post('/add', commentController.add)
+router.post('/add', authorization, commentController.add)
 
-router.put('/update/:id', commentController.update)
+router.put('/update/:id', authorization, commentController.update)
 
-router.delete('/delete/:id', commentController.delete)
+router.delete('/delete/:id', authorization, commentController.delete)
 
 module.exports = router

@@ -51,7 +51,11 @@ export default {
     },
     deletePost() {
       this.$axios
-        .delete(`/post/delete/${this.post.post_id}`)
+        .delete(`/post/delete/${this.post.post_id}`, {
+          data: {
+            user_id: this.$auth.user.id
+          }
+        })
         .then(response => {
           if (this.$route.name === 'post-id') {
             this.$router.push({ name: 'index' })

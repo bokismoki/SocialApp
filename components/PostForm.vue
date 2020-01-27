@@ -100,7 +100,8 @@ export default {
             .put(`/post/update/${this.$route.params.id}`, {
               body_text: this.bodyText,
               body_image: this.bodyImage,
-              is_private: Number(this.isPrivate)
+              is_private: Number(this.isPrivate),
+              user_id: this.$auth.user.id
             })
             .then(response => {
               this.$router.push({ name: 'index' })

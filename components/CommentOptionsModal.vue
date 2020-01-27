@@ -40,7 +40,11 @@ export default {
     },
     deleteComment() {
       this.$axios
-        .delete(`/comment/delete/${this.comment.comment_id}`)
+        .delete(`/comment/delete/${this.comment.comment_id}`, {
+          data: {
+            user_id: this.$auth.user.id
+          }
+        })
         .then(response => {
           this.$emit('deleteComment', this.index)
         })

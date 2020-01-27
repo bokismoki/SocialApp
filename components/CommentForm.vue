@@ -28,7 +28,8 @@ export default {
         if (this.$route.name === 'comment-id-edit') {
           this.$axios
             .put(`/comment/update/${this.$route.params.id}`, {
-              body_text: this.bodyText
+              body_text: this.bodyText,
+              user_id: this.$auth.user.id
             })
             .then(response => {
               this.$router.push({ name: 'index' })

@@ -57,7 +57,8 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '~modules/import-tailwind-config'
+    '~modules/import-tailwind-config',
+    'cookie-universal-nuxt'
   ],
   /*
   ** Axios module configuration

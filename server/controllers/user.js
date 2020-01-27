@@ -1,4 +1,7 @@
 const sql = require('../db/mysql')
+require('dotenv').config()
+
+const jwt = require('jsonwebtoken')
 
 exports.get = (req, res) => {
     const user_id = req.params.id
@@ -30,7 +33,7 @@ exports.login = (req, res) => {
         } else {
             if (result.length === 0) {
                 const queryAddUser = `INSERT INTO users (id, first_name, last_name, email, image)
-                VALUES ('${id}', '${first_name}', '${last_name}', '${email}', '${picture.data.url}'`
+                VALUES ('${id}', '${first_name}', '${last_name}', '${email}', '${picture.data.url}')`
                 sql.query(queryAddUser, (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryAddUser' })
@@ -43,4 +46,11 @@ exports.login = (req, res) => {
             }
         }
     })
+}
+
+exports.token = async (req, res) => {
+    const { user_id } = req.body
+    const token = await jwt.sign({ user_id }, process.env.JWT_SECRET)
+    res.cookie('jwt', token)
+    res.send({ success: true })
 }
