@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com/'),
+      socket: io('http://localhost:3000'),
       onlineUsers: []
     }
   },

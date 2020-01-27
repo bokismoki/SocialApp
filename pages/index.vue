@@ -72,6 +72,8 @@ export default {
     },
     deletePost(payload) {
       this.posts.splice(payload, 1)
+      this.likes.splice(payload, 1)
+      this.comments.splice(payload, 1)
     },
     liked(payload) {
       this.likes[payload].likes_count++
