@@ -47,7 +47,12 @@ export default {
               user_id: this.$auth.user.id
             })
             .then(response => {
-              this.$router.push({ name: 'index' })
+              if (response.data.success) {
+                this.$router.push({ name: 'index' })
+              } else {
+                this.$store.dispatch('setErrorMsg', response.data.msg)
+                this.$router.push({ name: 'index' })
+              }
             })
             .catch(err => {
               console.error(err)
@@ -68,8 +73,13 @@ export default {
               }
             )
             .then(response => {
-              this.$emit('newComment', response.data.comment)
-              this.bodyText = ''
+              if (response.data.success) {
+                this.$emit('newComment', response.data.comment)
+                this.bodyText = ''
+              } else {
+                this.$store.dispatch('setErrorMsg', response.data.msg)
+                this.$router.push({ name: 'index' })
+              }
             })
             .catch(err => {
               console.error(err)

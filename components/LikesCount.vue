@@ -34,19 +34,24 @@ export default {
           }
         )
         .then(response => {
-          const { liked, disliked } = response.data
-          if (liked) {
-            if (this.$route.name !== 'post-id') {
-              this.$emit('liked', this.index)
-            } else {
-              this.$emit('liked')
+          if (response.data.success) {
+            const { liked, disliked } = response.data
+            if (liked) {
+              if (this.$route.name !== 'post-id') {
+                this.$emit('liked', this.index)
+              } else {
+                this.$emit('liked')
+              }
+            } else if (disliked) {
+              if (this.$route.name !== 'post-id') {
+                this.$emit('disliked', this.index)
+              } else {
+                this.$emit('disliked')
+              }
             }
-          } else if (disliked) {
-            if (this.$route.name !== 'post-id') {
-              this.$emit('disliked', this.index)
-            } else {
-              this.$emit('disliked')
-            }
+          } else {
+            this.$store.dispatch('setErrorMsg', response.data.msg)
+            this.$router.push({ name: 'index' })
           }
         })
         .catch(err => {

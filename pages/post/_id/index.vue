@@ -74,7 +74,7 @@ export default {
       this.activePaginationIndex = index
     }
   },
-  async asyncData({ $axios, $auth, params, redirect }) {
+  async asyncData({ $axios, $auth, params, redirect, store }) {
     try {
       const post = await $axios.get(`/post/get/by_id/${params.id}`)
       if ($auth.user.id !== post.data.post.user_id) {
@@ -92,7 +92,8 @@ export default {
         likes_count: likesCount.data.likesCount
       }
     } catch (err) {
-      console.error(err)
+      store.dispatch('setErrorMsg', err)
+      redirect({ name: 'index' })
     }
   }
 }

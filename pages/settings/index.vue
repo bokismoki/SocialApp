@@ -42,12 +42,17 @@ export default {
   head: {
     title: 'Settings'
   },
-  async asyncData({ $axios, $auth }) {
-    const followedUsers = await $axios.get(
-      `/follow/get/followed_users/${$auth.user.id}`
-    )
-    return {
-      followedUsers: followedUsers.data.followedUsers
+  async asyncData({ $axios, $auth, store, redirect }) {
+    try {
+      const followedUsers = await $axios.get(
+        `/follow/get/followed_users/${$auth.user.id}`
+      )
+      return {
+        followedUsers: followedUsers.data.followedUsers
+      }
+    } catch (err) {
+      store.dispatch('setErrorMsg', err)
+      redirect({ name: 'index' })
     }
   }
 }

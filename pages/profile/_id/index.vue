@@ -103,13 +103,18 @@ export default {
           }
         )
         .then(response => {
-          const { followed, unfollowed } = response.data
-          if (followed) {
-            this.isFollowing = true
-            this.followers_count++
-          } else if (unfollowed) {
-            this.isFollowing = false
-            this.followers_count--
+          if (response.data.success) {
+            const { followed, unfollowed } = response.data
+            if (followed) {
+              this.isFollowing = true
+              this.followers_count++
+            } else if (unfollowed) {
+              this.isFollowing = false
+              this.followers_count--
+            }
+          } else {
+            this.$store.dispatch('setErrorMsg', response.data.msg)
+            this.$router.push({ name: 'index' })
           }
         })
         .catch(err => {
@@ -126,7 +131,7 @@ export default {
       this.activePaginationIndex = index
     }
   },
-  async asyncData({ $axios, $auth, redirect, params }) {
+  async asyncData({ $axios, $auth, redirect, params, store }) {
     try {
       const user = await $axios.get(`/user/get/${params.id}`)
       if (user.data.user.id === $auth.user.id) {
@@ -158,7 +163,8 @@ export default {
         }
       }
     } catch (err) {
-      console.error(err)
+      store.dispatch('setErrorMsg', err)
+      redirect({ name: 'index' })
     }
   }
 }

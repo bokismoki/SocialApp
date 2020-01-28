@@ -47,7 +47,7 @@ export default {
       }
     }
   },
-  async asyncData({ $axios, $auth, params, redirect }) {
+  async asyncData({ $axios, $auth, params, redirect, store }) {
     try {
       const comment = await $axios.get(`/comment/get/by_id/${params.id}`)
       if ($auth.user.id !== comment.data.comment.user_id) {
@@ -57,7 +57,8 @@ export default {
         comment: comment.data.comment
       }
     } catch (err) {
-      console.error(err)
+      store.dispatch('setErrorMsg', err)
+      redirect({ name: 'index' })
     }
   }
 }

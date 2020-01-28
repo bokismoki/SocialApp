@@ -1,26 +1,34 @@
 <template>
   <div class="app">
     <NavBar />
+    <nuxt />
     <div v-if="$route.name !== 'login'">
       <OnlineUsers :onlineUsers="onlineUsers" />
     </div>
-    <nuxt />
+    <div v-if="errorMsg">
+      <ErrorAlert />
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import io from 'socket.io-client'
 
 export default {
   components: {
     NavBar: () => import('~/components/NavBar'),
-    OnlineUsers: () => import('~/components/OnlineUsers')
+    OnlineUsers: () => import('~/components/OnlineUsers'),
+    ErrorAlert: () => import('~/components/ErrorAlert')
   },
   data() {
     return {
       socket: io('https://social-app-social.herokuapp.com'),
       onlineUsers: []
     }
+  },
+  computed: {
+    ...mapGetters(['errorMsg'])
   },
   methods: {
     listenSocket() {

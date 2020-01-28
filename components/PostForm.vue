@@ -121,6 +121,9 @@ export default {
               user_id: this.$auth.user.id
             })
             .then(response => {
+              if (!response.data.success) {
+                this.$store.dispatch('setErrorMsg', response.data.msg)
+              }
               this.$router.push({ name: 'index' })
             })
             .catch(err => {
@@ -143,11 +146,16 @@ export default {
               }
             )
             .then(response => {
-              this.$emit('newPost', response.data.post)
-              this.bodyText = ''
-              this.bodyImage = ''
-              this.isPrivate = false
-              this.containsImage = false
+              if (response.data.success) {
+                this.$emit('newPost', response.data.post)
+                this.bodyText = ''
+                this.bodyImage = ''
+                this.isPrivate = false
+                this.containsImage = false
+              } else {
+                this.$store.dispatch('setErrorMsg', response.data.msg)
+                this.$router.push({ name: 'index' })
+              }
             })
             .catch(err => {
               console.error(err)

@@ -57,12 +57,17 @@ export default {
           }
         })
         .then(response => {
-          if (this.$route.name === 'post-id') {
-            this.$router.push({ name: 'index' })
+          if (response.data.success) {
+            if (this.$route.name === 'post-id') {
+              this.$router.push({ name: 'index' })
+            } else {
+              this.$emit('deletePost', this.index)
+              const optionsModals = document.querySelectorAll('.options_modal')
+              optionsModals.forEach(modal => modal.classList.add('hidden'))
+            }
           } else {
-            this.$emit('deletePost', this.index)
-            const optionsModals = document.querySelectorAll('.options_modal')
-            optionsModals.forEach(modal => modal.classList.add('hidden'))
+            this.$store.dispatch('setErrorMsg', response.data.msg)
+            this.$router.push({ name: 'index' })
           }
         })
         .catch(err => {

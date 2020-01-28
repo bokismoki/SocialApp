@@ -104,7 +104,7 @@ export default {
       this.activePaginationIndex = index
     }
   },
-  async asyncData({ $axios, $auth }) {
+  async asyncData({ $axios, $auth, store, redirect }) {
     try {
       const user = await $axios.get(`/user/get/${$auth.user.id}`)
       const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}`)
@@ -125,7 +125,8 @@ export default {
         followers_count: followersCount.data.followersCount
       }
     } catch (err) {
-      console.error(err)
+      store.dispatch('setErrorMsg', err)
+      redirect({ name: 'index' })
     }
   }
 }

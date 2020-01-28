@@ -1,10 +1,15 @@
 export const state = () => ({
+    errorMsg: ''
 })
 
 export const getters = {
+    errorMsg: state => state.errorMsg
 }
 
 export const mutations = {
+    SET_ERROR_MSG: (state, payload) => {
+        state.errorMsg = payload
+    }
 }
 
 export const actions = {
@@ -36,5 +41,11 @@ export const actions = {
                     console.error(err)
                 })
         }
+    },
+    setErrorMsg: ({ commit, dispatch }, payload = '') => {
+        commit('SET_ERROR_MSG', payload)
+        setTimeout(() => {
+            dispatch('setErrorMsg')
+        }, 4000)
     }
 }

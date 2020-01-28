@@ -85,7 +85,7 @@ export default {
       this.activePaginationIndex = index
     }
   },
-  async asyncData({ $axios }) {
+  async asyncData({ $axios, store }) {
     try {
       const posts = await $axios.get('/post/get/public')
       const likes = await $axios.get('/like/get/count/public')
@@ -96,7 +96,7 @@ export default {
         comments: comments.data.comments
       }
     } catch (err) {
-      console.error(err)
+      store.dispatch('setErrorMsg', err)
     }
   }
 }
