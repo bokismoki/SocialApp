@@ -4,8 +4,8 @@
       <PostAuthor :post="post" :user="user" />
       <PostOptionsModal :post="post" :index="index" @deletePost="deletePost" />
     </div>
-    <p v-if="$route.name !== 'post-id'" class="mt-3">{{truncate(post.body_text)}}</p>
-    <p v-else class="mt-3">{{post.body_text}}</p>
+    <p v-if="$route.name !== 'post-id'" class="mt-3 break-words">{{truncate(post.body_text)}}</p>
+    <p v-else class="mt-3 break-words">{{post.body_text}}</p>
     <img v-if="post.body_image" class="mt-2" :src="post.body_image" alt="Post image" />
     <div class="flex mt-5">
       <LikesCount

@@ -2,7 +2,7 @@
   <div class="comment_item bg-white mb-5 p-5 rounded-lg border-2 border-gray-300">
     <div class="relative">
       <CommentAuthor :comment="comment" />
-      <p class="mt-3">{{comment.body_text}}</p>
+      <p class="mt-3 break-words">{{comment.body_text}}</p>
       <CommentOptionsModal :comment="comment" :index="index" @deleteComment="deleteComment" />
     </div>
   </div>

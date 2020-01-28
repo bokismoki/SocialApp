@@ -22,19 +22,26 @@
     </div>
     <form @submit.prevent="newPost">
       <textarea
-        class="px-2 py-1 mt-2 placeholder-black w-full"
+        class="px-2 py-1 mt-2 placeholder-black w-full border-2 border-gray-300"
+        :class="{'border-red-500': isBodyTextOverLimit}"
         placeholder="What's on your mind?"
         v-model="bodyText"
       ></textarea>
-      <div class="flex items-center justify-end my-3">
-        <span class="mr-2 uppercase text-xs font-semibold">Share globally:</span>
-        <img
-          class="w-6 cursor-pointer"
-          src="~/assets/img/network.svg"
-          alt="Gray network icon"
-          :class="{'opacity-50': isPrivate}"
-          @click="isPrivate = !isPrivate"
-        />
+      <div class="flex justify-between justify-end my-3">
+        <div
+          class="text-xs opacity-75"
+          :class="{'text-red-600 font-black': isBodyTextOverLimit}"
+        >{{charactersLeft}}</div>
+        <div class="flex items-center">
+          <span class="mr-2 uppercase text-xs font-semibold">Share globally:</span>
+          <img
+            class="w-6 cursor-pointer"
+            src="~/assets/img/network.svg"
+            alt="Gray network icon"
+            :class="{'opacity-50': isPrivate}"
+            @click="isPrivate = !isPrivate"
+          />
+        </div>
       </div>
       <div class="relative flex items-start" v-if="containsImage">
         <button
@@ -72,6 +79,16 @@ export default {
       containsImage: false
     }
   },
+  computed: {
+    charactersLeft() {
+      if (this.bodyText) {
+        return 255 - this.bodyText.trim().length
+      }
+    },
+    isBodyTextOverLimit() {
+      return this.charactersLeft < 0
+    }
+  },
   methods: {
     processFile(e) {
       const img = document.querySelector('.body_image')
@@ -94,11 +111,11 @@ export default {
       this.bodyImage = ''
     },
     newPost() {
-      if (this.bodyText) {
+      if (this.bodyText.trim() && !this.isBodyTextOverLimit) {
         if (this.$route.name === 'post-id-edit') {
           this.$axios
             .put(`/post/update/${this.$route.params.id}`, {
-              body_text: this.bodyText,
+              body_text: this.bodyText.trim(),
               body_image: this.bodyImage,
               is_private: Number(this.isPrivate),
               user_id: this.$auth.user.id
@@ -114,7 +131,7 @@ export default {
             .post(
               '/post/add',
               {
-                body_text: this.bodyText,
+                body_text: this.bodyText.trim(),
                 body_image: this.bodyImage,
                 is_private: Number(this.isPrivate),
                 user_id: this.$auth.user.id
@@ -127,15 +144,15 @@ export default {
             )
             .then(response => {
               this.$emit('newPost', response.data.post)
+              this.bodyText = ''
+              this.bodyImage = ''
+              this.isPrivate = false
+              this.containsImage = false
             })
             .catch(err => {
               console.error(err)
             })
         }
-        this.bodyText = ''
-        this.bodyImage = ''
-        this.isPrivate = false
-        this.containsImage = false
       }
     }
   }
