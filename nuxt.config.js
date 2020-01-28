@@ -71,7 +71,10 @@ module.exports = {
         userinfo_endpoint: 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email',
         scope: ['public_profile', 'email']
       },
-    }
+    },
+    plugins: [
+      '~/plugins/axios.js'
+    ]
   },
   axios: {
     baseURL: 'https://social-app-social.herokuapp.com/api'
