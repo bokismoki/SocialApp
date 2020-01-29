@@ -44,9 +44,11 @@ export default {
   },
   async asyncData({ $axios, $auth, store, redirect }) {
     try {
+      store.dispatch('setIsLoading', true)
       const followedUsers = await $axios.get(
         `/follow/get/followed_users/${$auth.user.id}`
       )
+      store.dispatch('setIsLoading', false)
       return {
         followedUsers: followedUsers.data.followedUsers
       }

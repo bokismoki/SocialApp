@@ -49,10 +49,12 @@ export default {
   },
   async asyncData({ $axios, $auth, params, redirect, store }) {
     try {
+      store.dispatch('setIsLoading', true)
       const comment = await $axios.get(`/comment/get/by_id/${params.id}`)
       if ($auth.user.id !== comment.data.comment.user_id) {
         return redirect({ name: 'index' })
       }
+      store.dispatch('setIsLoading', false)
       return {
         comment: comment.data.comment
       }

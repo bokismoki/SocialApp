@@ -39,6 +39,7 @@ export default {
       }
     },
     deleteComment() {
+      this.$store.dispatch('setIsLoading', true)
       this.$axios
         .delete(`/comment/delete/${this.comment.comment_id}`, {
           data: {
@@ -47,9 +48,11 @@ export default {
         })
         .then(response => {
           this.$emit('deleteComment', this.index)
+          this.$store.dispatch('setIsLoading', false)
         })
         .catch(err => {
           console.error(err)
+          this.$store.dispatch('setIsLoading', false)
         })
     }
   }

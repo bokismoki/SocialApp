@@ -76,6 +76,7 @@ export default {
   },
   async asyncData({ $axios, $auth, params, redirect, store }) {
     try {
+      store.dispatch('setIsLoading', true)
       const post = await $axios.get(`/post/get/by_id/${params.id}`)
       if ($auth.user.id !== post.data.post.user_id) {
         if (post.data.post.is_private === 1) {
@@ -86,6 +87,7 @@ export default {
       const likesCount = await $axios.get(
         `/like/get/count/by_post/${post.data.post.post_id}`
       )
+      store.dispatch('setIsLoading', false)
       return {
         post: post.data.post,
         comments: comments.data.comments,

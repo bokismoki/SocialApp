@@ -112,6 +112,7 @@ export default {
     },
     newPost() {
       if (this.bodyText.trim() && !this.isBodyTextOverLimit) {
+        this.$store.dispatch('setIsLoading', true)
         if (this.$route.name === 'post-id-edit') {
           this.$axios
             .put(`/post/update/${this.$route.params.id}`, {
@@ -125,9 +126,11 @@ export default {
                 this.$store.dispatch('setErrorMsg', response.data.msg)
               }
               this.$router.push({ name: 'index' })
+              this.$store.dispatch('setIsLoading', false)
             })
             .catch(err => {
               console.error(err)
+              this.$store.dispatch('setIsLoading', false)
             })
         } else {
           this.$axios
@@ -156,9 +159,11 @@ export default {
                 this.$store.dispatch('setErrorMsg', response.data.msg)
                 this.$router.push({ name: 'index' })
               }
+              this.$store.dispatch('setIsLoading', false)
             })
             .catch(err => {
               console.error(err)
+              this.$store.dispatch('setIsLoading', false)
             })
         }
       }

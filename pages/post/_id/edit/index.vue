@@ -60,10 +60,12 @@ export default {
   },
   async asyncData({ $axios, $auth, params, redirect, store }) {
     try {
+      store.dispatch('setIsLoading', true)
       const post = await $axios.get(`/post/get/by_id/${params.id}`)
       if ($auth.user.id !== post.data.post.user_id) {
         return redirect({ name: 'index' })
       }
+      store.dispatch('setIsLoading', false)
       return {
         post: post.data.post
       }

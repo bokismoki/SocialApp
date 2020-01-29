@@ -87,9 +87,11 @@ export default {
   },
   async asyncData({ $axios, store }) {
     try {
+      store.dispatch('setIsLoading', true)
       const posts = await $axios.get('/post/get/public')
       const likes = await $axios.get('/like/get/count/public')
       const comments = await $axios.get('/comment/get/count/public')
+      store.dispatch('setIsLoading', false)
       return {
         posts: posts.data.posts,
         likes: likes.data.likes,

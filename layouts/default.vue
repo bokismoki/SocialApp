@@ -8,6 +8,9 @@
     <div v-if="errorMsg">
       <ErrorAlert />
     </div>
+    <div v-if="isLoading">
+      <Loader />
+    </div>
   </div>
 </template>
 
@@ -19,7 +22,8 @@ export default {
   components: {
     NavBar: () => import('~/components/NavBar'),
     OnlineUsers: () => import('~/components/OnlineUsers'),
-    ErrorAlert: () => import('~/components/ErrorAlert')
+    ErrorAlert: () => import('~/components/ErrorAlert'),
+    Loader: () => import('~/components/Loader')
   },
   data() {
     return {
@@ -28,7 +32,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['errorMsg'])
+    ...mapGetters(['errorMsg', 'isLoading'])
   },
   methods: {
     listenSocket() {
@@ -70,5 +74,11 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   scroll-behavior: smooth;
   @apply bg-blue-100;
+}
+</style>
+
+<style scoped>
+.loader_container {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

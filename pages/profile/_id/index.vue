@@ -88,6 +88,7 @@ export default {
   },
   methods: {
     follow() {
+      this.$store.dispatch('setIsLoading', true)
       this.$axios
         .post(
           '/follow/set',
@@ -116,9 +117,11 @@ export default {
             this.$store.dispatch('setErrorMsg', response.data.msg)
             this.$router.push({ name: 'index' })
           }
+          this.$store.dispatch('setIsLoading', false)
         })
         .catch(err => {
           console.error(err)
+          this.$store.dispatch('setIsLoading', false)
         })
     },
     liked(payload) {
@@ -133,6 +136,7 @@ export default {
   },
   async asyncData({ $axios, $auth, redirect, params, store }) {
     try {
+      store.dispatch('setIsLoading', true)
       const user = await $axios.get(`/user/get/${params.id}`)
       if (user.data.user.id === $auth.user.id) {
         redirect({ name: 'profile' })
@@ -153,6 +157,7 @@ export default {
         const followersCount = await $axios.get(
           `follow/get/count/by_user/${params.id}`
         )
+        store.dispatch('setIsLoading', false)
         return {
           user: user.data.user,
           posts: publicPosts,

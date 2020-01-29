@@ -40,6 +40,7 @@ export default {
   methods: {
     newComment() {
       if (this.bodyText.trim() && !this.isBodyTextOverLimit) {
+        this.$store.dispatch('setIsLoading', true)
         if (this.$route.name === 'comment-id-edit') {
           this.$axios
             .put(`/comment/update/${this.$route.params.id}`, {
@@ -53,9 +54,11 @@ export default {
                 this.$store.dispatch('setErrorMsg', response.data.msg)
                 this.$router.push({ name: 'index' })
               }
+              this.$store.dispatch('setIsLoading', false)
             })
             .catch(err => {
               console.error(err)
+              this.$store.dispatch('setIsLoading', false)
             })
         } else {
           this.$axios
@@ -80,9 +83,11 @@ export default {
                 this.$store.dispatch('setErrorMsg', response.data.msg)
                 this.$router.push({ name: 'index' })
               }
+              this.$store.dispatch('setIsLoading', false)
             })
             .catch(err => {
               console.error(err)
+              this.$store.dispatch('setIsLoading', false)
             })
         }
       }

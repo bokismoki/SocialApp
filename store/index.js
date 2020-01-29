@@ -1,14 +1,19 @@
 export const state = () => ({
-    errorMsg: ''
+    errorMsg: '',
+    isLoading: false
 })
 
 export const getters = {
-    errorMsg: state => state.errorMsg
+    errorMsg: state => state.errorMsg,
+    isLoading: state => state.isLoading
 }
 
 export const mutations = {
     SET_ERROR_MSG: (state, payload) => {
         state.errorMsg = payload
+    },
+    SET_IS_LOADING: (state, payload) => {
+        state.isLoading = payload
     }
 }
 
@@ -47,5 +52,8 @@ export const actions = {
         setTimeout(() => {
             dispatch('setErrorMsg')
         }, 4000)
+    },
+    setIsLoading: ({ commit }, payload) => {
+        commit('SET_IS_LOADING', payload)
     }
 }

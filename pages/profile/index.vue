@@ -106,6 +106,7 @@ export default {
   },
   async asyncData({ $axios, $auth, store, redirect }) {
     try {
+      store.dispatch('setIsLoading', true)
       const user = await $axios.get(`/user/get/${$auth.user.id}`)
       const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}`)
       const likes = await $axios.get(
@@ -117,6 +118,7 @@ export default {
       const followersCount = await $axios.get(
         `follow/get/count/by_user/${$auth.user.id}`
       )
+      store.dispatch('setIsLoading', false)
       return {
         user: user.data.user,
         posts: posts.data.posts,

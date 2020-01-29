@@ -17,6 +17,7 @@ export default {
   props: ['post', 'likes_count', 'index'],
   methods: {
     likeDislike() {
+      this.$store.dispatch('setIsLoading', true)
       let post_id
       if (this.$route.name === 'post-id') {
         post_id = this.$route.params.id
@@ -53,9 +54,11 @@ export default {
             this.$store.dispatch('setErrorMsg', response.data.msg)
             this.$router.push({ name: 'index' })
           }
+          this.$store.dispatch('setIsLoading', false)
         })
         .catch(err => {
           console.error(err)
+          this.$store.dispatch('setIsLoading', false)
         })
     }
   }

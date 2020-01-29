@@ -50,6 +50,7 @@ export default {
       }
     },
     deletePost() {
+      this.$store.dispatch('setIsLoading', true)
       this.$axios
         .delete(`/post/delete/${this.post.post_id}`, {
           data: {
@@ -69,9 +70,11 @@ export default {
             this.$store.dispatch('setErrorMsg', response.data.msg)
             this.$router.push({ name: 'index' })
           }
+          this.$store.dispatch('setIsLoading', false)
         })
         .catch(err => {
           console.error(err)
+          this.$store.dispatch('setIsLoading', false)
         })
     }
   }
