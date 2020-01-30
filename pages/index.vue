@@ -101,6 +101,7 @@ export default {
       }
     } catch (err) {
       store.dispatch('setErrorMsg', err)
+      store.dispatch('setIsLoading', false)
     }
   }
 }

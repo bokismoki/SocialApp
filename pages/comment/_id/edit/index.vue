@@ -61,6 +61,7 @@ export default {
     } catch (err) {
       store.dispatch('setErrorMsg', err)
       redirect({ name: 'index' })
+      store.dispatch('setIsLoading', false)
     }
   }
 }
