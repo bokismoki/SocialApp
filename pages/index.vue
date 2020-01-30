@@ -3,6 +3,7 @@
     <div class="container mx-auto pt-5 pb-16 px-5">
       <div class="max-w-5xl mx-auto lg:flex">
         <div class="lg:mr-10 lg:w-1/3 lg:mt-6">
+          <SearchUser />
           <PostForm @newPost="newPost" />
         </div>
         <div class="mt-20 lg:mt-0 lg:w-2/3">
@@ -41,7 +42,8 @@ export default {
   middleware: 'auth',
   components: {
     PostForm: () => import('~/components/PostForm'),
-    PostItem: () => import('~/components/PostItem')
+    PostItem: () => import('~/components/PostItem'),
+    SearchUser: () => import('~/components/SearchUser')
   },
   data() {
     return {

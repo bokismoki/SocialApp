@@ -3,7 +3,7 @@ require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
 
-exports.get = (req, res) => {
+exports.getById = (req, res) => {
     const user_id = req.params.id
     const queryGetUser = `SELECT id, first_name, last_name, email, image
     FROM users WHERE id = '${user_id}'`
@@ -19,6 +19,20 @@ exports.get = (req, res) => {
                     msg: 'Error on queryGetUser'
                 })
             }
+        }
+    })
+}
+
+exports.getByInput = (req, res) => {
+    const inputValue = req.params.input
+    const queryGetUsers = `SELECT id, CONCAT(first_name, ' ', last_name) AS name, image
+    FROM users WHERE CONCAT(first_name, ' ', last_name) LIKE '%${inputValue}%'
+    LIMIT 3`
+    sql.query(queryGetUsers, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetUsers' })
+        } else {
+            res.send({ success: true, users: result })
         }
     })
 }
