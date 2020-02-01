@@ -83,26 +83,31 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    /*
-    ** You can extend webpack config here
-    */
     extractCSS: true,
-    extend(config, ctx) {
-      config.plugins.push(
-        new PurgecssPlugin({
-          whitelist: ['html', 'body'],
-          paths: glob.sync([
-            path.join(__dirname, 'components/**/*.vue'),
-            path.join(__dirname, 'layouts/**/*.vue'),
-            path.join(__dirname, 'pages/**/*.vue'),
-            path.join(__dirname, 'plugins/**/*.vue')
-          ]),
-          extractors: [{
-            extractor: TailwindExtractor,
-            extensions: ['html', 'js', 'vue']
-          }]
-        })
-      )
+    postcss: {
+      preset: { autoprefixer: { grid: true } }
+    },
+    extend(config, { isDev }) {
+      if (!isDev) {
+        config.plugins.push(
+          new PurgecssPlugin({
+            // purgecss configuration
+            // https://github.com/FullHuman/purgecss
+            paths: glob.sync([
+              path.join(__dirname, './pages/**/*.vue'),
+              path.join(__dirname, './layouts/**/*.vue'),
+              path.join(__dirname, './components/**/*.vue')
+            ]),
+            extractors: [
+              {
+                extractor: TailwindExtractor,
+                extensions: ['vue']
+              }
+            ],
+            whitelist: ['html', 'body', 'nuxt-progress']
+          })
+        )
+      }
     }
   },
 }
