@@ -6,16 +6,19 @@
       class="users pl-2 pr-5 py-2 overflow-y-auto"
       v-if="toggleShowOnlineUsers && onlineUsers.length > 0"
     >
-      <div class="mt-1" v-for="user in onlineUsers" :key="user.id">
+      <div class="mt-1" v-for="user in onlineUsers" :key="user.user.id">
         <div class="flex justify-between items-center">
-          <div class="flex items-center">
+          <nuxt-link
+            class="flex items-center"
+            :to="{name: 'profile-id', params: {id: user.user.id}}"
+          >
             <img
               class="rounded-full w-8 h-8 mr-2 border-2 border-blue-300"
-              :src="user.picture.data.url"
+              :src="user.user.picture.data.url"
               alt="My Facebook profile image"
             />
-            <h1 class="font-semibold text-xs">{{firstName(user.name)}}</h1>
-          </div>
+            <h1 class="font-semibold text-xs">{{firstName(user.user.name)}}</h1>
+          </nuxt-link>
           <div class="w-2 h-2 bg-green-700 rounded-full"></div>
         </div>
       </div>

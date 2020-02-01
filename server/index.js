@@ -45,15 +45,24 @@ async function start() {
 start()
 
 // SOCKET.IO
+const onlineUsers = []
 io.on('connection', socket => {
-  let userIndex
-  socket.on('newUserConnected', user => {
-    userIndex = user.index
-    io.emit('shareNewUser', user.user);
+  socket.emit('getNewUser')
+  socket.on('sendNewUser', user => {
+    if (user.user) {
+      const isOnline = onlineUsers.find(usr => usr.user.id === user.user.id)
+      if (typeof (isOnline) === 'undefined') {
+        onlineUsers.push({ user: user.user, socketId: socket.id })
+      } else {
+        const indexOfOnlineUser = onlineUsers.map(usr => usr.user.id).indexOf(user.user.id)
+        onlineUsers.splice(indexOfOnlineUser, 1, { user: user.user, socketId: socket.id })
+      }
+      io.emit('sendOnlineUsers', onlineUsers)
+    }
   })
 
   socket.on('disconnect', () => {
-    io.emit('shareDisconnectedUser', userIndex);
+    io.emit('userDisconnected', socket.id)
   })
 })
 

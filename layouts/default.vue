@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com'),
+      socket: io('http://localhost:3000'),
       onlineUsers: []
     }
   },
@@ -36,26 +36,24 @@ export default {
   },
   methods: {
     listenSocket() {
-      this.socket.on('shareNewUser', user => {
-        const isOnline = this.onlineUsers.find(
-          user => user.id === this.$auth.user.id
-        )
-        if (typeof isOnline === 'undefined') {
-          this.onlineUsers.push(user)
-        }
+      this.socket.on('sendOnlineUsers', onlineUsers => {
+        this.onlineUsers = onlineUsers
       })
-
-      this.socket.on('shareDisconnectedUser', index => {
-        if (this.onlineUsers[index].id !== this.$auth.user.id) {
-          this.onlineUsers.splice(index, 1)
+      this.socket.on('userDisconnected', socketId => {
+        const indexOfOnlineUser = this.onlineUsers
+          .map(user => user.socketId)
+          .indexOf(socketId)
+        if (indexOfOnlineUser !== -1) {
+          this.onlineUsers.splice(indexOfOnlineUser, 1)
         }
       })
     }
   },
   mounted() {
-    this.socket.emit('newUserConnected', {
-      user: this.$auth.user,
-      index: this.onlineUsers.length
+    this.socket.on('getNewUser', () => {
+      this.socket.emit('sendNewUser', {
+        user: this.$auth.user
+      })
     })
     this.listenSocket()
   }

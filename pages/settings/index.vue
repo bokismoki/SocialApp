@@ -5,7 +5,7 @@
         <nuxt-link
           :to="{name: 'profile'}"
           class="text-sm uppercase text-white font-semibold px-2 py-1 block bg-blue-600 rounded-lg"
-        >Manage post</nuxt-link>
+        >Manage posts</nuxt-link>
         <nuxt-link
           :to="{name: 'index'}"
           class="text-sm uppercase text-white mt-5 font-semibold px-2 py-1 block bg-blue-600 rounded-lg"
