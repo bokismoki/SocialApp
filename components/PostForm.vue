@@ -73,7 +73,8 @@
 
 <script>
 export default {
-  name: 'NewPostForm',
+  name: 'PostForm',
+  props: ['keepText', 'keepImage', 'currentText', 'currentImage'],
   data() {
     return {
       bodyText: '',
@@ -114,13 +115,29 @@ export default {
       this.bodyImage = ''
     },
     newPost() {
-      if (this.bodyText.trim() && !this.isBodyTextOverLimit) {
+      if (
+        (this.bodyText.trim() ||
+          (this.currentText.trim() && this.keepText === 'true')) &&
+        !this.isBodyTextOverLimit
+      ) {
         this.$store.dispatch('setIsLoading', true)
         if (this.$route.name === 'post-id-edit') {
+          let textToSend
+          let imageToSend
+          if (this.keepText === 'true') {
+            textToSend = this.currentText
+          } else {
+            textToSend = this.bodyText.trim()
+          }
+          if (this.keepImage === 'true') {
+            imageToSend = this.currentImage
+          } else {
+            imageToSend = this.bodyImage
+          }
           this.$axios
             .put(`/post/update/${this.$route.params.id}`, {
-              body_text: this.bodyText.trim(),
-              body_image: this.bodyImage,
+              body_text: textToSend,
+              body_image: imageToSend,
               is_private: Number(this.isPrivate),
               user_id: this.$auth.user.id
             })

@@ -2,7 +2,7 @@
   <div class="post_edit">
     <div class="container mx-auto max-w-5xl pt-5 pb-16 px-5">
       <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Post Editing</h1>
-      <div class="mb-10 max-w-lg border-2 border-gray-300 shadow-big rounded p-5 bg-white">
+      <div class="mb-5 max-w-lg border-2 border-gray-300 shadow-big rounded p-5 bg-white">
         <h2 class="uppercase text-gray-800 font-semibold mb-5">Current Post:</h2>
         <div>
           <div class="flex items-center">
@@ -37,9 +37,35 @@
           alt="Post image"
         />
       </div>
+      <div class="mb-10">
+        <div class="mb-2 flex items-center">
+          <p class="mr-2">Keep the current text</p>
+          <select class="border-2 border-gray-300 shadow" name="text" id="text" v-model="keepText">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        </div>
+        <div class="flex items-center">
+          <p class="mr-2">Keep the current image</p>
+          <select
+            class="border-2 border-gray-300 shadow"
+            name="image"
+            id="image"
+            v-model="keepImage"
+          >
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        </div>
+      </div>
       <h2 class="uppercase text-gray-800 font-semibold mb-5">New Content:</h2>
       <div class="max-w-lg">
-        <PostForm />
+        <PostForm
+          :keepText="keepText"
+          :keepImage="keepImage"
+          :currentText="post.body_text"
+          :currentImage="post.body_image"
+        />
       </div>
     </div>
   </div>
@@ -55,6 +81,12 @@ export default {
   middleware: 'auth',
   components: {
     PostForm: () => import('~/components/PostForm')
+  },
+  data() {
+    return {
+      keepText: 'false',
+      keepImage: 'false'
+    }
   },
   methods: {
     formatDate(date) {

@@ -2,7 +2,7 @@
   <div class="profile">
     <div class="container mx-auto">
       <div
-        class="relative h-40 max-w-5xl mx-auto"
+        class="relative h-40 max-w-5xl mx-auto rounded-b"
         :style="{'background': `url(${profileBackground}) center/cover no-repeat`}"
       >
         <img

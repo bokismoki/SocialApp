@@ -2,7 +2,7 @@
   <div class="profile_id">
     <div class="container mx-auto">
       <div
-        class="relative h-40 max-w-5xl mx-auto"
+        class="relative h-40 max-w-5xl mx-auto rounded-b"
         :style="{'background': `url(${profileBackground}) center/cover no-repeat`}"
       >
         <img
@@ -21,7 +21,7 @@
         </div>
         <div class="flex items-end">
           <button
-            class="uppercase mt-3 rounded-full px-5 py-1 bg-blue-700 text-white font-semibold tracking-widest shadow-lg hover:bg-blue-600"
+            class="uppercase mt-3 rounded px-5 py-1 bg-blue-700 text-white font-semibold tracking-widest shadow-lg hover:bg-blue-600"
             @click="follow"
           >{{isFollowing ? 'Unfollow' : 'Follow'}}</button>
           <div class="ml-2 w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
