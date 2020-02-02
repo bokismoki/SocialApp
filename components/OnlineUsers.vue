@@ -1,6 +1,6 @@
 <template>
   <div
-    class="online_users fixed bottom-0 right-0 z-50 w-64 bg-white shadow-2xl border-2 border-gray-500"
+    class="online_users fixed bottom-0 right-0 z-50 w-64 bg-white rounded border-2 border-gray-500"
   >
     <div
       class="users pl-2 pr-5 py-2 overflow-y-auto"

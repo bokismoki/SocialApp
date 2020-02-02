@@ -5,7 +5,7 @@
         <div
           class="flex items-center mr-10 cursor-pointer"
           :class="{'opacity-50': containsImage}"
-          @click="containsImage = false"
+          @click="containsImage = false; removeImage()"
         >
           <img class="w-5 mr-1" src="~/assets/img/feather.svg" alt="Gray feater icon" />
           <span class="text-gray-800 font-semibold">Text</span>
@@ -22,46 +22,49 @@
     </div>
     <form @submit.prevent="newPost">
       <textarea
-        class="px-2 py-1 mt-2 placeholder-black w-full border-2 border-gray-300"
+        class="px-2 py-1 mt-2 placeholder-black w-full rounded border-2 border-gray-300"
         :class="{'border-red-500': isBodyTextOverLimit}"
         placeholder="What's on your mind?"
         v-model="bodyText"
       ></textarea>
-      <div class="flex justify-between justify-end my-3">
+      <div class="my-3">
         <div
           class="text-xs opacity-75"
           :class="{'text-red-600 font-black': isBodyTextOverLimit}"
         >{{charactersLeft}}</div>
-        <div class="flex items-center">
-          <span class="mr-2 uppercase text-xs font-semibold">Share globally:</span>
-          <img
-            class="w-6 cursor-pointer"
-            src="~/assets/img/network.svg"
-            alt="Gray network icon"
-            :class="{'opacity-50': isPrivate}"
-            @click="isPrivate = !isPrivate"
-          />
-        </div>
-      </div>
-      <div class="relative flex items-start" v-if="containsImage">
-        <button
-          v-if="bodyImage"
-          class="absolute w-5 h-5 bg-gray-800 rounded-full mt-10"
-          @click="removeImage"
+        <div
+          class="flex items-center"
+          :class="{'justify-between': containsImage, 'justify-end': !containsImage}"
         >
-          <img class="w-full h-full" src="~/assets/img/cross.svg" alt="White cross icon" />
-        </button>
-        <input class="hidden" type="file" id="file" @change="processFile" />
-        <label
-          class="bg-gray-800 text-white rounded-full cursor-pointer uppercase text-xs px-2 py-1 inline-block mr-3 hover:bg-gray-700"
-          for="file"
-        >Add image</label>
-        <div v-if="bodyImage">
-          <img class="body_image w-32" :src="bodyImage" alt="Body_image" />
+          <div v-if="containsImage">
+            <input class="hidden" type="file" id="file" @change="processFile" />
+            <label
+              class="bg-gray-800 text-white rounded cursor-pointer uppercase text-xs px-2 py-1 inline-block mr-3 hover:bg-gray-700"
+              for="file"
+            >Add image</label>
+          </div>
+          <div class="flex items-center py-1">
+            <span class="mr-2 uppercase text-xs font-semibold">Share globally:</span>
+            <img
+              class="w-6 cursor-pointer"
+              src="~/assets/img/network.svg"
+              alt="Gray network icon"
+              :class="{'opacity-50': isPrivate}"
+              @click="isPrivate = !isPrivate"
+            />
+          </div>
+        </div>
+        <div class="mt-2 relative" v-if="bodyImage && containsImage">
+          <button class="absolute w-5 h-5 bg-gray-800 rounded-full mt-1 ml-1" @click="removeImage">
+            <img class="w-full h-full" src="~/assets/img/cross.svg" alt="White cross icon" />
+          </button>
+          <div v-if="bodyImage">
+            <img class="body_image w-32 rounded" :src="bodyImage" alt="Body_image" />
+          </div>
         </div>
       </div>
       <button
-        class="uppercase text-sm bg-blue-600 w-full text-white mt-2 font-semibold tracking-wide py-1 rounded-full hover:bg-blue-500"
+        class="uppercase text-sm bg-blue-600 w-full text-white mt-2 font-semibold tracking-wide py-1 rounded hover:bg-blue-500"
         type="submit"
       >{{$route.name === 'post-id-edit' ? 'Finish editing' : 'Post'}}</button>
     </form>

@@ -4,14 +4,14 @@
       <div class="max-w-lg">
         <nuxt-link
           :to="{name: 'profile'}"
-          class="text-sm uppercase text-white font-semibold px-2 py-1 block bg-blue-600 rounded-lg"
+          class="text-sm uppercase text-white font-semibold px-2 py-1 block bg-blue-600 rounded"
         >Manage posts</nuxt-link>
         <nuxt-link
           :to="{name: 'index'}"
-          class="text-sm uppercase text-white mt-5 font-semibold px-2 py-1 block bg-blue-600 rounded-lg"
+          class="text-sm uppercase text-white mt-5 font-semibold px-2 py-1 block bg-blue-600 rounded"
         >Manage comments</nuxt-link>
         <div
-          class="text-sm uppercase text-white mt-5 font-semibold px-2 py-1 block bg-blue-600 rounded-lg"
+          class="text-sm uppercase text-white mt-5 font-semibold px-2 py-1 block bg-blue-600 rounded"
         >Following</div>
         <div v-if="followedUsers.length > 0">
           <div v-for="follow in followedUsers" :key="follow.id">

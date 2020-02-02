@@ -7,7 +7,7 @@
           for="search"
         >Search User:</label>
         <input
-          class="px-1 placeholder-black text-sm border-2 border-gray-300"
+          class="px-1 placeholder-black text-sm rounded border-2 border-gray-300"
           type="search"
           id="search"
           v-model="searchValue"

@@ -2,7 +2,7 @@
   <div class="post_edit">
     <div class="container mx-auto max-w-5xl pt-5 pb-16 px-5">
       <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Post Editing</h1>
-      <div class="mb-10 max-w-lg border-2 border-gray-300 rounded-lg p-5 bg-white">
+      <div class="mb-10 max-w-lg border-2 border-gray-300 shadow-big rounded p-5 bg-white">
         <h2 class="uppercase text-gray-800 font-semibold mb-5">Current Post:</h2>
         <div>
           <div class="flex items-center">
@@ -30,7 +30,12 @@
           </div>
         </div>
         <p class="mt-3">{{post.body_text}}</p>
-        <img v-if="post.body_image" class="max-w-xs mt-2" :src="post.body_image" alt="Post image" />
+        <img
+          v-if="post.body_image"
+          class="max-w-xs mt-2 rounded"
+          :src="post.body_image"
+          alt="Post image"
+        />
       </div>
       <h2 class="uppercase text-gray-800 font-semibold mb-5">New Content:</h2>
       <div class="max-w-lg">

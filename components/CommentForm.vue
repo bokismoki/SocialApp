@@ -2,7 +2,7 @@
   <div class="comment_form">
     <form @submit.prevent="newComment">
       <textarea
-        class="px-2 py-1 placeholder-black w-full border-2 border-gray-300"
+        class="px-2 py-1 placeholder-black w-full rounded border-2 border-gray-300"
         :class="{'border-red-500': isBodyTextOverLimit}"
         placeholder="Write a comment"
         v-model="bodyText"
@@ -12,7 +12,7 @@
         :class="{'text-red-600 font-black': isBodyTextOverLimit}"
       >{{charactersLeft}}</div>
       <button
-        class="uppercase text-sm bg-blue-600 w-full text-white mt-2 font-semibold tracking-wide py-1 rounded-full hover:bg-blue-500"
+        class="uppercase text-sm bg-blue-600 w-full text-white mt-2 font-semibold tracking-wide py-1 rounded hover:bg-blue-500"
         type="submit"
       >Comment</button>
     </form>

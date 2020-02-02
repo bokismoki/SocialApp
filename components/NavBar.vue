@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar fixed top-0 w-full bg-blue-800 z-50">
+  <nav class="navbar fixed top-0 w-full bg-blue-800 z-50 shadow-nav">
     <div class="flex items-center justify-between container mx-auto p-5 text-white">
       <nuxt-link :to="{name: 'index'}">
         <div class="flex items-center">

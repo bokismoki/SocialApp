@@ -1,12 +1,12 @@
 <template>
-  <div class="post_item mb-5 border-2 border-gray-300 rounded-lg p-5 bg-white">
+  <div class="post_item mb-5 border-2 border-gray-300 rounded shadow-big p-5 bg-white">
     <div class="relative">
       <PostAuthor :post="post" :user="user" />
       <PostOptionsModal :post="post" :index="index" @deletePost="deletePost" />
     </div>
     <p v-if="$route.name !== 'post-id'" class="mt-3 break-words">{{truncate(post.body_text)}}</p>
     <p v-else class="mt-3 break-words">{{post.body_text}}</p>
-    <img v-if="post.body_image" class="mt-2" :src="post.body_image" alt="Post image" />
+    <img v-if="post.body_image" class="mt-2 rounded" :src="post.body_image" alt="Post image" />
     <div class="flex mt-5">
       <LikesCount
         :post="post"

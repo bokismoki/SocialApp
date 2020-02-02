@@ -1,6 +1,6 @@
 <template>
   <div class="likes_count">
-    <button class="bg-blue-200 rounded-lg mr-4 px-2 py-1 flex justify-center" @click="likeDislike">
+    <button class="bg-blue-200 rounded mr-4 px-2 py-1 flex justify-center" @click="likeDislike">
       <div class="relative">
         <div
           class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"

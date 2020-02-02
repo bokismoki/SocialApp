@@ -7,7 +7,9 @@
       v-if="displayEdit"
       @click="toggleOptionsModal"
     />
-    <div class="absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300">
+    <div
+      class="absolute hidden top-0 right-0 mt-5 p-1 shadow-big bg-white rounded border-2 border-gray-300"
+    >
       <nuxt-link
         :to="{name: 'comment-id-edit', params: {id: this.comment.comment_id}}"
         class="w-full uppercase text-xs font-semibold px-2 py-1"

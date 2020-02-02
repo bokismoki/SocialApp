@@ -2,7 +2,7 @@
   <div class="comments_count">
     <nuxt-link
       :to="{name: 'post-id', params: {id: post.post_id}}"
-      class="bg-blue-200 rounded-lg px-2 py-1 flex justify-center"
+      class="bg-blue-200 rounded px-2 py-1 flex justify-center"
     >
       <div class="relative">
         <div

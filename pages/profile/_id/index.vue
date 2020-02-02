@@ -74,7 +74,7 @@ export default {
   },
   data() {
     return {
-      profileBackground: require('~/assets/img/profile_background.jpg'),
+      profileBackground: require('~/assets/img/profile_background.png'),
       activePaginationIndex: 0
     }
   },

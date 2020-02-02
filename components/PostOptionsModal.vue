@@ -7,7 +7,7 @@
       @click="toggleOptionsModal"
     />
     <div
-      class="options_modal absolute hidden top-0 right-0 mt-5 p-1 shadow-lg bg-white border-2 border-gray-300"
+      class="options_modal absolute hidden top-0 right-0 mt-5 p-1 shadow-big bg-white rounded border-2 border-gray-300"
     >
       <nuxt-link
         :to="{name: 'post-id', params: {id: post.post_id}}"

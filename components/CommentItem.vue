@@ -1,5 +1,5 @@
 <template>
-  <div class="comment_item bg-white mb-5 p-5 rounded-lg border-2 border-gray-300">
+  <div class="comment_item bg-white mb-5 p-5 rounded shadow-big border-2 border-gray-300">
     <div class="relative">
       <CommentAuthor :comment="comment" />
       <p class="mt-3 break-words">{{comment.body_text}}</p>

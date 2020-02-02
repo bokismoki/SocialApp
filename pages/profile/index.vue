@@ -6,7 +6,7 @@
         :style="{'background': `url(${profileBackground}) center/cover no-repeat`}"
       >
         <img
-          class="profile_image absolute w-32 h-32 rounded-full border-4"
+          class="profile_image absolute w-32 h-32 rounded-full border-4 border-white shadow-big"
           :src="user.image"
           alt="My Facebook profile image"
         />
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      profileBackground: require('~/assets/img/profile_background.jpg'),
+      profileBackground: require('~/assets/img/profile_background.png'),
       activePaginationIndex: 0
     }
   },
