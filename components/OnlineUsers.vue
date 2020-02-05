@@ -23,7 +23,10 @@
     <button
       class="text-gray-800 font-semibold w-full bg-gray-100 px-2 py-1 cursor-pointer focus:outline-none"
       @click="toggleShowOnlineUsers = !toggleShowOnlineUsers"
-    >Online users</button>
+    >
+      Online users
+      <span class="text-sm">( {{onlineUsers.length}} )</span>
+    </button>
   </div>
 </template>
 
