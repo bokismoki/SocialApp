@@ -3,8 +3,12 @@
     <div class="container mx-auto pt-5 pb-16 px-5">
       <div class="max-w-lg">
         <nuxt-link
-          :to="{name: 'profile'}"
+          :to="{name: 'privacy'}"
           class="text-sm uppercase text-white font-semibold px-2 py-1 block bg-blue-600 rounded"
+        >Privacy</nuxt-link>
+        <nuxt-link
+          :to="{name: 'profile'}"
+          class="text-sm uppercase text-white mt-5 font-semibold px-2 py-1 block bg-blue-600 rounded"
         >Manage posts</nuxt-link>
         <nuxt-link
           :to="{name: 'index'}"
@@ -42,6 +46,7 @@ export default {
   head: {
     title: 'Settings'
   },
+  middleware: 'auth',
   async asyncData({ $axios, $auth, store, redirect }) {
     try {
       store.dispatch('setIsLoading', true)

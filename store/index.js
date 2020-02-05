@@ -18,7 +18,7 @@ export const mutations = {
 }
 
 export const actions = {
-    nuxtServerInit({ state }, { $axios, $cookies }) {
+    nuxtServerInit({ state }, { app, $axios }) {
         if (state.auth.loggedIn) {
             $axios
                 .post('/user/login', state.auth.user, {
@@ -35,7 +35,7 @@ export const actions = {
                         })
                             .then(response => {
                                 const token = response.headers['set-cookie'][0].split('=')[1].split(';')[0]
-                                this.$cookies.set('jwt', token)
+                                app.$cookies.set('jwt', token)
                             })
                             .catch(err => {
                                 console.error(err)
