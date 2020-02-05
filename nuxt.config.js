@@ -77,37 +77,28 @@ module.exports = {
     ]
   },
   axios: {
-    baseURL: 'http://localhost:3000/api'
+    baseURL: 'https://social-app-social.herokuapp.com/api'
   },
   /*
   ** Build configuration
   */
   build: {
     extractCSS: true,
-    postcss: {
-      preset: { autoprefixer: { grid: true } }
-    },
-    extend(config, { isDev }) {
-      if (!isDev) {
-        config.plugins.push(
-          new PurgecssPlugin({
-            // purgecss configuration
-            // https://github.com/FullHuman/purgecss
-            paths: glob.sync([
-              path.join(__dirname, './pages/**/*.vue'),
-              path.join(__dirname, './layouts/**/*.vue'),
-              path.join(__dirname, './components/**/*.vue')
-            ]),
-            extractors: [
-              {
-                extractor: TailwindExtractor,
-                extensions: ['vue']
-              }
-            ],
-            whitelist: ['html', 'body', 'nuxt-progress']
-          })
-        )
-      }
+    extend(config, ctx) {
+      config.plugins.push(
+        new PurgecssPlugin({
+          whitelist: ['html', 'body'],
+          paths: glob.sync([
+            path.join(__dirname, 'components/**/*.vue'),
+            path.join(__dirname, 'layouts/**/*.vue'),
+            path.join(__dirname, 'pages/**/*.vue')
+          ]),
+          extractors: [{
+            extractor: TailwindExtractor,
+            extensions: ['html', 'js', 'vue']
+          }]
+        })
+      )
     }
   },
 }
