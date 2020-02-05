@@ -8,10 +8,7 @@
     >
       <div class="mt-1" v-for="user in onlineUsers" :key="user.user.id">
         <div class="flex justify-between items-center">
-          <nuxt-link
-            class="flex items-center"
-            :to="{name: 'profile-id', params: {id: user.user.id}}"
-          >
+          <nuxt-link class="flex items-center" :to="userProfileRoute(user.user.id)">
             <img
               class="rounded-full w-8 h-8 mr-2 border-2 border-blue-300"
               :src="user.user.picture.data.url"
@@ -42,6 +39,13 @@ export default {
   methods: {
     firstName(name) {
       return name.split(' ')[0]
+    },
+    userProfileRoute(userId) {
+      if (this.$auth.user.id !== userId) {
+        return { name: 'profile-id', params: { id: userId } }
+      } else {
+        return { name: 'profile' }
+      }
     }
   }
 }
