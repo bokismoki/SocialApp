@@ -22,7 +22,7 @@
     </div>
     <form @submit.prevent="newPost">
       <textarea
-        class="px-2 py-1 mt-2 placeholder-black w-full rounded border-2 border-gray-300"
+        class="px-2 py-1 mt-2 placeholder-black w-full shadow-big rounded border-2 border-gray-300"
         :class="{'border-red-500': isBodyTextOverLimit}"
         placeholder="What's on your mind?"
         v-model="bodyText"
@@ -36,10 +36,11 @@
           class="flex items-center"
           :class="{'justify-between': containsImage, 'justify-end': !containsImage}"
         >
-          <div v-if="containsImage">
+          <div class="relative" v-if="containsImage">
             <input class="hidden" type="file" id="file" @change="processFile" />
+            <p class="absolute text-xs font-semibold mt-6 pt-1 opacity-75">max 2MB*</p>
             <label
-              class="bg-gray-800 text-white rounded cursor-pointer uppercase text-xs px-2 py-1 inline-block mr-3 hover:bg-gray-700"
+              class="bg-gray-800 text-white rounded cursor-pointer uppercase text-xs px-2 py-1 inline-block hover:bg-gray-700"
               for="file"
             >Add image</label>
           </div>
@@ -104,10 +105,10 @@ export default {
         this.bodyImage = reader.result
       })
 
-      if (file.type.includes('image')) {
+      if (file.type.includes('image') && file.size < 2000000) {
         reader.readAsDataURL(file)
       } else {
-        console.error('Please select the right image format!')
+        console.error('Wrong file format or too large file (max 2MB allowed)!')
         this.bodyImage = ''
       }
     },

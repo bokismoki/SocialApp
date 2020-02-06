@@ -12,8 +12,8 @@
             <PostItem
               :post="post"
               :index="index"
-              :likes_count="likes[index].likes_count"
-              :comments_count="comments[index].comments_count"
+              :likes_count="post.likes_count"
+              :comments_count="post.comments_count"
               @liked="liked"
               @disliked="disliked"
               @deletePost="deletePost"
@@ -66,22 +66,20 @@ export default {
           ...payload,
           first_name,
           last_name,
+          likes_count: 0,
+          comments_count: 0,
           image: this.$auth.user.picture.data.url
         })
-        this.likes.unshift({ likes_count: 0 })
-        this.comments.unshift({ comments_count: 0 })
       }
     },
     deletePost(payload) {
       this.posts.splice(payload, 1)
-      this.likes.splice(payload, 1)
-      this.comments.splice(payload, 1)
     },
     liked(payload) {
-      this.likes[payload].likes_count++
+      this.posts[payload].likes_count++
     },
     disliked(payload) {
-      this.likes[payload].likes_count--
+      this.posts[payload].likes_count--
     },
     updatePagination(index) {
       this.activePaginationIndex = index
@@ -91,13 +89,9 @@ export default {
     try {
       store.dispatch('setIsLoading', true)
       const posts = await $axios.get('/post/get/public')
-      const likes = await $axios.get('/like/get/count/public')
-      const comments = await $axios.get('/comment/get/count/public')
       store.dispatch('setIsLoading', false)
       return {
-        posts: posts.data.posts,
-        likes: likes.data.likes,
-        comments: comments.data.comments
+        posts: posts.data.posts
       }
     } catch (err) {
       store.dispatch('setErrorMsg', err)

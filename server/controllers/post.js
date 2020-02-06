@@ -2,11 +2,16 @@ const sql = require('../db/mysql')
 
 exports.getByUser = (req, res) => {
     const user_id = req.params.id
-    const queryGetPost = `SELECT id AS post_id, body_text, body_image, created_at, is_private
-    FROM posts WHERE user_id = '${user_id}'
-    ORDER BY created_at DESC`
+    const queryGetPost = `SELECT p.id AS post_id, p.body_text, p.body_image, p.created_at, p.is_private,
+    COALESCE(l.likes_count, 0) AS likes_count, COALESCE(c.comments_count, 0) AS comments_count
+    FROM posts p
+    LEFT JOIN ( SELECT post_id, COUNT(created_at) AS likes_count FROM likes GROUP BY post_id ) l ON l.post_id = p.id
+    LEFT JOIN ( SELECT post_id, COUNT(created_at) AS comments_count FROM comments GROUP BY post_id ) c ON c.post_id = p.id
+    WHERE p.user_id = '${user_id}'
+    ORDER BY p.created_at DESC`
     sql.query(queryGetPost, (err, result) => {
         if (err) {
+            console.log(err)
             res.send({ success: false, msg: 'Error on queryGetPost' })
         } else {
             res.send({ success: true, posts: result })
@@ -17,8 +22,10 @@ exports.getByUser = (req, res) => {
 exports.getById = (req, res) => {
     const post_id = req.params.id
     const queryGetPost = `SELECT posts.id AS post_id, posts.body_text, posts.body_image, posts.created_at, posts.is_private,
-    users.id AS user_id, users.first_name, users.last_name, users.image
+    users.id AS user_id, users.first_name, users.last_name, users.image,
+    COUNT(likes.created_at) AS likes_count
     FROM posts JOIN users ON posts.user_id = users.id
+    LEFT JOIN likes ON likes.post_id = posts.id
     WHERE posts.id = ${post_id}`
     sql.query(queryGetPost, (err, result) => {
         if (err) {
@@ -30,13 +37,17 @@ exports.getById = (req, res) => {
 }
 
 exports.getPublic = (req, res) => {
-    const queryGetPublicPosts = `SELECT posts.id AS post_id, posts.body_text, posts.body_image, posts.created_at, posts.is_private,
-    users.id AS user_id, users.first_name, users.last_name, users.image
-    FROM posts JOIN users ON users.id = posts.user_id
-    WHERE posts.is_private = 0
-    ORDER BY posts.created_at DESC`
+    const queryGetPublicPosts = `SELECT p.id AS post_id, p.body_text, p.body_image, p.created_at, p.is_private,
+    u.id AS user_id, u.first_name, u.last_name, u.image,
+    COALESCE(l.likes_count, 0) AS likes_count, COALESCE(c.comments_count, 0) AS comments_count
+    FROM posts p JOIN users u ON u.id = p.user_id
+    LEFT JOIN ( SELECT post_id, COUNT(created_at) AS likes_count FROM likes GROUP BY post_id ) l ON l.post_id = p.id
+    LEFT JOIN ( SELECT post_id, COUNT(created_at) AS comments_count FROM comments GROUP BY post_id ) c ON c.post_id = p.id
+    WHERE p.is_private = 0
+    ORDER BY p.created_at DESC`
     sql.query(queryGetPublicPosts, (err, result) => {
         if (err) {
+            console.log(err)
             res.send({ success: false, msg: 'Error on queryGetPublicPosts' })
         } else {
             res.send({ success: true, posts: result })

@@ -3,7 +3,7 @@
     <div class="container mx-auto pt-5 pb-16 px-5 lg:max-w-3xl">
       <PostItem
         :post="post"
-        :likes_count="likes_count"
+        :likes_count="post.likes_count"
         :comments_count="comments.length"
         @liked="liked"
         @disliked="disliked"
@@ -62,10 +62,10 @@ export default {
       this.comments.unshift(payload)
     },
     liked() {
-      this.likes_count++
+      this.post.likes_count++
     },
     disliked() {
-      this.likes_count--
+      this.post.likes_count--
     },
     deleteComment(payload) {
       this.comments.splice(payload, 1)
@@ -84,14 +84,10 @@ export default {
         }
       }
       const comments = await $axios.get(`/comment/get/by_post/${params.id}`)
-      const likesCount = await $axios.get(
-        `/like/get/count/by_post/${post.data.post.post_id}`
-      )
       store.dispatch('setIsLoading', false)
       return {
         post: post.data.post,
         comments: comments.data.comments,
-        likes_count: likesCount.data.likesCount
       }
     } catch (err) {
       store.dispatch('setErrorMsg', err)

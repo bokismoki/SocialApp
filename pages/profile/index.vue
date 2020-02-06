@@ -17,7 +17,7 @@
             class="text-gray-800 uppercase font-black text-3xl leading-none"
           >{{user.first_name}} {{user.last_name}}</h1>
           <div class="ml-3 w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
-            <p class="m-auto">{{followers_count}}</p>
+            <p class="m-auto text-lg">{{followers_count}}</p>
           </div>
         </div>
         <div class="flex items-end mt-1">
@@ -36,8 +36,8 @@
                 :post="post"
                 :user="user"
                 :index="index"
-                :likes_count="likes[index].likes_count"
-                :comments_count="comments[index].comments_count"
+                :likes_count="post.likes_count"
+                :comments_count="post.comments_count"
                 @liked="liked"
                 @disliked="disliked"
                 @deletePost="deletePost"
@@ -85,20 +85,16 @@ export default {
   },
   methods: {
     newPost(payload) {
-      this.posts.unshift(payload)
-      this.likes.unshift({ likes_count: 0 })
-      this.comments.unshift({ comments_count: 0 })
+      this.posts.unshift({ ...payload, likes_count: 0, comments_count: 0 })
     },
     deletePost(payload) {
       this.posts.splice(payload, 1)
-      this.likes.splice(payload, 1)
-      this.comments.splice(payload, 1)
     },
     liked(payload) {
-      this.likes[payload].likes_count++
+      this.posts[payload].likes_count++
     },
     disliked(payload) {
-      this.likes[payload].likes_count--
+      this.posts[payload].likes_count--
     },
     updatePagination(index) {
       this.activePaginationIndex = index
@@ -109,12 +105,6 @@ export default {
       store.dispatch('setIsLoading', true)
       const user = await $axios.get(`/user/get/${$auth.user.id}`)
       const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}`)
-      const likes = await $axios.get(
-        `/like/get/count/for_profile/${$auth.user.id}`
-      )
-      const comments = await $axios.get(
-        `/comment/get/count/for_profile/${$auth.user.id}`
-      )
       const followersCount = await $axios.get(
         `follow/get/count/by_user/${$auth.user.id}`
       )
@@ -122,8 +112,6 @@ export default {
       return {
         user: user.data.user,
         posts: posts.data.posts,
-        likes: likes.data.likes,
-        comments: comments.data.comments,
         followers_count: followersCount.data.followersCount
       }
     } catch (err) {

@@ -1,6 +1,5 @@
 const sql = require('../db/mysql')
 
-
 exports.getById = (req, res) => {
     const comment_id = req.params.id
     const queryGetComment = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
@@ -26,53 +25,6 @@ exports.getByPost = (req, res) => {
     sql.query(queryGetComments, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetComments' })
-        } else {
-            res.send({ success: true, comments: result })
-        }
-    })
-}
-
-exports.getCountPublic = (req, res) => {
-    const queryGetCommentsCount = `SELECT COUNT(comments.created_at) AS comments_count FROM posts
-    LEFT JOIN comments ON posts.id = comments.post_id
-    WHERE posts.is_private = 0
-    GROUP BY posts.id
-    ORDER BY posts.created_at DESC`
-    sql.query(queryGetCommentsCount, (err, result) => {
-        if (err) {
-            res.send({ success: false, msg: 'Error on queryGetCommentsCount' })
-        } else {
-            res.send({ success: true, comments: result })
-        }
-    })
-}
-
-exports.getCountForProfile = (req, res) => {
-    const user_id = req.params.id
-    const queryGetLikesCount = `SELECT COUNT(comments.created_at) AS comments_count FROM posts
-    LEFT JOIN comments ON posts.id = comments.post_id
-    WHERE posts.user_id = '${user_id}'
-    GROUP BY posts.id
-    ORDER BY posts.created_at DESC`
-    sql.query(queryGetLikesCount, (err, result) => {
-        if (err) {
-            res.send({ success: false, msg: 'Error on queryGetLikesCount' })
-        } else {
-            res.send({ success: true, comments: result })
-        }
-    })
-}
-
-exports.getCountPublicByUser = (req, res) => {
-    const user_id = req.params.id
-    const queryGetCommentsCount = `SELECT COUNT(comments.created_at) AS comments_count FROM posts
-    LEFT JOIN comments ON posts.id = comments.post_id
-    WHERE posts.user_id = '${user_id}' && posts.is_private = '0'
-    GROUP BY posts.id
-    ORDER BY posts.created_at DESC`
-    sql.query(queryGetCommentsCount, (err, result) => {
-        if (err) {
-            res.send({ success: false, msg: 'Error on queryGetCommentsCount' })
         } else {
             res.send({ success: true, comments: result })
         }
