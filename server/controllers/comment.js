@@ -17,16 +17,31 @@ exports.getById = (req, res) => {
 
 exports.getByPost = (req, res) => {
     const post_id = req.params.id
+    const limit_index = req.params.limit_index
     const queryGetComments = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
     users.id AS user_id, users.first_name, users.last_name, users.image
     FROM comments JOIN users ON comments.user_id = users.id
     WHERE comments.post_id = ${post_id}
-    ORDER BY comments.created_at DESC`
+    ORDER BY comments.created_at DESC
+    LIMIT ${limit_index * 10}, 10`
     sql.query(queryGetComments, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetComments' })
         } else {
             res.send({ success: true, comments: result })
+        }
+    })
+}
+
+exports.getCountByPost = (req, res) => {
+    const post_id = req.params.id
+    const queryGetCountByPost = `SELECT COUNT(id) AS comments_count FROM comments
+    WHERE post_id = ${post_id}`
+    sql.query(queryGetCountByPost, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetCountByPost' })
+        } else {
+            res.send({ success: true, comments_count: result[0].comments_count })
         }
     })
 }

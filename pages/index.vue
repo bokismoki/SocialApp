@@ -8,7 +8,7 @@
         </div>
         <div class="mt-20 lg:mt-0 lg:w-2/3">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Public Posts</h1>
-          <div v-for="(post, index) in displayedPosts" :key="post.post_id">
+          <div v-for="(post, index) in posts" :key="post.post_id">
             <PostItem
               :post="post"
               :index="index"
@@ -52,10 +52,7 @@ export default {
   },
   computed: {
     paginationButtonsCount() {
-      return Math.ceil(this.posts.length / 15)
-    },
-    displayedPosts() {
-      return this.posts.slice().splice(this.activePaginationIndex * 15, 15)
+      return Math.ceil(this.posts_count / 15)
     }
   },
   methods: {
@@ -81,17 +78,33 @@ export default {
     disliked(payload) {
       this.posts[payload].likes_count--
     },
-    updatePagination(index) {
-      this.activePaginationIndex = index
+    async updatePagination(index) {
+      try {
+        if (this.activePaginationIndex !== index) {
+          this.activePaginationIndex = index
+          this.$store.dispatch('setIsLoading', true)
+          const posts = await this.$axios.get(`/post/get/public/${index}`)
+          const posts_count = await this.$axios.get('/post/get/count/public')
+          this.$store.dispatch('setIsLoading', false)
+
+          this.posts = posts.data.posts
+          this.posts_count = posts_count.data.posts_count
+        }
+      } catch (err) {
+        this.$store.dispatch('setErrorMsg', err)
+        this.$store.dispatch('setIsLoading', false)
+      }
     }
   },
   async asyncData({ $axios, store }) {
     try {
       store.dispatch('setIsLoading', true)
-      const posts = await $axios.get('/post/get/public')
+      const posts = await $axios.get('/post/get/public/0')
+      const posts_count = await $axios.get('/post/get/count/public')
       store.dispatch('setIsLoading', false)
       return {
-        posts: posts.data.posts
+        posts: posts.data.posts,
+        posts_count: posts_count.data.posts_count
       }
     } catch (err) {
       store.dispatch('setErrorMsg', err)

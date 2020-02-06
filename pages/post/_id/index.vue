@@ -4,7 +4,7 @@
       <PostItem
         :post="post"
         :likes_count="post.likes_count"
-        :comments_count="comments.length"
+        :comments_count="comments_count"
         @liked="liked"
         @disliked="disliked"
       />
@@ -13,7 +13,7 @@
         <div class="mt-10">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Comments</h1>
           <p v-if="comments.length === 0">No comments to display.</p>
-          <div v-else v-for="(comment, index) in displayedComments" :key="comment.comment_id">
+          <div v-else v-for="(comment, index) in comments" :key="comment.comment_id">
             <CommentItem :comment="comment" :index="index" @deleteComment="deleteComment" />
           </div>
         </div>
@@ -51,10 +51,7 @@ export default {
   },
   computed: {
     paginationButtonsCount() {
-      return Math.ceil(this.comments.length / 10)
-    },
-    displayedComments() {
-      return this.comments.slice().splice(this.activePaginationIndex * 10, 10)
+      return Math.ceil(this.comments_count / 10)
     }
   },
   methods: {
@@ -70,8 +67,22 @@ export default {
     deleteComment(payload) {
       this.comments.splice(payload, 1)
     },
-    updatePagination(index) {
-      this.activePaginationIndex = index
+    async updatePagination(index) {
+      try {
+        if (this.activePaginationIndex !== index) {
+          this.activePaginationIndex = index
+          this.$store.dispatch('setIsLoading', true)
+          const comments = await this.$axios.get(
+            `/comment/get/by_post/${this.$route.params.id}/${index}`
+          )
+          this.$store.dispatch('setIsLoading', false)
+          this.comments = comments.data.comments
+        }
+      } catch (err) {
+        this.$store.dispatch('setErrorMsg', err)
+        this.$router.push({ name: 'index' })
+        this.$store.dispatch('setIsLoading', false)
+      }
     }
   },
   async asyncData({ $axios, $auth, params, redirect, store }) {
@@ -83,11 +94,15 @@ export default {
           return redirect({ name: 'index' })
         }
       }
-      const comments = await $axios.get(`/comment/get/by_post/${params.id}`)
+      const comments = await $axios.get(`/comment/get/by_post/${params.id}/0`)
+      const comments_count = await $axios.get(
+        `/comment/get/count/by_post/${params.id}`
+      )
       store.dispatch('setIsLoading', false)
       return {
         post: post.data.post,
         comments: comments.data.comments,
+        comments_count: comments_count.data.comments_count
       }
     } catch (err) {
       store.dispatch('setErrorMsg', err)

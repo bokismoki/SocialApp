@@ -31,7 +31,7 @@
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display, please add one.</h1>
-            <div v-for="(post, index) in displayedPosts" :key="post.id">
+            <div v-for="(post, index) in posts" :key="post.id">
               <PostItem
                 :post="post"
                 :user="user"
@@ -77,10 +77,7 @@ export default {
   },
   computed: {
     paginationButtonsCount() {
-      return Math.ceil(this.posts.length / 15)
-    },
-    displayedPosts() {
-      return this.posts.slice().splice(this.activePaginationIndex * 15, 15)
+      return Math.ceil(this.posts_count / 15)
     }
   },
   methods: {
@@ -96,15 +93,32 @@ export default {
     disliked(payload) {
       this.posts[payload].likes_count--
     },
-    updatePagination(index) {
-      this.activePaginationIndex = index
+    async updatePagination(index) {
+      try {
+        if (this.activePaginationIndex !== index) {
+          this.activePaginationIndex = index
+          this.$store.dispatch('setIsLoading', true)
+          const posts = await this.$axios.get(
+            `/post/get/by_user/${this.$auth.user.id}/${index}`
+          )
+          this.$store.dispatch('setIsLoading', false)
+          this.posts = posts.data.posts
+        }
+      } catch (err) {
+        this.$store.dispatch('setErrorMsg', err)
+        redirect({ name: 'index' })
+        this.$store.dispatch('setIsLoading', false)
+      }
     }
   },
   async asyncData({ $axios, $auth, store, redirect }) {
     try {
       store.dispatch('setIsLoading', true)
       const user = await $axios.get(`/user/get/${$auth.user.id}`)
-      const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}`)
+      const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}/0`)
+      const posts_count = await $axios.get(
+        `/post/get/count/by_user/${$auth.user.id}`
+      )
       const followersCount = await $axios.get(
         `follow/get/count/by_user/${$auth.user.id}`
       )
@@ -112,6 +126,7 @@ export default {
       return {
         user: user.data.user,
         posts: posts.data.posts,
+        posts_count: posts_count.data.posts_count,
         followers_count: followersCount.data.followersCount
       }
     } catch (err) {

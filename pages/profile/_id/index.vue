@@ -34,7 +34,7 @@
               class="uppercase text-gray-800 font-semibold text-2xl mb-5 mt-10"
             >{{user.first_name}}'s Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display.</h1>
-            <div v-for="(post, index) in displayedPosts" :key="post.id">
+            <div v-for="(post, index) in posts" :key="post.id">
               <PostItem
                 :post="post"
                 :user="user"
@@ -80,10 +80,7 @@ export default {
   },
   computed: {
     paginationButtonsCount() {
-      return Math.ceil(this.posts.length / 15)
-    },
-    displayedPosts() {
-      return this.posts.slice().splice(this.activePaginationIndex * 15, 15)
+      return Math.ceil(this.posts_count / 15)
     }
   },
   methods: {
@@ -130,8 +127,25 @@ export default {
     disliked(payload) {
       this.posts[payload].likes_count--
     },
-    updatePagination(index) {
-      this.activePaginationIndex = index
+    async updatePagination(index) {
+      try {
+        if (this.activePaginationIndex !== index) {
+          this.activePaginationIndex = index
+          this.$store.dispatch('setIsLoading', true)
+          const posts = await this.$axios.get(
+            `/post/get/by_user/${this.$route.params.id}/${index}`
+          )
+          const publicPosts = posts.data.posts.filter(
+            post => post.is_private === 0
+          )
+          this.$store.dispatch('setIsLoading', false)
+          this.posts = publicPosts
+        }
+      } catch (err) {
+        this.$store.dispatch('setErrorMsg', err)
+        redirect({ name: 'index' })
+        this.$store.dispatch('setIsLoading', false)
+      }
     }
   },
   async asyncData({ $axios, $auth, redirect, params, store }) {
@@ -144,10 +158,17 @@ export default {
         const isFollowing = await $axios.get(
           `/follow/get/by_user/${user.data.user.id}/${$auth.user.id}`
         )
-        const posts = await $axios.get(`/post/get/by_user/${user.data.user.id}`)
+        const posts = await $axios.get(
+          `/post/get/by_user/${user.data.user.id}/0`
+        )
+        const posts_count = await $axios.get(
+          `/post/get/count/by_user/${user.data.user.id}`
+        )
         const publicPosts = posts.data.posts.filter(
           post => post.is_private === 0
         )
+        const publicPostsCount =
+          posts_count.data.posts_count - publicPosts.length
         const followersCount = await $axios.get(
           `follow/get/count/by_user/${params.id}`
         )
@@ -155,6 +176,7 @@ export default {
         return {
           user: user.data.user,
           posts: publicPosts,
+          posts_count: publicPostsCount,
           isFollowing: isFollowing.data.isFollowing,
           followers_count: followersCount.data.followersCount
         }

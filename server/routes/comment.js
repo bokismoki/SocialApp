@@ -6,7 +6,9 @@ const commentController = require('../controllers/comment')
 
 router.get('/get/by_id/:id', commentController.getById)
 
-router.get('/get/by_post/:id', commentController.getByPost)
+router.get('/get/by_post/:id/:limit_index', commentController.getByPost)
+
+router.get('/get/count/by_post/:id', commentController.getCountByPost)
 
 router.post('/add', authorization, commentController.add)
 
