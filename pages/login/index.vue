@@ -9,6 +9,11 @@
         <img class="w-8 rounded" src="~/assets/img/facebook.svg" alt="Facebook icon" />
       </span>
     </button>
+    <div class="bg-blue-200 px-4 py-2 inline-block">
+      <p class="text-sm font-semibold">Facebook Test User</p>
+      <p class="text-sm font-semibold">Email: srjivqxzmy_1580048820@tfbnw.net</p>
+      <p class="text-sm font-semibold">Password: DanielAlisonsen99</p>
+    </div>
   </div>
 </template>
 
