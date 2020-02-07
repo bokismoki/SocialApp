@@ -101,8 +101,10 @@ export default {
           const posts = await this.$axios.get(
             `/post/get/by_user/${this.$auth.user.id}/${index}`
           )
-          this.$store.dispatch('setIsLoading', false)
+          
           this.posts = posts.data.posts
+          window.scrollTo(0, 0)
+          this.$store.dispatch('setIsLoading', false)
         }
       } catch (err) {
         this.$store.dispatch('setErrorMsg', err)

@@ -85,10 +85,11 @@ export default {
           this.$store.dispatch('setIsLoading', true)
           const posts = await this.$axios.get(`/post/get/public/${index}`)
           const posts_count = await this.$axios.get('/post/get/count/public')
-          this.$store.dispatch('setIsLoading', false)
 
           this.posts = posts.data.posts
           this.posts_count = posts_count.data.posts_count
+          window.scrollTo(0, 0)
+          this.$store.dispatch('setIsLoading', false)
         }
       } catch (err) {
         this.$store.dispatch('setErrorMsg', err)

@@ -75,8 +75,10 @@ export default {
           const comments = await this.$axios.get(
             `/comment/get/by_post/${this.$route.params.id}/${index}`
           )
-          this.$store.dispatch('setIsLoading', false)
+          
           this.comments = comments.data.comments
+          window.scrollTo(0, 0)
+          this.$store.dispatch('setIsLoading', false)
         }
       } catch (err) {
         this.$store.dispatch('setErrorMsg', err)

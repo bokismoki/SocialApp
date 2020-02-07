@@ -138,8 +138,10 @@ export default {
           const publicPosts = posts.data.posts.filter(
             post => post.is_private === 0
           )
-          this.$store.dispatch('setIsLoading', false)
+
           this.posts = publicPosts
+          window.scrollTo(0, 0)
+          this.$store.dispatch('setIsLoading', false)
         }
       } catch (err) {
         this.$store.dispatch('setErrorMsg', err)
