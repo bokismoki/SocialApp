@@ -57,6 +57,7 @@ export default {
   methods: {
     newComment(payload) {
       this.comments.unshift(payload)
+      this.comments_count++
     },
     liked() {
       this.post.likes_count++
@@ -66,6 +67,7 @@ export default {
     },
     deleteComment(payload) {
       this.comments.splice(payload, 1)
+      this.comments_count--
     },
     async updatePagination(index) {
       try {
