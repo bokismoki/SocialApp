@@ -2,8 +2,20 @@ const sql = require('../db/mysql')
 
 exports.getByUser = (req, res) => {
     const user_id = req.params.id
-    const body = req.body
-    console.log(user_id, body)
+    const queryGetNotifications = `SELECT n.id AS notification_id, n.post_id, n.user_id, n.type,
+    CONCAT(u.first_name, ' ', u.last_name) AS name, u.image, p.id AS post_id
+    FROM notifications n
+    JOIN users u ON u.id = n.user_id
+    LEFT JOIN posts p ON p.id = n.post_id
+    WHERE n.receiver_id = '${user_id}'
+    ORDER BY n.created_at DESC`
+    sql.query(queryGetNotifications, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetNotifications' })
+        } else {
+            res.send({ success: true, notifications: result })
+        }
+    })
 }
 
 exports.add = (req, res) => {

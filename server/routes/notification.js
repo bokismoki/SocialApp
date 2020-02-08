@@ -4,7 +4,7 @@ const router = require('express').Router()
 
 const notificationController = require('../controllers/notification')
 
-router.get('/get/by_user/:id', authorization, notificationController.getByUser)
+router.get('/get/by_user/:id', notificationController.getByUser)
 
 router.post('/add', authorization, notificationController.add)
 
