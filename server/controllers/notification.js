@@ -24,13 +24,27 @@ exports.add = (req, res) => {
     if (!post_id) {
         post_id = null
     }
-    const queryAddNotification = `INSERT INTO notifications (type, post_id, user_id, receiver_id)
-    VALUES ('${type}', ${post_id}, '${user_id}', '${receiver_id}')`
-    sql.query(queryAddNotification, (err, result) => {
+    let queryGetNotification = `SELECT id FROM notifications
+    WHERE type = '${type}' AND user_id = '${user_id}' AND post_id = ${post_id} AND receiver_id = '${receiver_id}'`
+    if (!post_id) {
+        queryGetNotification = `SELECT id FROM notifications
+    WHERE type = '${type}' AND user_id = '${user_id}' AND receiver_id = '${receiver_id}'`
+    }
+    sql.query(queryGetNotification, (err, result) => {
         if (err) {
-            res.send({ success: false, msg: 'Error on queryAddNotification' })
+            res.send({ success: false, msg: 'Error on queryGetNotification' })
         } else {
-            res.send({ success: true })
+            if (result.length === 0) {
+                const queryAddNotification = `INSERT INTO notifications (type, post_id, user_id, receiver_id)
+                VALUES ('${type}', ${post_id}, '${user_id}', '${receiver_id}')`
+                sql.query(queryAddNotification, (err, result) => {
+                    if (err) {
+                        res.send({ success: false, msg: 'Error on queryAddNotification' })
+                    } else {
+                        res.send({ success: true })
+                    }
+                })
+            }
         }
     })
 }
