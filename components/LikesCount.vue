@@ -43,6 +43,7 @@ export default {
               } else {
                 this.$emit('liked')
               }
+              this.newNotificationLike()
             } else if (disliked) {
               if (this.$route.name !== 'post-id') {
                 this.$emit('disliked', this.index)
@@ -59,6 +60,32 @@ export default {
         .catch(err => {
           console.error(err)
           this.$store.dispatch('setIsLoading', false)
+        })
+    },
+    newNotificationLike() {
+      this.$axios
+        .post(
+          '/notification/add',
+          {
+            type: 'like',
+            post_id: this.post.post_id,
+            user_id: this.$auth.user.id,
+            receiver_id: this.post.user_id
+          },
+          {
+            headers: {
+              'content-type': 'application/json'
+            }
+          }
+        )
+        .then(response => {
+          if (!response.data.success) {
+            this.$store.dispatch('setErrorMsg', response.data.msg)
+            this.$router.push({ name: 'index' })
+          }
+        })
+        .catch(err => {
+          console.error(err)
         })
     }
   }

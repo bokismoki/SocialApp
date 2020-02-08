@@ -106,6 +106,7 @@ export default {
             if (followed) {
               this.isFollowing = true
               this.followers_count++
+              this.newNotificationFollow()
             } else if (unfollowed) {
               this.isFollowing = false
               this.followers_count--
@@ -126,6 +127,31 @@ export default {
     },
     disliked(payload) {
       this.posts[payload].likes_count--
+    },
+    newNotificationFollow() {
+      this.$axios
+        .post(
+          '/notification/add',
+          {
+            type: 'follow',
+            user_id: this.$auth.user.id,
+            receiver_id: this.user.id
+          },
+          {
+            headers: {
+              'content-type': 'application/json'
+            }
+          }
+        )
+        .then(response => {
+          if (!response.data.success) {
+            this.$store.dispatch('setErrorMsg', response.data.msg)
+            this.$router.push({ name: 'index' })
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     },
     async updatePagination(index) {
       try {

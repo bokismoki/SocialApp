@@ -9,7 +9,7 @@
         @disliked="disliked"
       />
       <div class="max-w-lg">
-        <CommentForm @newComment="newComment" />
+        <CommentForm :post="post" @newComment="newComment" />
         <div class="mt-10">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Comments</h1>
           <p v-if="comments.length === 0">No comments to display.</p>

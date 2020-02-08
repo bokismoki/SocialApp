@@ -22,6 +22,7 @@
 <script>
 export default {
   name: 'CommentForm',
+  props: ['post'],
   data() {
     return {
       bodyText: ''
@@ -79,6 +80,7 @@ export default {
               if (response.data.success) {
                 this.$emit('newComment', response.data.comment)
                 this.bodyText = ''
+                this.newNotificationComment()
               } else {
                 this.$store.dispatch('setErrorMsg', response.data.msg)
                 this.$router.push({ name: 'index' })
@@ -90,6 +92,34 @@ export default {
               this.$store.dispatch('setIsLoading', false)
             })
         }
+      }
+    },
+    newNotificationComment() {
+      if (this.$auth.user.id !== this.post.user_id) {
+        this.$axios
+          .post(
+            '/notification/add',
+            {
+              type: 'comment',
+              post_id: this.$route.params.id,
+              user_id: this.$auth.user.id,
+              receiver_id: this.post.user_id
+            },
+            {
+              headers: {
+                'content-type': 'application/json'
+              }
+            }
+          )
+          .then(response => {
+            if (!response.data.success) {
+              this.$store.dispatch('setErrorMsg', response.data.msg)
+              this.$router.push({ name: 'index' })
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
       }
     }
   }

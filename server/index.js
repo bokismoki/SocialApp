@@ -81,3 +81,6 @@ app.use('/api/like', likeRoutes)
 
 const followRoutes = require('./routes/follow')
 app.use('/api/follow', followRoutes)
+
+const notificationRoutes = require('./routes/notification')
+app.use('/api/notification', notificationRoutes)
