@@ -37,6 +37,25 @@ exports.add = (req, res) => {
 
 exports.delete = (req, res) => {
     const notification_id = req.params.id
-    const body = req.body
-    console.log(notification_id, body)
+    const queryDeleteNotification = `DELETE FROM notifications
+    WHERE id = ${notification_id}`
+    sql.query(queryDeleteNotification, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryDeleteNotification' })
+        } else {
+            res.send({ success: true, msg: 'Notification successfully deleted' })
+        }
+    })
+}
+
+exports.deleteAll = (req, res) => {
+    const receiver_id = req.params.id
+    const queryDeleteAllNotifications = `DELETE FROM notifications WHERE receiver_id = '${receiver_id}'`
+    sql.query(queryDeleteAllNotifications, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryDeleteAllNotifications' })
+        } else {
+            res.send({ success: true, msg: 'Notifications successfully deleted' })
+        }
+    })
 }

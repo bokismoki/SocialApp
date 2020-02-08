@@ -13,6 +13,7 @@
         <span class="text-blue-700 font-semibold">followed</span> you
         <button
           class="block mt-1 py-1 text-xs font-semibold bg-blue-600 text-white rounded px-2"
+          @click="deleteNotification"
         >Mark as seen</button>
       </span>
       <span class="text-sm leading-none" v-else-if="notification.type === 'like'">
@@ -24,6 +25,7 @@
         >post</nuxt-link>
         <button
           class="block mt-1 py-1 text-xs font-semibold bg-blue-600 text-white rounded px-2"
+          @click="deleteNotification"
         >Mark as seen</button>
       </span>
       <span class="text-sm leading-none" v-else>
@@ -35,6 +37,7 @@
         >post</nuxt-link>
         <button
           class="block mt-1 py-1 text-xs font-semibold bg-blue-600 text-white rounded px-2"
+          @click="deleteNotification"
         >Mark as seen</button>
       </span>
     </div>
@@ -44,7 +47,28 @@
 <script>
 export default {
   name: 'NotificationItem',
-  props: ['notification']
+  props: ['notification', 'index'],
+  methods: {
+    deleteNotification() {
+      this.$store.dispatch('setIsLoading', true)
+      this.$axios
+        .delete(`/notification/delete/${this.notification.notification_id}`, {
+          data: {
+            user_id: this.$auth.user.id
+          }
+        })
+        .then(response => {
+          if (response.data.success) {
+            this.$emit('deleteNotification', this.index)
+          }
+          this.$store.dispatch('setIsLoading', false)
+        })
+        .catch(err => {
+          console.error(err)
+          this.$store.dispatch('setIsLoading', false)
+        })
+    }
+  }
 }
 </script>
 

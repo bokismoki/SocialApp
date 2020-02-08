@@ -10,4 +10,6 @@ router.post('/add', authorization, notificationController.add)
 
 router.delete('/delete/:id', authorization, notificationController.delete)
 
+router.delete('/delete_all/:id', authorization, notificationController.deleteAll)
+
 module.exports = router
