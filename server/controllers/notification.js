@@ -18,6 +18,23 @@ exports.getByUser = (req, res) => {
     })
 }
 
+exports.getCount = (req, res) => {
+    const user_id = req.params.id
+    const queryGetNotificationsCount = `SELECT COUNT(id) AS notifications_count FROM notifications
+    WHERE receiver_id = '${user_id}'`
+    sql.query(queryGetNotificationsCount, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetNotificationsCount' })
+        } else {
+            if (result[0].notifications_count === 0) {
+                res.send({ success: true, hasNotifications: false })
+            } else {
+                res.send({ success: true, hasNotifications: true })
+            }
+        }
+    })
+}
+
 exports.add = (req, res) => {
     const { type, user_id, receiver_id } = req.body
     let { post_id } = req.body

@@ -1,13 +1,15 @@
 export const state = () => ({
     errorMsg: '',
     isLoading: false,
-    isDropdownMenuOpen: false
+    isDropdownMenuOpen: false,
+    hasNotifications: false
 })
 
 export const getters = {
     errorMsg: state => state.errorMsg,
     isLoading: state => state.isLoading,
-    isDropdownMenuOpen: state => state.isDropdownMenuOpen
+    isDropdownMenuOpen: state => state.isDropdownMenuOpen,
+    hasNotifications: state => state.hasNotifications
 }
 
 export const mutations = {
@@ -19,6 +21,9 @@ export const mutations = {
     },
     SET_IS_DROPDOWN_MENU_OPEN: (state, payload) => {
         state.isDropdownMenuOpen = payload
+    },
+    SET_HAS_NOTIFICATIONS: (state, payload) => {
+        state.hasNotifications = payload
     }
 }
 
@@ -63,5 +68,8 @@ export const actions = {
     },
     setIsDropdownMenuOpen: ({ commit }, payload) => {
         commit('SET_IS_DROPDOWN_MENU_OPEN', payload)
+    },
+    setHasNotifications: ({ commit }, payload) => {
+        commit('SET_HAS_NOTIFICATIONS', payload)
     }
 }

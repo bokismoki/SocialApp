@@ -33,6 +33,9 @@ export default {
   methods: {
     deleteNotification(payload) {
       this.notifications.splice(payload, 1)
+      if (this.notifications.length === 0) {
+        this.$store.dispatch('setHasNotifications', false)
+      }
     },
     deleteAllNotifications() {
       this.$store.dispatch('setIsLoading', true)
@@ -45,6 +48,7 @@ export default {
         .then(response => {
           if (response.data.success) {
             this.notifications = []
+            this.$store.dispatch('setHasNotifications', false)
           }
           this.$store.dispatch('setIsLoading', false)
         })

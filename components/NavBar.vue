@@ -18,20 +18,28 @@
         </nuxt-link>
       </div>
       <div v-else>
-        <img
-          v-if="isDropdownMenuOpen"
-          class="w-10 cursor-pointer sm:hidden"
-          src="~/assets/img/cross.svg"
-          alt="White cross icon"
-          @click="setIsDropdownMenuOpen"
-        />
-        <img
-          v-else
-          class="w-10 cursor-pointer sm:hidden"
-          src="~/assets/img/hamburger.svg"
-          alt="White hamburger menu icon"
-          @click="setIsDropdownMenuOpen"
-        />
+        <div class="relative">
+          <img
+            v-if="isDropdownMenuOpen"
+            class="w-10 cursor-pointer sm:hidden"
+            src="~/assets/img/cross.svg"
+            alt="White cross icon"
+            @click="setIsDropdownMenuOpen"
+          />
+          <img
+            v-else
+            class="w-10 cursor-pointer sm:hidden"
+            src="~/assets/img/hamburger.svg"
+            alt="White hamburger menu icon"
+            @click="setIsDropdownMenuOpen"
+          />
+          <div
+            class="sm:hidden"
+            v-if="hasNotifications && !isDropdownMenuOpen"
+          >
+            <NotificationsIndicator />
+          </div>
+        </div>
       </div>
       <div v-if="$auth.loggedIn" class="hidden sm:flex items-center">
         <div class="lg:mr-10">
@@ -43,6 +51,23 @@
                 alt="White paper icon representing posts"
               />
               <span class="hidden lg:inline text-sm uppercase">Home</span>
+            </div>
+          </nuxt-link>
+        </div>
+        <div class="lg:mr-10">
+          <nuxt-link :to="{name: 'notifications'}">
+            <div class="flex items-center">
+              <div class="relative mr-5 lg:mr-2">
+                <img
+                  class="w-8"
+                  src="~/assets/img/bell.svg"
+                  alt="White bell icon representing notifications"
+                />
+                <div v-if="hasNotifications">
+                  <NotificationsIndicator />
+                </div>
+              </div>
+              <span class="hidden lg:inline text-sm uppercase">Notifications</span>
             </div>
           </nuxt-link>
         </div>
@@ -88,10 +113,11 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'NavBar',
   components: {
-    DropdownMenu: () => import('~/components/DropdownMenu')
+    DropdownMenu: () => import('~/components/DropdownMenu'),
+    NotificationsIndicator: () => import('~/components/NotificationsIndicator')
   },
   computed: {
-    ...mapGetters(['isDropdownMenuOpen'])
+    ...mapGetters(['isDropdownMenuOpen', 'hasNotifications'])
   },
   methods: {
     async logout() {

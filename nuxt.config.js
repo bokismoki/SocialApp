@@ -83,7 +83,7 @@ module.exports = {
   ** Build configuration
   */
   router: {
-    middleware: ['closeDropdownMenu']
+    middleware: ['closeDropdownMenu', 'checkNotifications']
   },
   build: {
     extractCSS: true,

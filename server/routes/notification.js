@@ -6,6 +6,8 @@ const notificationController = require('../controllers/notification')
 
 router.get('/get/by_user/:id', notificationController.getByUser)
 
+router.get('/get/count/:id', notificationController.getCount)
+
 router.post('/add', authorization, notificationController.add)
 
 router.delete('/delete/:id', authorization, notificationController.delete)
