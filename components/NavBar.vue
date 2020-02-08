@@ -23,14 +23,14 @@
           class="w-10 cursor-pointer sm:hidden"
           src="~/assets/img/cross.svg"
           alt="White cross icon"
-          @click="isDropdownMenuOpen = !isDropdownMenuOpen"
+          @click="setIsDropdownMenuOpen"
         />
         <img
           v-else
           class="w-10 cursor-pointer sm:hidden"
           src="~/assets/img/hamburger.svg"
           alt="White hamburger menu icon"
-          @click="isDropdownMenuOpen = !isDropdownMenuOpen"
+          @click="setIsDropdownMenuOpen"
         />
       </div>
       <div v-if="$auth.loggedIn" class="hidden sm:flex items-center">
@@ -83,21 +83,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'NavBar',
   components: {
     DropdownMenu: () => import('~/components/DropdownMenu')
   },
-  data() {
-    return {
-      isDropdownMenuOpen: false
-    }
+  computed: {
+    ...mapGetters(['isDropdownMenuOpen'])
   },
   methods: {
     async logout() {
       await this.$auth.logout()
       this.$cookies.remove('jwt')
       this.$router.push({ name: 'login' })
+    },
+    setIsDropdownMenuOpen() {
+      this.$store.dispatch('setIsDropdownMenuOpen', !this.isDropdownMenuOpen)
     }
   }
 }

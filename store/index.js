@@ -1,11 +1,13 @@
 export const state = () => ({
     errorMsg: '',
-    isLoading: false
+    isLoading: false,
+    isDropdownMenuOpen: false
 })
 
 export const getters = {
     errorMsg: state => state.errorMsg,
-    isLoading: state => state.isLoading
+    isLoading: state => state.isLoading,
+    isDropdownMenuOpen: state => state.isDropdownMenuOpen
 }
 
 export const mutations = {
@@ -14,6 +16,9 @@ export const mutations = {
     },
     SET_IS_LOADING: (state, payload) => {
         state.isLoading = payload
+    },
+    SET_IS_DROPDOWN_MENU_OPEN: (state, payload) => {
+        state.isDropdownMenuOpen = payload
     }
 }
 
@@ -55,5 +60,8 @@ export const actions = {
     },
     setIsLoading: ({ commit }, payload) => {
         commit('SET_IS_LOADING', payload)
+    },
+    setIsDropdownMenuOpen: ({ commit }, payload) => {
+        commit('SET_IS_DROPDOWN_MENU_OPEN', payload)
     }
 }

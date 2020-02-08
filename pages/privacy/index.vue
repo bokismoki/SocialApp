@@ -1,7 +1,9 @@
 <template>
   <div class="privacy">
     <div class="px-5 pt-5 pb-16">
-      <h2 class="font-semibold text-xl">Web Site Terms and Conditions of Use</h2>
+      <h1
+        class="uppercase text-gray-800 font-semibold text-2xl mb-5"
+      >Web site terms and conditions of use</h1>
 
       <h3 class="font-semibold text-lg">1. Terms</h3>
 

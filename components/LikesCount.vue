@@ -63,30 +63,32 @@ export default {
         })
     },
     newNotificationLike() {
-      this.$axios
-        .post(
-          '/notification/add',
-          {
-            type: 'like',
-            post_id: this.post.post_id,
-            user_id: this.$auth.user.id,
-            receiver_id: this.post.user_id
-          },
-          {
-            headers: {
-              'content-type': 'application/json'
+      if (this.$auth.user.id !== this.post.user_id) {
+        this.$axios
+          .post(
+            '/notification/add',
+            {
+              type: 'like',
+              post_id: this.post.post_id,
+              user_id: this.$auth.user.id,
+              receiver_id: this.post.user_id
+            },
+            {
+              headers: {
+                'content-type': 'application/json'
+              }
             }
-          }
-        )
-        .then(response => {
-          if (!response.data.success) {
-            this.$store.dispatch('setErrorMsg', response.data.msg)
-            this.$router.push({ name: 'index' })
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
+          )
+          .then(response => {
+            if (!response.data.success) {
+              this.$store.dispatch('setErrorMsg', response.data.msg)
+              this.$router.push({ name: 'index' })
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }
     }
   }
 }

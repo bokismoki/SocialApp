@@ -26,6 +26,11 @@ export default {
     login() {
       this.$auth.loginWith('facebook')
     }
+  },
+  asyncData({ $auth, redirect }) {
+    if ($auth.loggedIn) {
+      redirect({ name: 'index' })
+    }
   }
 }
 </script>
