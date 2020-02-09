@@ -58,7 +58,7 @@ export default {
         })
     }
   },
-  async asyncData({ $axios, $auth, store }) {
+  async asyncData({ $axios, $auth, store, redirect }) {
     try {
       store.dispatch('setIsLoading', true)
       const notifications = await $axios.get(
@@ -70,6 +70,7 @@ export default {
       }
     } catch (err) {
       store.dispatch('setErrorMsg', err)
+      redirect({ name: 'index' })
       store.dispatch('setIsLoading', false)
     }
   }

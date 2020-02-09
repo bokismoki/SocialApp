@@ -60,7 +60,7 @@
             <img class="w-full h-full" src="~/assets/img/cross.svg" alt="White cross icon" />
           </button>
           <div v-if="bodyImage">
-            <img class="body_image w-32 rounded" :src="bodyImage" alt="Body_image" />
+            <img class="body_image w-32 rounded mt-5" :src="bodyImage" alt="Body_image" />
           </div>
         </div>
       </div>
@@ -108,7 +108,10 @@ export default {
       if (file.type.includes('image') && file.size < 2000000) {
         reader.readAsDataURL(file)
       } else {
-        console.error('Wrong file format or too large file (max 2MB allowed)!')
+        this.$store.dispatch(
+          'setErrorMsg',
+          'Wrong file format or too large file (max 2MB allowed)'
+        )
         this.bodyImage = ''
       }
     },
@@ -118,7 +121,7 @@ export default {
     newPost() {
       if (
         (this.bodyText.trim() ||
-          (this.currentText.trim() && this.keepText === 'true')) &&
+          (this.currentText && this.currentText.trim() && this.keepText === 'true')) &&
         !this.isBodyTextOverLimit
       ) {
         this.$store.dispatch('setIsLoading', true)

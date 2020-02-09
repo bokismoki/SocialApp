@@ -57,10 +57,10 @@ export const actions = {
                 })
         }
     },
-    setErrorMsg: ({ commit, dispatch }, payload = '') => {
+    setErrorMsg: ({ commit }, payload = '') => {
         commit('SET_ERROR_MSG', payload)
         setTimeout(() => {
-            dispatch('setErrorMsg')
+            commit('SET_ERROR_MSG', '')
         }, 4000)
     },
     setIsLoading: ({ commit }, payload) => {
