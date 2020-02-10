@@ -2,15 +2,17 @@ const sql = require('../db/mysql')
 
 exports.set = (req, res) => {
     const { post_id, user_id } = req.body
+    const placeholder = [{ post_id }, { user_id }]
     const queryCheckForLike = `SELECT * FROM likes
-    WHERE post_id = ${post_id} && user_id = '${user_id}'`
-    sql.query(queryCheckForLike, (err, result) => {
+    WHERE ? && ?`
+    sql.query(queryCheckForLike, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryCheckForLike' })
         } else {
             if (result.length > 0) {
+                const placeholder2 = [{ post_id }, { user_id }]
                 const queryDislike = `DELETE FROM likes
-                WHERE post_id = ${post_id} && user_id = '${user_id}'`
+                WHERE ? && ?`
                 sql.query(queryDislike, (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryDislike' })
@@ -19,9 +21,10 @@ exports.set = (req, res) => {
                     }
                 })
             } else {
+                const placeholder3 = [user_id, post_id]
                 const queryLike = `INSERT INTO likes (user_id, post_id)
-                VALUES('${user_id}', ${post_id})`
-                sql.query(queryLike, (err, result) => {
+                VALUES(?, ?)`
+                sql.query(queryLike, [...placeholder3], (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryLike' })
                     } else {

@@ -5,9 +5,10 @@ const jwt = require('jsonwebtoken')
 
 exports.getById = (req, res) => {
     const user_id = req.params.id
+    const placeholder = { id: user_id }
     const queryGetUser = `SELECT id, first_name, last_name, email, image
-    FROM users WHERE id = '${user_id}'`
-    sql.query(queryGetUser, (err, result) => {
+    FROM users WHERE ?`
+    sql.query(queryGetUser, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetUser' })
         } else {
@@ -25,10 +26,11 @@ exports.getById = (req, res) => {
 
 exports.getByInput = (req, res) => {
     const inputValue = req.params.input
+    const placeholder = `%${inputValue}%`
     const queryGetUsers = `SELECT id, CONCAT(first_name, ' ', last_name) AS name, image
-    FROM users WHERE CONCAT(first_name, ' ', last_name) LIKE '%${inputValue}%'
+    FROM users WHERE CONCAT(first_name, ' ', last_name) LIKE ?
     LIMIT 3`
-    sql.query(queryGetUsers, (err, result) => {
+    sql.query(queryGetUsers, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetUsers' })
         } else {
@@ -40,15 +42,17 @@ exports.getByInput = (req, res) => {
 exports.login = (req, res) => {
     const { name, picture, email, id } = req.body
     const [first_name, last_name] = name.split(' ')
-    const queryGetUser = `SELECT id FROM users WHERE id = '${id}'`
-    sql.query(queryGetUser, (err, result) => {
+    const placeholder = { id }
+    const queryGetUser = `SELECT id FROM users WHERE ?`
+    sql.query(queryGetUser, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetUser' })
         } else {
             if (result.length === 0) {
+                const placeholder2 = [id, first_name, last_name, email, picture.data.url]
                 const queryAddUser = `INSERT INTO users (id, first_name, last_name, email, image)
-                VALUES ('${id}', '${first_name}', '${last_name}', '${email}', '${picture.data.url}')`
-                sql.query(queryAddUser, (err, result) => {
+                VALUES (?, ?, ?, ?, ?)`
+                sql.query(queryAddUser, [...placeholder2], (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryAddUser' })
                     } else {

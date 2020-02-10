@@ -2,9 +2,10 @@ const sql = require('../db/mysql')
 
 exports.getByUser = (req, res) => {
     const { followee_id, follower_id } = req.params
+    const placeholder = [{ followee_id }, { follower_id }]
     const queryCheckForFollow = `SELECT * FROM follows
-    WHERE followee_id = '${followee_id}' && follower_id = '${follower_id}'`
-    sql.query(queryCheckForFollow, (err, result) => {
+    WHERE ? && ?`
+    sql.query(queryCheckForFollow, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryCheckForFollow' })
         } else {
@@ -19,10 +20,11 @@ exports.getByUser = (req, res) => {
 
 exports.getCountByUser = (req, res) => {
     const user_id = req.params.id
+    const placeholder = { followee_id: user_id }
     const queryGetFollowsCount = `SELECT COUNT(*) AS followers_count FROM follows
-    WHERE followee_id = '${user_id}'
+    WHERE ?
     GROUP BY followee_id`
-    sql.query(queryGetFollowsCount, (err, result) => {
+    sql.query(queryGetFollowsCount, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetFollowsCount' })
         } else {
@@ -37,10 +39,11 @@ exports.getCountByUser = (req, res) => {
 
 exports.getFollowedUsers = (req, res) => {
     const user_id = req.params.id
+    const placeholder = { follower_id: user_id }
     const queryGetFollowedUsers = `SELECT users.id, users.first_name, users.last_name, users.image
     FROM follows JOIN users ON users.id = followee_id
-    WHERE follows.follower_id = '${user_id}'`
-    sql.query(queryGetFollowedUsers, (err, result) => {
+    WHERE follows.?`
+    sql.query(queryGetFollowedUsers, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetFollowedUsers' })
         } else {
@@ -51,16 +54,18 @@ exports.getFollowedUsers = (req, res) => {
 
 exports.set = (req, res) => {
     const { followee_id, follower_id } = req.body
+    const placeholder = [{ followee_id }, { follower_id }]
     const queryCheckForFollow = `SELECT * FROM follows
-    WHERE followee_id = '${followee_id}' && follower_id = '${follower_id}'`
-    sql.query(queryCheckForFollow, (err, result) => {
+    WHERE ? && ?`
+    sql.query(queryCheckForFollow, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryCheckForFollow' })
         } else {
             if (result.length > 0) {
+                const placeholder2 = [{ followee_id }, { follower_id }]
                 const queryUnfollow = `DELETE FROM follows
-                WHERE followee_id = '${followee_id}' && follower_id = '${follower_id}'`
-                sql.query(queryUnfollow, (err, result) => {
+                WHERE ? && ?`
+                sql.query(queryUnfollow, [...placeholder2], (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryUnfollow' })
                     } else {
@@ -68,9 +73,10 @@ exports.set = (req, res) => {
                     }
                 })
             } else {
+                const placeholder3 = [followee_id, follower_id]
                 const queryFollow = `INSERT INTO follows (followee_id, follower_id)
-                VALUES('${followee_id}', '${follower_id}')`
-                sql.query(queryFollow, (err, result) => {
+                VALUES(?, ?)`
+                sql.query(queryFollow, [...placeholder3], (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryFollow' })
                     } else {

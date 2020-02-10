@@ -22,9 +22,10 @@ exports.getByUser = (req, res) => {
 
 exports.getCountByUser = (req, res) => {
     const user_id = req.params.id
+    const placeholder = { user_id }
     const queryGetCountByUser = `SELECT COUNT(id) AS posts_count FROM posts
-    WHERE user_id = '${user_id}'`
-    sql.query(queryGetCountByUser, (err, result) => {
+    WHERE ?`
+    sql.query(queryGetCountByUser, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetCountByUser' })
         } else {
@@ -35,13 +36,14 @@ exports.getCountByUser = (req, res) => {
 
 exports.getById = (req, res) => {
     const post_id = req.params.id
+    const placeholder = { id: post_id }
     const queryGetPost = `SELECT posts.id AS post_id, posts.body_text, posts.body_image, posts.created_at, posts.is_private,
     users.id AS user_id, users.first_name, users.last_name, users.image,
     COUNT(likes.created_at) AS likes_count
     FROM posts JOIN users ON posts.user_id = users.id
     LEFT JOIN likes ON likes.post_id = posts.id
-    WHERE posts.id = ${post_id}`
-    sql.query(queryGetPost, (err, result) => {
+    WHERE posts.?`
+    sql.query(queryGetPost, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetPost' })
         } else {
@@ -83,10 +85,12 @@ exports.getCountPublic = (req, res) => {
 
 exports.add = (req, res) => {
     const { body_text, body_image, is_private, user_id } = req.body
+    const placeholder = [body_text, body_image, is_private, user_id]
     const queryAddPost = `INSERT INTO posts (body_text, body_image, is_private, user_id)
-    VALUES ('${body_text}', '${body_image}', '${is_private}', '${user_id}')`
-    sql.query(queryAddPost, (err, result) => {
+    VALUES (?, ?, ?, ?)`
+    sql.query(queryAddPost, [...placeholder], (err, result) => {
         if (err) {
+            console.log(err)
             res.send({ success: false, msg: 'Error on queryAddPost' })
         } else {
             const id = result.insertId
@@ -106,10 +110,11 @@ exports.add = (req, res) => {
 exports.update = (req, res) => {
     const post_id = req.params.id
     const { body_text, body_image, is_private } = req.body
+    const placeholder = [body_text, body_image, is_private, post_id]
     const queryUpdatePost = `UPDATE posts
-    SET body_text = '${body_text}', body_image = '${body_image}', is_private = '${is_private}'
-    WHERE id = ${post_id}`
-    sql.query(queryUpdatePost, (err, result) => {
+    SET body_text = ?, body_image = ?, is_private = ?
+    WHERE id = ?`
+    sql.query(queryUpdatePost, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryUpdatePost' })
         } else {
@@ -120,9 +125,10 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
     const post_id = req.params.id
+    const placeholer = { id: post_id }
     const queryDeletePost = `DELETE FROM posts
-    WHERE id = ${post_id}`
-    sql.query(queryDeletePost, (err, result) => {
+    WHERE ?`
+    sql.query(queryDeletePost, placeholer, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryDeletePost' })
         } else {

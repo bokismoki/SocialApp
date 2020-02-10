@@ -46,7 +46,9 @@ export default {
   },
   methods: {
     search() {
-      if (this.searchValue.trim()) {
+      const regex = /^[a-z0-9]+$/i
+      const isAlphanumeric = regex.test(this.searchValue.trim())
+      if (this.searchValue.trim() && isAlphanumeric) {
         this.$store.dispatch('setIsLoading', true)
         this.$axios
           .get(`/user/get/by_input/${this.searchValue.toLowerCase().trim()}`)

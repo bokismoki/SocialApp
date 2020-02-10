@@ -2,14 +2,15 @@ const sql = require('../db/mysql')
 
 exports.getByUser = (req, res) => {
     const user_id = req.params.id
+    const placeholder = { receiver_id: user_id }
     const queryGetNotifications = `SELECT n.id AS notification_id, n.post_id, n.user_id, n.type,
     CONCAT(u.first_name, ' ', u.last_name) AS name, u.image, p.id AS post_id
     FROM notifications n
     JOIN users u ON u.id = n.user_id
     LEFT JOIN posts p ON p.id = n.post_id
-    WHERE n.receiver_id = '${user_id}'
+    WHERE n.?
     ORDER BY n.created_at DESC`
-    sql.query(queryGetNotifications, (err, result) => {
+    sql.query(queryGetNotifications, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetNotifications' })
         } else {
@@ -20,9 +21,10 @@ exports.getByUser = (req, res) => {
 
 exports.getCount = (req, res) => {
     const user_id = req.params.id
+    const placeholder = { receiver_id: user_id }
     const queryGetNotificationsCount = `SELECT COUNT(id) AS notifications_count FROM notifications
-    WHERE receiver_id = '${user_id}'`
-    sql.query(queryGetNotificationsCount, (err, result) => {
+    WHERE ?`
+    sql.query(queryGetNotificationsCount, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetNotificationsCount' })
         } else {
@@ -41,20 +43,22 @@ exports.add = (req, res) => {
     if (!post_id) {
         post_id = null
     }
+    const placeholder = [{ type }, { user_id }, { post_id }, { receiver_id }]
     let queryGetNotification = `SELECT id FROM notifications
-    WHERE type = '${type}' AND user_id = '${user_id}' AND post_id = ${post_id} AND receiver_id = '${receiver_id}'`
+    WHERE ? AND ? AND ? AND ?`
     if (!post_id) {
         queryGetNotification = `SELECT id FROM notifications
-    WHERE type = '${type}' AND user_id = '${user_id}' AND receiver_id = '${receiver_id}'`
+    WHERE ? AND ? AND ?`
     }
-    sql.query(queryGetNotification, (err, result) => {
+    sql.query(queryGetNotification, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetNotification' })
         } else {
             if (result.length === 0) {
+                const placeholder2 = [type, post_id, user_id, receiver_id]
                 const queryAddNotification = `INSERT INTO notifications (type, post_id, user_id, receiver_id)
-                VALUES ('${type}', ${post_id}, '${user_id}', '${receiver_id}')`
-                sql.query(queryAddNotification, (err, result) => {
+                VALUES (?, ?, ?, ?)`
+                sql.query(queryAddNotification, [...placeholder2], (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryAddNotification' })
                     } else {
@@ -68,9 +72,10 @@ exports.add = (req, res) => {
 
 exports.delete = (req, res) => {
     const notification_id = req.params.id
+    const placeholder = { id: notification_id }
     const queryDeleteNotification = `DELETE FROM notifications
-    WHERE id = ${notification_id}`
-    sql.query(queryDeleteNotification, (err, result) => {
+    WHERE ?`
+    sql.query(queryDeleteNotification, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryDeleteNotification' })
         } else {
@@ -81,8 +86,9 @@ exports.delete = (req, res) => {
 
 exports.deleteAll = (req, res) => {
     const receiver_id = req.params.id
-    const queryDeleteAllNotifications = `DELETE FROM notifications WHERE receiver_id = '${receiver_id}'`
-    sql.query(queryDeleteAllNotifications, (err, result) => {
+    const placeholder = { receiver_id }
+    const queryDeleteAllNotifications = `DELETE FROM notifications WHERE ?`
+    sql.query(queryDeleteAllNotifications, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryDeleteAllNotifications' })
         } else {

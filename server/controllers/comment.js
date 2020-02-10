@@ -2,11 +2,12 @@ const sql = require('../db/mysql')
 
 exports.getById = (req, res) => {
     const comment_id = req.params.id
+    const placeholder = { id: comment_id }
     const queryGetComment = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
     users.id AS user_id, users.first_name, users.last_name, users.image
     FROM comments JOIN users ON comments.user_id = users.id
-    WHERE comments.id = ${comment_id}`
-    sql.query(queryGetComment, (err, result) => {
+    WHERE comments.?`
+    sql.query(queryGetComment, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetComment' })
         } else {
@@ -18,13 +19,14 @@ exports.getById = (req, res) => {
 exports.getByPost = (req, res) => {
     const post_id = req.params.id
     const limit_index = req.params.limit_index
+    const placeholder = { post_id }
     const queryGetComments = `SELECT comments.id AS comment_id, comments.body_text, comments.created_at,
     users.id AS user_id, users.first_name, users.last_name, users.image
     FROM comments JOIN users ON comments.user_id = users.id
-    WHERE comments.post_id = ${post_id}
+    WHERE comments.?
     ORDER BY comments.created_at DESC
     LIMIT ${limit_index * 10}, 10`
-    sql.query(queryGetComments, (err, result) => {
+    sql.query(queryGetComments, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetComments' })
         } else {
@@ -35,9 +37,10 @@ exports.getByPost = (req, res) => {
 
 exports.getCountByPost = (req, res) => {
     const post_id = req.params.id
+    const placeholder = { post_id }
     const queryGetCountByPost = `SELECT COUNT(id) AS comments_count FROM comments
-    WHERE post_id = ${post_id}`
-    sql.query(queryGetCountByPost, (err, result) => {
+    WHERE ?`
+    sql.query(queryGetCountByPost, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetCountByPost' })
         } else {
@@ -48,9 +51,10 @@ exports.getCountByPost = (req, res) => {
 
 exports.add = (req, res) => {
     const { body_text, post_id, user_id } = req.body
+    const placeholder = [body_text, post_id, user_id]
     const queryAddComment = `INSERT INTO comments (body_text, post_id, user_id)
-    VALUES ('${body_text}', ${post_id}, '${user_id}')`
-    sql.query(queryAddComment, (err, result) => {
+    VALUES (?, ?, ?)`
+    sql.query(queryAddComment, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryAddComment' })
         } else {
@@ -73,9 +77,10 @@ exports.add = (req, res) => {
 exports.update = (req, res) => {
     const comment_id = req.params.id
     const { body_text } = req.body
-    const queryUpdateComment = `UPDATE comments SET body_text = '${body_text}'
-    WHERE id = ${comment_id}`
-    sql.query(queryUpdateComment, (err, result) => {
+    const placeholder = [{ body_text }, { id: comment_id }]
+    const queryUpdateComment = `UPDATE comments SET ?
+    WHERE ?`
+    sql.query(queryUpdateComment, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryUpdateComment' })
         } else {
@@ -86,9 +91,10 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
     const comment_id = req.params.id
+    const placeholder = { id: comment_id }
     const queryDeleteComment = `DELETE FROM comments
-    WHERE id = ${comment_id}`
-    sql.query(queryDeleteComment, (err, result) => {
+    WHERE ?`
+    sql.query(queryDeleteComment, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryDeleteComment' })
         } else {
