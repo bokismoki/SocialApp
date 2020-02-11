@@ -54,7 +54,7 @@ export default {
   mounted() {
     if (!this.$route.name.includes('login')) {
       this.socket.on('getNewUser', () => {
-        if (this.$auth.strategy === 'facebook') {
+        if (this.$auth.strategy.name === 'facebook') {
           this.socket.emit('sendNewUser', {
             user: this.$auth.user
           })
