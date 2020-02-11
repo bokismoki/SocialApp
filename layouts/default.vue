@@ -38,24 +38,25 @@ export default {
     listenSocket() {
       this.socket.on('sendOnlineUsers', onlineUsers => {
         this.onlineUsers = onlineUsers
-      })
-      this.socket.on('userDisconnected', socketId => {
-        const indexOfOnlineUser = this.onlineUsers
+        this.onlineUsers
           .map(user => user.socketId)
-          .indexOf(socketId)
-        if (indexOfOnlineUser !== -1) {
-          this.onlineUsers.splice(indexOfOnlineUser, 1)
-        }
+          .forEach((arr, index) => {
+            if (arr.length === 0) {
+              this.onlineUsers.splice(index, 1)
+            }
+          })
       })
     }
   },
   mounted() {
-    this.socket.on('getNewUser', () => {
-      this.socket.emit('sendNewUser', {
-        user: this.$auth.user
+    if (!this.$route.name.includes('login')) {
+      this.socket.on('getNewUser', () => {
+        this.socket.emit('sendNewUser', {
+          user: this.$auth.user
+        })
       })
-    })
-    this.listenSocket()
+      this.listenSocket()
+    }
   }
 }
 </script>

@@ -50,12 +50,11 @@ io.on('connection', socket => {
   socket.emit('getNewUser')
   socket.on('sendNewUser', user => {
     if (user.user) {
-      const isOnline = onlineUsers.find(usr => usr.user.id === user.user.id)
-      if (typeof (isOnline) === 'undefined') {
-        onlineUsers.push({ user: user.user, socketId: socket.id })
+      if (typeof (onlineUsers.find(usr => usr.user.id === user.user.id)) !== 'undefined') {
+        const index = onlineUsers.map(usr => usr.user.id).indexOf(user.user.id)
+        onlineUsers[index].socketId.push(socket.id)
       } else {
-        const indexOfOnlineUser = onlineUsers.map(usr => usr.user.id).indexOf(user.user.id)
-        onlineUsers.splice(indexOfOnlineUser, 1, { user: user.user, socketId: socket.id })
+        onlineUsers.push({ user: user.user, socketId: [socket.id] })
       }
       io.emit('sendOnlineUsers', onlineUsers)
     }
@@ -63,6 +62,19 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     io.emit('userDisconnected', socket.id)
+    socket.disconnect();
+    let indexOfUser
+    onlineUsers.map(user => user.socketId).forEach((arr, index) => {
+      const idIndex = arr.indexOf(socket.id)
+      if (idIndex !== -1) {
+        indexOfUser = index
+      }
+    });
+    if (typeof (indexOfUser) !== 'undefined') {
+      const indexOfId = onlineUsers[indexOfUser].socketId.map(id => id).indexOf(socket.id)
+      onlineUsers[indexOfUser].socketId.splice(indexOfId, 1)
+      io.emit('sendOnlineUsers', onlineUsers)
+    }
   })
 })
 
