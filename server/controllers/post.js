@@ -85,26 +85,32 @@ exports.getCountPublic = (req, res) => {
 
 exports.add = (req, res) => {
     const { body_text, body_image, is_private, user_id } = req.body
-    const placeholder = [body_text, body_image, is_private, user_id]
-    const queryAddPost = `INSERT INTO posts (body_text, body_image, is_private, user_id)
-    VALUES (?, ?, ?, ?)`
-    sql.query(queryAddPost, [...placeholder], (err, result) => {
-        if (err) {
-            console.log(err)
-            res.send({ success: false, msg: 'Error on queryAddPost' })
-        } else {
-            const id = result.insertId
-            const queryGetNewPost = `SELECT id AS post_id, body_text, body_image, created_at, is_private, user_id
-            FROM posts WHERE id = ${id}`
-            sql.query(queryGetNewPost, (err, result) => {
-                if (err) {
-                    res.send({ success: false, msg: 'Error on queryGetNewPost' })
-                } else {
-                    res.send({ success: true, post: result[0] })
-                }
-            })
-        }
-    })
+    const imageLength = body_image.length - 'data:image/png;base64,'.length
+    const sizeInBytes = 4 * Math.ceil((imageLength / 3)) * 0.5624896334383812
+    if (sizeInBytes > 2000000) {
+        res.send({ success: false, msg: 'Image file is too large (max 2MB allowed)' })
+    } else {
+        const placeholder = [body_text, body_image, is_private, user_id]
+        const queryAddPost = `INSERT INTO posts (body_text, body_image, is_private, user_id)
+        VALUES (?, ?, ?, ?)`
+        sql.query(queryAddPost, [...placeholder], (err, result) => {
+            if (err) {
+                console.log(err)
+                res.send({ success: false, msg: 'Error on queryAddPost' })
+            } else {
+                const id = result.insertId
+                const queryGetNewPost = `SELECT id AS post_id, body_text, body_image, created_at, is_private, user_id
+                FROM posts WHERE id = ${id}`
+                sql.query(queryGetNewPost, (err, result) => {
+                    if (err) {
+                        res.send({ success: false, msg: 'Error on queryGetNewPost' })
+                    } else {
+                        res.send({ success: true, post: result[0] })
+                    }
+                })
+            }
+        })
+    }
 }
 
 exports.update = (req, res) => {
