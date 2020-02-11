@@ -73,7 +73,7 @@ module.exports = {
         scope: ['public_profile', 'email']
       },
       google: {
-        client_id: '238487592577-lm2nu7odbvu9etq9m5sg4jgm25bekrgi.apps.googleusercontent.com'
+        client_id: process.env.GOOGLE_APP_ID
       }
     },
     plugins: [
