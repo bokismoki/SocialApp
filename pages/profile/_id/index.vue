@@ -45,7 +45,7 @@
                 @disliked="disliked"
               />
             </div>
-            <div>
+            <div v-if="posts.length > 0">
               <button
                 class="bg-blue-700 text-white mx-1 px-2 rounded-sm font-semibold"
                 :class="{'px-3 py-1': activePaginationIndex === index}"
