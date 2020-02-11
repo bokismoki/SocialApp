@@ -33,10 +33,7 @@
             alt="White hamburger menu icon"
             @click="setIsDropdownMenuOpen"
           />
-          <div
-            class="sm:hidden"
-            v-if="hasNotifications && !isDropdownMenuOpen"
-          >
+          <div class="sm:hidden" v-if="hasNotifications && !isDropdownMenuOpen">
             <NotificationsIndicator />
           </div>
         </div>
@@ -124,6 +121,7 @@ export default {
       await this.$auth.logout()
       this.$cookies.remove('jwt')
       this.$router.push({ name: 'login' })
+      this.$emit('disconnect')
     },
     setIsDropdownMenuOpen() {
       this.$store.dispatch('setIsDropdownMenuOpen', !this.isDropdownMenuOpen)

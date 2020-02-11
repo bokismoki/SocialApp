@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <NavBar />
+    <NavBar @disconnect="disconnect" />
     <nuxt />
     <div v-if="$route.name !== 'login'">
       <OnlineUsers :onlineUsers="onlineUsers" />
@@ -46,6 +46,9 @@ export default {
             }
           })
       })
+    },
+    disconnect() {
+      this.socket.emit('disc')
     }
   },
   mounted() {

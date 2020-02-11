@@ -59,10 +59,12 @@ io.on('connection', socket => {
       io.emit('sendOnlineUsers', onlineUsers)
     }
   })
+  socket.on('disc', () => {
+    socket.emit('disconnect')
+  })
 
   socket.on('disconnect', () => {
     io.emit('userDisconnected', socket.id)
-    socket.disconnect();
     let indexOfUser
     onlineUsers.map(user => user.socketId).forEach((arr, index) => {
       const idIndex = arr.indexOf(socket.id)
