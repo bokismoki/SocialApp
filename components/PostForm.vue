@@ -121,7 +121,9 @@ export default {
     newPost() {
       if (
         (this.bodyText.trim() ||
-          (this.currentText && this.currentText.trim() && this.keepText === 'true')) &&
+          (this.currentText &&
+            this.currentText.trim() &&
+            this.keepText === 'true')) &&
         !this.isBodyTextOverLimit
       ) {
         this.$store.dispatch('setIsLoading', true)
@@ -144,6 +146,8 @@ export default {
               body_image: imageToSend,
               is_private: Number(this.isPrivate),
               user_id: this.$auth.user.id
+                ? this.$auth.user.id
+                : this.$auth.user.sub
             })
             .then(response => {
               if (!response.data.success) {
@@ -165,6 +169,8 @@ export default {
                 body_image: this.bodyImage,
                 is_private: Number(this.isPrivate),
                 user_id: this.$auth.user.id
+                  ? this.$auth.user.id
+                  : this.$auth.user.sub
               },
               {
                 headers: {

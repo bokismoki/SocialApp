@@ -55,6 +55,8 @@ export default {
         .delete(`/notification/delete/${this.notification.notification_id}`, {
           data: {
             user_id: this.$auth.user.id
+              ? this.$auth.user.id
+              : this.$auth.user.sub
           }
         })
         .then(response => {

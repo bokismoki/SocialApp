@@ -54,9 +54,23 @@ export default {
   mounted() {
     if (!this.$route.name.includes('login')) {
       this.socket.on('getNewUser', () => {
-        this.socket.emit('sendNewUser', {
-          user: this.$auth.user
-        })
+        if (this.$auth.strategy === 'facebook') {
+          this.socket.emit('sendNewUser', {
+            user: this.$auth.user
+          })
+        } else {
+          const user = {
+            email: this.$auth.user.email,
+            id: this.$auth.user.sub,
+            name: this.$auth.user.name,
+            picture: {
+              data: {
+                url: this.$auth.user.picture
+              }
+            }
+          }
+          this.socket.emit('sendNewUser', { user })
+        }
       })
       this.listenSocket()
     }

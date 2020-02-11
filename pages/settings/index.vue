@@ -51,7 +51,9 @@ export default {
     try {
       store.dispatch('setIsLoading', true)
       const followedUsers = await $axios.get(
-        `/follow/get/followed_users/${$auth.user.id}`
+        `/follow/get/followed_users/${
+          $auth.user.id ? $auth.user.id : $auth.user.sub
+        }`
       )
       store.dispatch('setIsLoading', false)
       return {

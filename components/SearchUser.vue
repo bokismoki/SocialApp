@@ -18,7 +18,7 @@
         <div v-if="searchValue">
           <div v-if="users.length > 0">
             <div v-for="user in users" :key="user.id">
-              <div v-if="user.id !== $auth.user.id">
+              <div v-if="user.id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)">
                 <SearchUserItem :user="user" />
               </div>
             </div>

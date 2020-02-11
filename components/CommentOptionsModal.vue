@@ -28,7 +28,10 @@ export default {
   props: ['comment', 'index'],
   computed: {
     displayEdit() {
-      return this.comment.user_id === this.$auth.user.id
+      return (
+        this.comment.user_id ===
+        (this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub)
+      )
     }
   },
   methods: {
@@ -46,6 +49,8 @@ export default {
         .delete(`/comment/delete/${this.comment.comment_id}`, {
           data: {
             user_id: this.$auth.user.id
+              ? this.$auth.user.id
+              : this.$auth.user.sub
           }
         })
         .then(response => {

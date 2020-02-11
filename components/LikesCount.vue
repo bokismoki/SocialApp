@@ -27,7 +27,12 @@ export default {
       this.$axios
         .post(
           '/like/set',
-          { post_id, user_id: this.$auth.user.id },
+          {
+            post_id,
+            user_id: this.$auth.user.id
+              ? this.$auth.user.id
+              : this.$auth.user.sub
+          },
           {
             headers: {
               'content-type': 'application/json'
@@ -63,14 +68,19 @@ export default {
         })
     },
     newNotificationLike() {
-      if (this.$auth.user.id !== this.post.user_id) {
+      if (
+        (this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub) !==
+        this.post.user_id
+      ) {
         this.$axios
           .post(
             '/notification/add',
             {
               type: 'like',
               post_id: this.post.post_id,
-              user_id: this.$auth.user.id,
+              user_id: this.$auth.user.id
+                ? this.$auth.user.id
+                : this.$auth.user.sub,
               receiver_id: this.post.user_id
             },
             {

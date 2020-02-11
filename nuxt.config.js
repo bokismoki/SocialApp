@@ -72,6 +72,9 @@ module.exports = {
         userinfo_endpoint: 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email',
         scope: ['public_profile', 'email']
       },
+      google: {
+        client_id: '238487592577-lm2nu7odbvu9etq9m5sg4jgm25bekrgi.apps.googleusercontent.com'
+      }
     },
     plugins: [
       '~/plugins/axios.js'

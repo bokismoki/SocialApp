@@ -12,7 +12,7 @@
             <img
               class="rounded-full w-8 h-8 mr-2 border-2 border-blue-300"
               :src="user.user.picture.data.url"
-              alt="My Facebook profile image"
+              alt
             />
             <h1 class="font-semibold text-xs">{{firstName(user.user.name)}}</h1>
           </nuxt-link>
@@ -44,7 +44,10 @@ export default {
       return name.split(' ')[0]
     },
     userProfileRoute(userId) {
-      if (this.$auth.user.id !== userId) {
+      if (
+        (this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub) !==
+        userId
+      ) {
         return { name: 'profile-id', params: { id: userId } }
       } else {
         return { name: 'profile' }

@@ -14,6 +14,7 @@
       <p class="text-sm font-semibold">Email: srjivqxzmy_1580048820@tfbnw.net</p>
       <p class="text-sm font-semibold">Password: DanielAlisonsen99</p>
     </div>
+    <div @click="loginGoogle">CLICK ME TO LOGIN AS GOOGLE</div>
   </div>
 </template>
 
@@ -25,6 +26,9 @@ export default {
   methods: {
     login() {
       this.$auth.loginWith('facebook')
+    },
+    loginGoogle() {
+      this.$auth.loginWith('google')
     }
   },
   asyncData({ $auth, redirect }) {

@@ -66,6 +66,8 @@ export default {
           likes_count: 0,
           comments_count: 0,
           image: this.$auth.user.picture.data.url
+            ? this.$auth.user.picture.data.url
+            : this.$auth.user.picture
         })
       }
     },

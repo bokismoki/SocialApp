@@ -34,7 +34,10 @@ export default {
   computed: {
     displayEdit() {
       if (this.$route.name !== 'profile') {
-        return this.$auth.user.id === this.post.user_id
+        return (
+          (this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub) ===
+          this.post.user_id
+        )
       } else {
         return true
       }
@@ -55,6 +58,8 @@ export default {
         .delete(`/post/delete/${this.post.post_id}`, {
           data: {
             user_id: this.$auth.user.id
+              ? this.$auth.user.id
+              : this.$auth.user.sub
           }
         })
         .then(response => {

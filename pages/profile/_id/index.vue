@@ -91,8 +91,12 @@ export default {
           '/follow/set',
           {
             followee_id: this.$route.params.id,
-            follower_id: this.$auth.user.id,
+            follower_id: this.$auth.user.id
+              ? this.$auth.user.id
+              : this.$auth.user.sub,
             user_id: this.$auth.user.id
+              ? this.$auth.user.id
+              : this.$auth.user.sub
           },
           {
             headers: {
@@ -134,7 +138,9 @@ export default {
           '/notification/add',
           {
             type: 'follow',
-            user_id: this.$auth.user.id,
+            user_id: this.$auth.user.id
+              ? this.$auth.user.id
+              : this.$auth.user.sub,
             receiver_id: this.user.id
           },
           {
@@ -180,11 +186,15 @@ export default {
     try {
       store.dispatch('setIsLoading', true)
       const user = await $axios.get(`/user/get/${params.id}`)
-      if (user.data.user.id === $auth.user.id) {
+      if (
+        user.data.user.id === ($auth.user.id ? $auth.user.id : $auth.user.sub)
+      ) {
         redirect({ name: 'profile' })
       } else {
         const isFollowing = await $axios.get(
-          `/follow/get/by_user/${user.data.user.id}/${$auth.user.id}`
+          `/follow/get/by_user/${user.data.user.id}/${
+            $auth.user.id ? $auth.user.id : $auth.user.sub
+          }`
         )
         const posts = await $axios.get(
           `/post/get/by_user/${user.data.user.id}/0`

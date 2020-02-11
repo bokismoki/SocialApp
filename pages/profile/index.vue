@@ -99,9 +99,11 @@ export default {
           this.activePaginationIndex = index
           this.$store.dispatch('setIsLoading', true)
           const posts = await this.$axios.get(
-            `/post/get/by_user/${this.$auth.user.id}/${index}`
+            `/post/get/by_user/${
+              this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
+            }/${index}`
           )
-          
+
           this.posts = posts.data.posts
           window.scrollTo(0, 0)
           this.$store.dispatch('setIsLoading', false)
@@ -116,13 +118,21 @@ export default {
   async asyncData({ $axios, $auth, store, redirect }) {
     try {
       store.dispatch('setIsLoading', true)
-      const user = await $axios.get(`/user/get/${$auth.user.id}`)
-      const posts = await $axios.get(`/post/get/by_user/${$auth.user.id}/0`)
+      const user = await $axios.get(
+        `/user/get/${$auth.user.id ? $auth.user.id : $auth.user.sub}`
+      )
+      const posts = await $axios.get(
+        `/post/get/by_user/${$auth.user.id ? $auth.user.id : $auth.user.sub}/0`
+      )
       const posts_count = await $axios.get(
-        `/post/get/count/by_user/${$auth.user.id}`
+        `/post/get/count/by_user/${
+          $auth.user.id ? $auth.user.id : $auth.user.sub
+        }`
       )
       const followersCount = await $axios.get(
-        `follow/get/count/by_user/${$auth.user.id}`
+        `follow/get/count/by_user/${
+          $auth.user.id ? $auth.user.id : $auth.user.sub
+        }`
       )
       store.dispatch('setIsLoading', false)
       return {

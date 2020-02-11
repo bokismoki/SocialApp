@@ -40,11 +40,18 @@ export default {
     deleteAllNotifications() {
       this.$store.dispatch('setIsLoading', true)
       this.$axios
-        .delete(`/notification/delete_all/${this.$auth.user.id}`, {
-          data: {
-            user_id: this.$auth.user.id
+        .delete(
+          `/notification/delete_all/${
+            this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
+          }`,
+          {
+            data: {
+              user_id: this.$auth.user.id
+                ? this.$auth.user.id
+                : this.$auth.user.sub
+            }
           }
-        })
+        )
         .then(response => {
           if (response.data.success) {
             this.notifications = []
@@ -62,7 +69,9 @@ export default {
     try {
       store.dispatch('setIsLoading', true)
       const notifications = await $axios.get(
-        `/notification/get/by_user/${$auth.user.id}`
+        `/notification/get/by_user/${
+          $auth.user.id ? $auth.user.id : $auth.user.sub
+        }`
       )
       store.dispatch('setIsLoading', false)
       return {

@@ -77,7 +77,7 @@ export default {
           const comments = await this.$axios.get(
             `/comment/get/by_post/${this.$route.params.id}/${index}`
           )
-          
+
           this.comments = comments.data.comments
           window.scrollTo(0, 0)
           this.$store.dispatch('setIsLoading', false)
@@ -93,7 +93,10 @@ export default {
     try {
       store.dispatch('setIsLoading', true)
       const post = await $axios.get(`/post/get/by_id/${params.id}`)
-      if ($auth.user.id !== post.data.post.user_id) {
+      if (
+        ($auth.user.id ? $auth.user.id : $auth.user.sub) !==
+        post.data.post.user_id
+      ) {
         if (post.data.post.is_private === 1) {
           return redirect({ name: 'index' })
         }

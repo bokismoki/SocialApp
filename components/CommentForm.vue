@@ -47,6 +47,8 @@ export default {
             .put(`/comment/update/${this.$route.params.id}`, {
               body_text: this.bodyText.trim(),
               user_id: this.$auth.user.id
+                ? this.$auth.user.id
+                : this.$auth.user.sub
             })
             .then(response => {
               if (response.data.success) {
@@ -69,6 +71,8 @@ export default {
                 body_text: this.bodyText.trim(),
                 post_id: this.$route.params.id,
                 user_id: this.$auth.user.id
+                  ? this.$auth.user.id
+                  : this.$auth.user.sub
               },
               {
                 headers: {
@@ -95,14 +99,19 @@ export default {
       }
     },
     newNotificationComment() {
-      if (this.$auth.user.id !== this.post.user_id) {
+      if (
+        (this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub) !==
+        this.post.user_id
+      ) {
         this.$axios
           .post(
             '/notification/add',
             {
               type: 'comment',
               post_id: this.$route.params.id,
-              user_id: this.$auth.user.id,
+              user_id: this.$auth.user.id
+                ? this.$auth.user.id
+                : this.$auth.user.sub,
               receiver_id: this.post.user_id
             },
             {

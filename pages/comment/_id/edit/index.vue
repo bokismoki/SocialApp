@@ -51,7 +51,10 @@ export default {
     try {
       store.dispatch('setIsLoading', true)
       const comment = await $axios.get(`/comment/get/by_id/${params.id}`)
-      if ($auth.user.id !== comment.data.comment.user_id) {
+      if (
+        ($auth.user.id ? $auth.user.id : $auth.user.sub) !==
+        comment.data.comment.user_id
+      ) {
         return redirect({ name: 'index' })
       }
       store.dispatch('setIsLoading', false)

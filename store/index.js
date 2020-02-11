@@ -30,31 +30,69 @@ export const mutations = {
 export const actions = {
     nuxtServerInit({ state }, { app, $axios }) {
         if (state.auth.loggedIn) {
-            $axios
-                .post('/user/login', state.auth.user, {
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.data.success === true) {
-                        $axios.post('/user/token', { user_id: state.auth.user.id }, {
-                            headers: {
-                                'content-type': 'application/json'
-                            }
-                        })
-                            .then(response => {
-                                const token = response.headers['set-cookie'][0].split('=')[1].split(';')[0]
-                                app.$cookies.set('jwt', token)
+            if (state.auth.strategy === 'facebook') {
+                $axios
+                    .post('/user/login', state.auth.user, {
+                        headers: {
+                            'content-type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success === true) {
+                            $axios.post('/user/token', { user_id: state.auth.user.id }, {
+                                headers: {
+                                    'content-type': 'application/json'
+                                }
                             })
-                            .catch(err => {
-                                console.error(err)
+                                .then(response => {
+                                    const token = response.headers['set-cookie'][0].split('=')[1].split(';')[0]
+                                    app.$cookies.set('jwt', token)
+                                })
+                                .catch(err => {
+                                    console.error(err)
+                                })
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            } else {
+                const user = {
+                    name: state.auth.user.name,
+                    picture: {
+                        data: {
+                            url: state.auth.user.picture
+                        }
+                    },
+                    email: state.auth.user.email,
+                    id: state.auth.user.sub
+                }
+                $axios
+                    .post('/user/login', user, {
+                        headers: {
+                            'content-type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success === true) {
+                            $axios.post('/user/token', { user_id: state.auth.user.sub }, {
+                                headers: {
+                                    'content-type': 'application/json'
+                                }
                             })
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                })
+                                .then(response => {
+                                    const token = response.headers['set-cookie'][0].split('=')[1].split(';')[0]
+                                    app.$cookies.set('jwt', token)
+                                })
+                                .catch(err => {
+                                    console.error(err)
+                                })
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            }
         }
     },
     setErrorMsg: ({ commit }, payload = '') => {
