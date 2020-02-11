@@ -13,7 +13,7 @@ exports.set = (req, res) => {
                 const placeholder2 = [{ post_id }, { user_id }]
                 const queryDislike = `DELETE FROM likes
                 WHERE ? && ?`
-                sql.query(queryDislike, (err, result) => {
+                sql.query(queryDislike, [...placeholder2], (err, result) => {
                     if (err) {
                         res.send({ success: false, msg: 'Error on queryDislike' })
                     } else {
