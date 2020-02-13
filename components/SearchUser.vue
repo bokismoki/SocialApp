@@ -1,18 +1,25 @@
 <template>
   <div class="search_user">
     <div class="lg:mb-5">
-      <div class="flex items-center lg:block">
+      <div>
         <label
-          class="text-gray-900 text-xs uppercase mr-2 font-semibold cursor-pointer lg:block"
+          class="text-gray-900 text-xs uppercase mr-2 font-semibold cursor-pointer"
           for="search"
         >Search User:</label>
-        <input
-          class="px-1 placeholder-black text-sm rounded border-2 border-gray-300"
-          type="search"
-          id="search"
-          v-model="searchValue"
-          @input="search"
-        />
+        <div class="flex items-center">
+          <img
+            class="w-5 h-5 mr-1"
+            src="~/assets/img/magnifying-glass.svg"
+            alt="Gray magnifying glass icon"
+          />
+          <input
+            class="px-1 placeholder-black text-sm rounded border-2 border-gray-300"
+            type="search"
+            id="search"
+            v-model="searchValue"
+            @input="search"
+          />
+        </div>
       </div>
       <div class="mt-2">
         <div v-if="searchValue">
