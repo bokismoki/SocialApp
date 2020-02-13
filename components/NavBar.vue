@@ -43,7 +43,7 @@
           <nuxt-link :to="{name: 'index'}">
             <div class="flex items-center">
               <img
-                class="w-8 mr-5 lg:mr-2"
+                class="w-8 mr-5 lg:mr-1"
                 src="~/assets/img/posts.svg"
                 alt="White paper icon representing posts"
               />
@@ -54,7 +54,7 @@
         <div class="lg:mr-10">
           <nuxt-link :to="{name: 'notifications'}">
             <div class="flex items-center">
-              <div class="relative mr-5 lg:mr-2">
+              <div class="relative mr-5 lg:mr-1">
                 <img
                   class="w-8"
                   src="~/assets/img/bell.svg"
@@ -72,7 +72,7 @@
           <nuxt-link :to="{name: 'profile'}">
             <div class="flex items-center">
               <img
-                class="w-8 mr-5 lg:mr-2"
+                class="w-8 mr-5 lg:mr-1"
                 src="~/assets/img/profile.svg"
                 alt="White user silhouette icon"
               />
@@ -84,7 +84,7 @@
           <nuxt-link :to="{name: 'settings'}">
             <div class="flex items-center cursor-pointer">
               <img
-                class="w-8 mr-5 lg:mr-2"
+                class="w-8 mr-5 lg:mr-1"
                 src="~/assets/img/settings.svg"
                 alt="White tools icon representing settings"
               />
@@ -93,7 +93,7 @@
           </nuxt-link>
         </div>
         <div class="flex items-center lg:mr-10 cursor-pointer opacity-50" @click="logout">
-          <img class="w-8 lg:mr-2" src="~/assets/img/logout.svg" alt="White logout icon" />
+          <img class="w-8 lg:mr-1" src="~/assets/img/logout.svg" alt="White logout icon" />
           <span class="hidden lg:inline text-sm uppercase">Logout</span>
         </div>
       </div>

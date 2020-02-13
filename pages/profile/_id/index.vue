@@ -19,15 +19,16 @@
           <img class="w-4 mr-1" src="~/assets/img/email.svg" alt />
           <h3 class="text-gray-800 text-xs font-semibold">{{user.email}}</h3>
         </div>
-        <div class="flex items-end">
-          <button
-            class="uppercase mt-3 rounded px-5 py-1 bg-blue-700 text-white font-semibold tracking-widest shadow-lg hover:bg-blue-600"
-            @click="follow"
-          >{{isFollowing ? 'Unfollow' : 'Follow'}}</button>
-          <div class="ml-2 w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
+        <div class="flex items-center mt-1">
+          <p class="text-blue-600 font-black mr-1">Followers:</p>
+          <div class="w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
             <p class="m-auto text-lg">{{followers_count}}</p>
           </div>
         </div>
+        <button
+          class="uppercase mt-2 rounded px-5 py-1 bg-blue-700 text-white font-semibold tracking-widest shadow-lg hover:bg-blue-600"
+          @click="follow"
+        >{{isFollowing ? 'Unfollow' : 'Follow'}}</button>
         <div class="lg:flex lg:items-start lg:mt-10">
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1

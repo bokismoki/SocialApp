@@ -12,17 +12,18 @@
         />
       </div>
       <div class="py-16 px-5 max-w-5xl mx-auto">
-        <div class="flex items-center">
-          <h1
-            class="text-gray-800 uppercase font-black text-3xl leading-none"
-          >{{user.first_name}} {{user.last_name}}</h1>
-          <div class="ml-3 w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
-            <p class="m-auto text-lg">{{followers_count}}</p>
-          </div>
-        </div>
+        <h1
+          class="text-gray-800 uppercase font-black text-3xl leading-none"
+        >{{user.first_name}} {{user.last_name}}</h1>
         <div class="flex items-end mt-1">
           <img class="w-4 mr-1" src="~/assets/img/email.svg" alt />
           <h3 class="text-gray-800 text-xs font-semibold">{{user.email}}</h3>
+        </div>
+        <div class="flex items-center mt-1">
+          <p class="text-blue-600 font-black mr-1">Followers:</p>
+          <div class="w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
+            <p class="m-auto text-lg">{{followers_count}}</p>
+          </div>
         </div>
         <div class="lg:flex lg:items-start lg:mt-10">
           <div class="lg:w-1/3 lg:mr-10">

@@ -75,8 +75,8 @@ io.on('connection', socket => {
     if (typeof (indexOfUser) !== 'undefined') {
       const indexOfId = onlineUsers[indexOfUser].socketId.map(id => id).indexOf(socket.id)
       onlineUsers[indexOfUser].socketId.splice(indexOfId, 1)
-      io.emit('sendOnlineUsers', onlineUsers)
     }
+    io.emit('sendOnlineUsers', onlineUsers)
   })
 })
 
