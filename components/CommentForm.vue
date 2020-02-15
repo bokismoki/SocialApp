@@ -20,11 +20,14 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
+
 export default {
   name: 'CommentForm',
   props: ['post'],
   data() {
     return {
+      socket: io('https://social-app-social.herokuapp.com'),
       bodyText: ''
     }
   },
@@ -124,6 +127,8 @@ export default {
             if (!response.data.success) {
               this.$store.dispatch('setErrorMsg', response.data.msg)
               this.$router.push({ name: 'index' })
+            } else {
+              this.socket.emit('newNotification', this.post.user_id)
             }
           })
           .catch(err => {

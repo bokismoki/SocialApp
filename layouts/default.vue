@@ -46,6 +46,13 @@ export default {
             }
           })
       })
+      this.socket.on('hasNotification', receiver_id => {
+        if ((this.$auth.user.id || this.$auth.user.sub) === receiver_id) {
+          if (!this.$store.getters.hasNotifications) {
+            this.$store.dispatch('setHasNotifications', true)
+          }
+        }
+      })
     },
     disconnect() {
       this.socket.emit('disc')

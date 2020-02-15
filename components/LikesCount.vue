@@ -12,9 +12,16 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
+
 export default {
   name: 'LikesCount',
   props: ['post', 'likes_count', 'index'],
+  data() {
+    return {
+      socket: io('https://social-app-social.herokuapp.com')
+    }
+  },
   methods: {
     likeDislike() {
       this.$store.dispatch('setIsLoading', true)
@@ -93,6 +100,8 @@ export default {
             if (!response.data.success) {
               this.$store.dispatch('setErrorMsg', response.data.msg)
               this.$router.push({ name: 'index' })
+            } else {
+              this.socket.emit('newNotification', this.post.user_id)
             }
           })
           .catch(err => {

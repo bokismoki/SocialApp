@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
+
 export default {
   head() {
     return {
@@ -75,6 +77,7 @@ export default {
   },
   data() {
     return {
+      socket: io('https://social-app-social.herokuapp.com'),
       profileBackground: require('~/assets/img/profile_background.png'),
       activePaginationIndex: 0
     }
@@ -154,6 +157,8 @@ export default {
           if (!response.data.success) {
             this.$store.dispatch('setErrorMsg', response.data.msg)
             this.$router.push({ name: 'index' })
+          } else {
+            this.socket.emit('newNotification', this.user.id)
           }
         })
         .catch(err => {
