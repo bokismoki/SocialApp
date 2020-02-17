@@ -39,7 +39,7 @@
         </div>
       </div>
       <div v-if="$auth.loggedIn" class="hidden sm:flex items-center">
-        <div class="lg:mr-10">
+        <div class="lg:mr-6">
           <nuxt-link :to="{name: 'index'}">
             <div class="flex items-center">
               <img
@@ -51,7 +51,7 @@
             </div>
           </nuxt-link>
         </div>
-        <div class="lg:mr-10">
+        <div class="lg:mr-6">
           <nuxt-link :to="{name: 'notifications'}">
             <div class="flex items-center">
               <div class="relative mr-5 lg:mr-1">
@@ -68,7 +68,21 @@
             </div>
           </nuxt-link>
         </div>
-        <div class="lg:mr-10">
+        <div class="lg:mr-6">
+          <nuxt-link :to="{name: 'chat'}">
+            <div class="flex items-center">
+              <div class="relative mr-5 lg:mr-1">
+                <img
+                  class="w-8"
+                  src="~/assets/img/chat.svg"
+                  alt="White dialog blocks icon representing chat"
+                />
+              </div>
+              <span class="hidden lg:inline text-sm uppercase">Chat</span>
+            </div>
+          </nuxt-link>
+        </div>
+        <div class="lg:mr-6">
           <nuxt-link :to="{name: 'profile'}">
             <div class="flex items-center">
               <img
@@ -80,7 +94,7 @@
             </div>
           </nuxt-link>
         </div>
-        <div class="lg:mr-10">
+        <div class="lg:mr-6">
           <nuxt-link :to="{name: 'settings'}">
             <div class="flex items-center cursor-pointer">
               <img

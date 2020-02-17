@@ -28,7 +28,7 @@
           <div v-if="users.length > 0">
             <div v-for="user in users" :key="user.id">
               <div v-if="user.id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)">
-                <SearchUserItem :user="user" />
+                <SearchUserItem :user="user" @emitUser="emitUser" />
               </div>
             </div>
           </div>
@@ -70,6 +70,9 @@ export default {
             this.$store.dispatch('setIsLoading', false)
           })
       }
+    },
+    emitUser(user) {
+      this.$emit('emitUser', user)
     }
   },
   watch: {

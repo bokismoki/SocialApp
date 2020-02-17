@@ -30,6 +30,20 @@
       </nuxt-link>
     </li>
     <li class="mb-1 p-2 bg-blue-700">
+      <nuxt-link class="flex items-center" :to="{name: 'chat'}">
+        <div class="flex items-center">
+          <div class="relative mr-5">
+            <img
+              class="w-8"
+              src="~/assets/img/chat.svg"
+              alt="White dialog blocks icon representing chat"
+            />
+          </div>
+          <span class="text-white uppercase">Chat</span>
+        </div>
+      </nuxt-link>
+    </li>
+    <li class="mb-1 p-2 bg-blue-700">
       <nuxt-link class="flex items-center" :to="{name: 'profile'}">
         <div class="flex items-center">
           <img class="w-8 mr-5" src="~/assets/img/profile.svg" alt="White user silhouette icon" />
