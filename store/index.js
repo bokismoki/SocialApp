@@ -2,14 +2,16 @@ export const state = () => ({
     errorMsg: '',
     isLoading: false,
     isDropdownMenuOpen: false,
-    hasNotifications: false
+    hasNotifications: false,
+    onlineUsers: []
 })
 
 export const getters = {
     errorMsg: state => state.errorMsg,
     isLoading: state => state.isLoading,
     isDropdownMenuOpen: state => state.isDropdownMenuOpen,
-    hasNotifications: state => state.hasNotifications
+    hasNotifications: state => state.hasNotifications,
+    onlineUsers: state => state.onlineUsers
 }
 
 export const mutations = {
@@ -24,6 +26,12 @@ export const mutations = {
     },
     SET_HAS_NOTIFICATIONS: (state, payload) => {
         state.hasNotifications = payload
+    },
+    SET_ONLINE_USERS: (state, payload) => {
+        state.onlineUsers = payload
+    },
+    SPLICE_ONLINE_USERS: (state, payload) => {
+        state.onlineUsers.splice(payload, 1)
     }
 }
 
@@ -109,5 +117,11 @@ export const actions = {
     },
     setHasNotifications: ({ commit }, payload) => {
         commit('SET_HAS_NOTIFICATIONS', payload)
+    },
+    setOnlineUsers: ({ commit }, payload) => {
+        commit('SET_ONLINE_USERS', payload)
+    },
+    spliceOnlineUsers: ({ commit }, payload) => {
+        commit('SPLICE_ONLINE_USERS', payload)
     }
 }

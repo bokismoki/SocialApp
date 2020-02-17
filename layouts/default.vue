@@ -27,27 +27,26 @@ export default {
   },
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com'),
-      onlineUsers: []
+      socket: io('http://localhost:3000')
     }
   },
   computed: {
-    ...mapGetters(['errorMsg', 'isLoading'])
+    ...mapGetters(['errorMsg', 'isLoading', 'onlineUsers'])
   },
   methods: {
     listenSocket() {
       this.socket.on('sendOnlineUsers', onlineUsers => {
-        this.onlineUsers = onlineUsers
+        this.$store.dispatch('setOnlineUsers', onlineUsers)
         this.onlineUsers
           .map(user => user.socketId)
           .forEach((arr, index) => {
             if (arr.length === 0) {
-              this.onlineUsers.splice(index, 1)
+              this.$store.dispatch('spliceOnlineUsers', index)
             }
           })
       })
       this.socket.on('hasNotification', receiver_id => {
-        if ((this.$auth.user.id || this.$auth.user.sub) === receiver_id) {
+        if ((this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub) === receiver_id) {
           if (!this.$store.getters.hasNotifications) {
             this.$store.dispatch('setHasNotifications', true)
           }
