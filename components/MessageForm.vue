@@ -16,11 +16,14 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
+
 export default {
   name: 'MessageForm',
   props: ['receiver_id'],
   data() {
     return {
+      socket: io('http://localhost:3000'),
       msg: ''
     }
   },
@@ -49,6 +52,7 @@ export default {
               this.$router.push({ name: 'index' })
             } else {
               this.$emit('newMsg', response.data.message)
+              this.socket.emit('newMsg', response.data.message)
             }
           })
           .catch(err => {
@@ -56,7 +60,21 @@ export default {
           })
         this.msg = ''
       }
+    },
+    listenSocket() {
+      this.socket.on('sendNewMsg', msg => {
+        if (
+          (this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub) ===
+            msg.receiver_id &&
+          msg.user_id === this.receiver_id
+        ) {
+          this.$emit('newMsg', msg)
+        }
+      })
     }
+  },
+  created() {
+    this.listenSocket()
   }
 }
 </script>

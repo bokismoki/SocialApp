@@ -62,6 +62,9 @@ io.on('connection', socket => {
   socket.on('newNotification', receiver_id => {
     io.emit('hasNotification', receiver_id)
   })
+  socket.on('newMsg', msg => {
+    io.emit('sendNewMsg', msg)
+  })
   socket.on('disc', () => {
     socket.emit('disconnect')
   })
