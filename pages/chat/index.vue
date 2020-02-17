@@ -25,8 +25,6 @@
 
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   head: {
     title: 'Chat'
@@ -44,9 +42,6 @@ export default {
       messages: [],
       receiver_user: {}
     }
-  },
-  computed: {
-    ...mapGetters(['onlineUsers'])
   },
   methods: {
     emitNewChatF() {

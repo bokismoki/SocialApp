@@ -16,14 +16,20 @@
           <div v-for="(user, index) in previousChatUsers" :key="index">
             <div v-if="user.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)">
               <div
-                class="flex items-center cursor-pointer mb-1"
+                class="flex items-center justify-between cursor-pointer mb-1"
                 @click="emitReceiverId(user.user_id)"
               >
-                <img class="w-12 h-12 rounded-full mr-2 border-2 border-blue-300" :src="user.image" />
-                <h1
-                  class="text-xs font-semibold"
-                  :class="{'text-blue-600 font-black': receiver_id === user.user_id}"
-                >{{user.name}}</h1>
+                <div class="flex items-center">
+                  <img
+                    class="w-12 h-12 rounded-full mr-2 border-2 border-blue-300"
+                    :src="user.image"
+                  />
+                  <h1
+                    class="text-xs font-semibold"
+                    :class="{'text-blue-600 font-black': receiver_id === user.user_id}"
+                  >{{user.name}}</h1>
+                </div>
+                <div v-if="isOnline(user.user_id)" class="w-2 h-2 bg-green-700 rounded-full"></div>
               </div>
             </div>
           </div>
@@ -37,6 +43,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'PreviousChats',
   props: ['previousChatUsers', 'receiver_id'],
@@ -48,7 +56,16 @@ export default {
       newChat: false
     }
   },
+  computed: {
+    ...mapGetters(['onlineUsers'])
+  },
   methods: {
+    isOnline(id) {
+      const userIsOnline = this.onlineUsers.find(user => {
+        return user.user.id === id
+      })
+      return userIsOnline ? true : false
+    },
     emitNewChatF() {
       this.newChat = !this.newChat
       this.$emit('emitNewChatF')
