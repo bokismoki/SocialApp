@@ -1,6 +1,6 @@
 <template>
   <div class="privacy">
-    <div class="px-5 pt-5 pb-16">
+    <div class="container mx-auto px-5 pt-5 pb-16">
       <h1
         class="uppercase text-gray-800 font-semibold text-2xl mb-5"
       >Web site terms and conditions of use</h1>
