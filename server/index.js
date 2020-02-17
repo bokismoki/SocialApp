@@ -101,3 +101,6 @@ app.use('/api/follow', followRoutes)
 
 const notificationRoutes = require('./routes/notification')
 app.use('/api/notification', notificationRoutes)
+
+const messageRoutes = require('./routes/message')
+app.use('/api/message', messageRoutes)
