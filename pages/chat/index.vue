@@ -25,6 +25,8 @@
 
 
 <script>
+import io from 'socket.io-client'
+
 export default {
   head: {
     title: 'Chat'
@@ -37,6 +39,7 @@ export default {
   },
   data() {
     return {
+      socket: io('https://social-app-social.herokuapp.com/api'),
       receiver_id: '',
       msg: '',
       messages: [],
@@ -63,52 +66,79 @@ export default {
       }
     },
     setReceiverId(id) {
-      this.receiver_id = id
       this.getDBMessages(id)
+      this.receiver_id = id
     },
     newMsg(msg) {
       this.messages.push(msg)
       this.scrollToBottomOfMessages()
     },
     getDBMessages(id) {
-      this.$store.dispatch('setIsLoading', true)
-      this.$axios
-        .get(
-          `/message/get/by_user/${
-            this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
-          }/${id}`
-        )
-        .then(response => {
-          if (!response.data.success) {
-            this.$store.dispatch('setErrorMsg', response.data.msg)
-            this.$router.push({ name: 'index' })
-          } else {
-            this.messages = response.data.messages
-            this.scrollToBottomOfMessages()
-          }
-          this.$store.dispatch('setIsLoading', false)
-        })
-        .catch(err => {
-          console.error(err)
-          this.$store.dispatch('setIsLoading', false)
-        })
+      if (this.receiver_id !== id) {
+        this.$store.dispatch('setIsLoading', true)
+        this.$axios
+          .get(
+            `/message/get/by_user/${
+              this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
+            }/${id}`
+          )
+          .then(response => {
+            if (!response.data.success) {
+              this.$store.dispatch('setErrorMsg', response.data.msg)
+              this.$router.push({ name: 'index' })
+            } else {
+              this.messages = response.data.messages
+              this.scrollToBottomOfMessages()
+            }
+            this.$store.dispatch('setIsLoading', false)
+          })
+          .catch(err => {
+            console.error(err)
+            this.$store.dispatch('setIsLoading', false)
+          })
+      }
     },
     scrollToBottomOfMessages() {
       const messagesDiv = document.querySelector('.messages')
       setTimeout(() => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight
       }, 100)
+    },
+    listenSocket() {
+      this.socket.on('sendNewMsg', msg => {
+        const isInPreviousChatUsers = this.previousChatUsers.find(user => {
+          return user.user_id === msg.user_id
+        })
+        if (!isInPreviousChatUsers) {
+          this.previousChatUsers.push({
+            image: msg.user_image,
+            name: msg.user_name,
+            user_id: msg.user_id
+          })
+        }
+      })
     }
   },
-  async asyncData({ $axios, $auth }) {
-    const previousChatUsers = await $axios.get(
-      `/message/get/previous_chat_users/${
-        $auth.user.id ? $auth.user.id : $auth.user.sub
-      }`
-    )
-    return {
-      previousChatUsers: previousChatUsers.data.previousChatUsers
+  async asyncData({ $axios, $auth, store, redirect }) {
+    try {
+      store.dispatch('setIsLoading', true)
+      const previousChatUsers = await $axios.get(
+        `/message/get/previous_chat_users/${
+          $auth.user.id ? $auth.user.id : $auth.user.sub
+        }`
+      )
+      store.dispatch('setIsLoading', false)
+      return {
+        previousChatUsers: previousChatUsers.data.previousChatUsers
+      }
+    } catch (err) {
+      store.dispatch('setErrorMsg', err)
+      redirect({ name: 'index' })
+      store.dispatch('setIsLoading', false)
     }
+  },
+  mounted() {
+    this.listenSocket()
   }
 }
 </script>

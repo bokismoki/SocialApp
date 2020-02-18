@@ -11,7 +11,7 @@
         >{{ newChat ? 'Old -' : 'New &plus;'}}</button>
       </div>
       <div v-if="!newChat">
-        <p v-if="previousChatUsers.length <= 1">No previous chats, start a new one</p>
+        <p v-if="previousChatUsers.length < 1">No previous chats, start a new one</p>
         <div v-else>
           <div v-for="(user, index) in previousChatUsers" :key="index">
             <div v-if="user.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)">

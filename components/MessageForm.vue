@@ -23,7 +23,7 @@ export default {
   props: ['receiver_id'],
   data() {
     return {
-      socket: io('http://localhost:3000'),
+      socket: io('https://social-app-social.herokuapp.com/api'),
       msg: ''
     }
   },
@@ -52,7 +52,10 @@ export default {
               this.$router.push({ name: 'index' })
             } else {
               this.$emit('newMsg', response.data.message)
-              this.socket.emit('newMsg', response.data.message)
+              this.socket.emit('newMsg', {
+                ...response.data.message,
+                user_name: this.$auth.user.name
+              })
             }
           })
           .catch(err => {

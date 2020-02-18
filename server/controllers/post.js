@@ -95,7 +95,6 @@ exports.add = (req, res) => {
         VALUES (?, ?, ?, ?)`
         sql.query(queryAddPost, [...placeholder], (err, result) => {
             if (err) {
-                console.log(err)
                 res.send({ success: false, msg: 'Error on queryAddPost' })
             } else {
                 const id = result.insertId
