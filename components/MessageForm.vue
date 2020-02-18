@@ -23,7 +23,7 @@ export default {
   props: ['receiver_id'],
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com/api'),
+      socket: io('https://social-app-social.herokuapp.com'),
       msg: ''
     }
   },

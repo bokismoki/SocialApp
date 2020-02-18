@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com/api'),
+      socket: io('https://social-app-social.herokuapp.com'),
       receiver_id: '',
       msg: '',
       messages: [],
