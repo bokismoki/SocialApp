@@ -38,6 +38,21 @@ exports.getPreviousChatUsers = (req, res) => {
     })
 }
 
+exports.getUnread = (req, res) => {
+    const user_id = req.params.id
+    const placeholder = { receiver_id: user_id }
+    const queryGetMessagesCount = `SELECT user_id
+    FROM messages
+    WHERE ? AND isRead = '0'`
+    sql.query(queryGetMessagesCount, placeholder, (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryGetMessagesCount' })
+        } else {
+            res.send({ success: true, messages: result })
+        }
+    })
+}
+
 exports.add = (req, res) => {
     const { body_text, user_id, receiver_id } = req.body
     const placeholder = [body_text, user_id, receiver_id]

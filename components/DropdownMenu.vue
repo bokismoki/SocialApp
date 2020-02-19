@@ -38,6 +38,9 @@
               src="~/assets/img/chat.svg"
               alt="White dialog blocks icon representing chat"
             />
+            <div v-if="hasMessages">
+              <NotificationsIndicator />
+            </div>
           </div>
           <span class="text-white uppercase">Chat</span>
         </div>
@@ -81,7 +84,7 @@ export default {
     NotificationsIndicator: () => import('~/components/NotificationsIndicator')
   },
   computed: {
-    ...mapGetters(['hasNotifications'])
+    ...mapGetters(['hasNotifications', 'hasMessages'])
   }
 }
 </script>

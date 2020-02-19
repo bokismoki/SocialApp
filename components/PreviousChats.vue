@@ -20,10 +20,15 @@
                 @click="emitReceiverId(user.user_id); emitReceiverName(user.name)"
               >
                 <div class="flex items-center">
-                  <img
-                    class="w-12 h-12 rounded-full mr-2 border-2 border-blue-300"
-                    :src="user.image"
-                  />
+                  <div class="relative mr-2">
+                    <img
+                      class="w-12 h-12 rounded-full border-2 border-blue-300"
+                      :src="user.image"
+                    />
+                    <div v-if="isUnread(user.user_id)">
+                      <NotificationsIndicator />
+                    </div>
+                  </div>
                   <h1
                     class="text-xs font-semibold"
                     :class="{'text-blue-600 font-black': receiver_id === user.user_id}"
@@ -49,7 +54,8 @@ export default {
   name: 'PreviousChats',
   props: ['previousChatUsers', 'receiver_id'],
   components: {
-    SearchUser: () => import('~/components/SearchUser')
+    SearchUser: () => import('~/components/SearchUser'),
+    NotificationsIndicator: () => import('~/components/NotificationsIndicator')
   },
   data() {
     return {
@@ -57,9 +63,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['onlineUsers'])
+    ...mapGetters(['onlineUsers', 'messageNotifications'])
   },
   methods: {
+    isUnread(id) {
+      return this.messageNotifications.find(msg => msg.user_id === id)
+    },
     isOnline(id) {
       const userIsOnline = this.onlineUsers.find(user => {
         return user.user.id === id

@@ -3,7 +3,8 @@ export const state = () => ({
     isLoading: false,
     isDropdownMenuOpen: false,
     hasNotifications: false,
-    onlineUsers: []
+    onlineUsers: [],
+    messageNotifications: []
 })
 
 export const getters = {
@@ -11,7 +12,9 @@ export const getters = {
     isLoading: state => state.isLoading,
     isDropdownMenuOpen: state => state.isDropdownMenuOpen,
     hasNotifications: state => state.hasNotifications,
-    onlineUsers: state => state.onlineUsers
+    onlineUsers: state => state.onlineUsers,
+    hasMessages: state => Boolean(state.messageNotifications.length),
+    messageNotifications: state => state.messageNotifications
 }
 
 export const mutations = {
@@ -32,12 +35,31 @@ export const mutations = {
     },
     SPLICE_ONLINE_USERS: (state, payload) => {
         state.onlineUsers.splice(payload, 1)
+    },
+    SET_MESSAGE_NOTIFICATIONS: (state, payload) => {
+        state.messageNotifications = payload
     }
 }
 
 export const actions = {
-    nuxtServerInit({ state }, { app, $axios }) {
+    nuxtServerInit({ state, dispatch }, { app, $axios }) {
         if (state.auth.loggedIn) {
+            $axios.get(`/notification/get/count/${state.auth.user.id ? state.auth.user.id : state.auth.user.sub}`)
+                .then(response => {
+                    const hasNotifications = response.data.hasNotifications
+                    dispatch('setHasNotifications', hasNotifications)
+                }).catch(err => {
+                    console.error(err)
+                })
+
+            $axios.get(`/message/get/unread/${state.auth.user.id ? state.auth.user.id : state.auth.user.sub}`)
+                .then(response => {
+                    dispatch('setMessageNotifications', response.data.messages)
+                }).catch(err => {
+                    console.error(err)
+                })
+
+
             if (state.auth.strategy === 'facebook') {
                 $axios
                     .post('/user/login', state.auth.user, {
@@ -123,5 +145,8 @@ export const actions = {
     },
     spliceOnlineUsers: ({ commit }, payload) => {
         commit('SPLICE_ONLINE_USERS', payload)
+    },
+    setMessageNotifications: ({ commit }, payload) => {
+        commit('SET_MESSAGE_NOTIFICATIONS', payload)
     }
 }
