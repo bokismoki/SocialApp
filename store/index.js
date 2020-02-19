@@ -38,6 +38,10 @@ export const mutations = {
     },
     SET_MESSAGE_NOTIFICATIONS: (state, payload) => {
         state.messageNotifications = payload
+    },
+    REMOVE_MESSAGE_NOTIFICATION: (state, payload) => {
+        const index = state.messageNotifications.findIndex(msg => msg.user_id === payload)
+        state.messageNotifications.splice(index, 1)
     }
 }
 
@@ -123,5 +127,8 @@ export const actions = {
     },
     setMessageNotifications: ({ commit }, payload) => {
         commit('SET_MESSAGE_NOTIFICATIONS', payload)
+    },
+    removeMessageNotification: ({ commit }, payload) => {
+        commit('REMOVE_MESSAGE_NOTIFICATION', payload)
     }
 }

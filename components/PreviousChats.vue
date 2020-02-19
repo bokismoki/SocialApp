@@ -17,14 +17,11 @@
             <div v-if="user.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)">
               <div
                 class="flex items-center justify-between cursor-pointer mb-1"
-                @click="emitReceiverId(user.user_id); emitReceiverName(user.name)"
+                @click="emitReceiverId(user.user_id); emitReceiverName(user.name); msgRead(user)"
               >
                 <div class="flex items-center">
                   <div class="relative mr-2">
-                    <img
-                      class="w-12 h-12 rounded-full border-2 border-blue-300"
-                      :src="user.image"
-                    />
+                    <img class="w-12 h-12 rounded-full border-2 border-blue-300" :src="user.image" />
                     <div v-if="isUnread(user.user_id)">
                       <NotificationsIndicator />
                     </div>
@@ -66,6 +63,41 @@ export default {
     ...mapGetters(['onlineUsers', 'messageNotifications'])
   },
   methods: {
+    msgRead(user) {
+      if (this.messageNotifications.find(msg => msg.user_id === user.user_id)) {
+        this.$store.dispatch('setIsLoading', true)
+        this.$axios
+          .put(
+            `/message/update/${
+              this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
+            }`,
+            {
+              receiver_id: user.user_id,
+              user_id: this.$auth.user.id
+                ? this.$auth.user.id
+                : this.$auth.user.sub
+            },
+            {
+              headers: {
+                'content-type': 'application/json'
+              }
+            }
+          )
+          .then(response => {
+            if (response.data.success) {
+              this.$store.dispatch('removeMessageNotification', user.user_id)
+            } else {
+              this.$store.dispatch('setErrorMsg', response.data.msg)
+              this.$router.push({ name: 'index' })
+            }
+            this.$store.dispatch('setIsLoading', false)
+          })
+          .catch(err => {
+            console.error(err)
+            this.$store.dispatch('setIsLoading', false)
+          })
+      }
+    },
     isUnread(id) {
       return this.messageNotifications.find(msg => msg.user_id === id)
     },

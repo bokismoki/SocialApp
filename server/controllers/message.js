@@ -43,12 +43,29 @@ exports.getUnread = (req, res) => {
     const placeholder = { receiver_id: user_id }
     const queryGetMessagesCount = `SELECT user_id
     FROM messages
-    WHERE ? AND isRead = '0'`
+    WHERE ? AND is_read = '0'
+    GROUP BY user_id`
     sql.query(queryGetMessagesCount, placeholder, (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetMessagesCount' })
         } else {
             res.send({ success: true, messages: result })
+        }
+    })
+}
+
+exports.update = (req, res) => {
+    const user_id = req.params.id
+    const receiver_id = req.body.receiver_id
+    const placeholder = [{ receiver_id: user_id }, { user_id: receiver_id }]
+    const queryUpdateIsRead = `UPDATE messages
+    SET is_read = '1'
+    WHERE ? AND ?`
+    sql.query(queryUpdateIsRead, [...placeholder], (err, result) => {
+        if (err) {
+            res.send({ success: false, msg: 'Error on queryUpdateIsRead' })
+        } else {
+            res.send({ success: true })
         }
     })
 }

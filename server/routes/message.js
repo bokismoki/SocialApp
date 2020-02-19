@@ -12,4 +12,6 @@ router.get('/get/unread/:id', messageController.getUnread)
 
 router.post('/add', authorization, messageController.add)
 
+router.put('/update/:id', authorization, messageController.update)
+
 module.exports = router
