@@ -2,7 +2,7 @@
   <div class="message_form">
     <form class="mt-5" @submit.prevent="newMsg">
       <textarea
-        class="px-1 placeholder-black text-sm rounded border-2 border-gray-300 w-full"
+        class="px-1 placeholder-black text-sm rounded shadow-big border-2 border-gray-300 w-full"
         type="text"
         placeholder="Type a message..."
         v-model="msg"

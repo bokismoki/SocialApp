@@ -1,6 +1,7 @@
 <template>
   <div class="chat_messages">
-    <div class="messages border-2 border-dashed border-gray-400 rounded p-2 overflow-y-auto">
+    <h1 class="font-semibold mb-3 text-blue-600">To: {{receiver_name}}</h1>
+    <div class="messages border-2 bg-white shadow-big border-gray-400 rounded p-2 overflow-y-auto">
       <h1 v-if="messages.length === 0">Start chatting!</h1>
       <div v-for="msg in messages" :key="msg.message_id">
         <div
@@ -36,7 +37,7 @@
 <script>
 export default {
   name: 'ChatMessages',
-  props: ['messages']
+  props: ['receiver_name', 'messages']
 }
 </script>
 

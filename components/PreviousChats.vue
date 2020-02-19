@@ -7,7 +7,7 @@
         >{{newChat ? 'Start a new chat' : 'Previous chats'}}</h1>
         <button
           class="bg-blue-600 text-white font-semibold px-3 py-1 rounded"
-          @click="emitNewChatF"
+          @click="emitNewChat"
         >{{ newChat ? 'Old -' : 'New &plus;'}}</button>
       </div>
       <div v-if="!newChat">
@@ -17,7 +17,7 @@
             <div v-if="user.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)">
               <div
                 class="flex items-center justify-between cursor-pointer mb-1"
-                @click="emitReceiverId(user.user_id)"
+                @click="emitReceiverId(user.user_id); emitReceiverName(user.name)"
               >
                 <div class="flex items-center">
                   <img
@@ -66,12 +66,15 @@ export default {
       })
       return userIsOnline ? true : false
     },
-    emitNewChatF() {
+    emitNewChat() {
       this.newChat = !this.newChat
-      this.$emit('emitNewChatF')
+      this.$emit('emitNewChat')
     },
     emitReceiverId(id) {
       this.$emit('emitReceiverId', id)
+    },
+    emitReceiverName(name) {
+      this.$emit('emitReceiverName', name)
     },
     emitUser(user) {
       this.newChat = false

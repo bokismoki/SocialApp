@@ -9,13 +9,14 @@
           <PreviousChats
             :previousChatUsers="previousChatUsers"
             :receiver_id="receiver_id"
-            @emitNewChatF="emitNewChatF"
+            @emitNewChat="startNewChat"
             @emitReceiverId="setReceiverId"
-            @emitUser="emitUser"
+            @emitUser="setUser"
+            @emitReceiverName="setReceiverName"
           />
         </div>
         <div v-if="receiver_id" class="mt-10 max-w-xl md:w-1/2 md:mt-0 md:ml-5 lg:w-2/3">
-          <ChatMessages :messages="messages" />
+          <ChatMessages :receiver_name="receiver_name" :messages="messages" />
           <MessageForm :receiver_id="receiver_id" @newMsg="newMsg" />
         </div>
       </div>
@@ -43,15 +44,17 @@ export default {
       receiver_id: '',
       msg: '',
       messages: [],
-      receiver_user: {}
+      receiver_user: {},
+      receiver_name: ''
     }
   },
   methods: {
-    emitNewChatF() {
+    startNewChat() {
       this.receiver_id = ''
       this.messages = []
     },
-    emitUser(user) {
+    setUser(user) {
+      this.receiver_name = user.name
       this.receiver_user = user
       this.setReceiverId(user.id)
       const userIsInPreviousChats = this.previousChatUsers.find(usr => {
@@ -68,6 +71,9 @@ export default {
     setReceiverId(id) {
       this.getDBMessages(id)
       this.receiver_id = id
+    },
+    setReceiverName(name) {
+      this.receiver_name = name
     },
     newMsg(msg) {
       this.messages.push(msg)
