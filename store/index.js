@@ -42,87 +42,62 @@ export const mutations = {
 }
 
 export const actions = {
-    nuxtServerInit({ state, dispatch }, { app, $axios }) {
-        if (state.auth.loggedIn) {
-            $axios.get(`/notification/get/count/${state.auth.user.id ? state.auth.user.id : state.auth.user.sub}`)
-                .then(response => {
-                    const hasNotifications = response.data.hasNotifications
-                    dispatch('setHasNotifications', hasNotifications)
-                }).catch(err => {
-                    console.error(err)
-                })
+    async nuxtServerInit({ state, dispatch }, { app, $axios }) {
+        try {
+            if (state.auth.loggedIn) {
+                const hasNotificationsData = await $axios.get(`/notification/get/count/${state.auth.user.id ? state.auth.user.id : state.auth.user.sub}`)
+                const hasNotifications = hasNotificationsData.data.hasNotifications
+                dispatch('setHasNotifications', hasNotifications)
 
-            $axios.get(`/message/get/unread/${state.auth.user.id ? state.auth.user.id : state.auth.user.sub}`)
-                .then(response => {
-                    dispatch('setMessageNotifications', response.data.messages)
-                }).catch(err => {
-                    console.error(err)
-                })
+                const messages = await $axios.get(`/message/get/unread/${state.auth.user.id ? state.auth.user.id : state.auth.user.sub}`)
+                dispatch('setMessageNotifications', messages.data.messages)
 
-
-            if (state.auth.strategy === 'facebook') {
-                $axios
-                    .post('/user/login', state.auth.user, {
-                        headers: {
-                            'content-type': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        if (response.data.success === true) {
-                            $axios.post('/user/token', { user_id: state.auth.user.id }, {
-                                headers: {
-                                    'content-type': 'application/json'
-                                }
-                            })
-                                .then(response => {
-                                    const token = response.headers['set-cookie'][0].split('=')[1].split(';')[0]
-                                    app.$cookies.set('jwt', token)
-                                })
-                                .catch(err => {
-                                    console.error(err)
-                                })
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
-            } else {
-                const user = {
-                    name: state.auth.user.name,
-                    picture: {
-                        data: {
-                            url: state.auth.user.picture
-                        }
-                    },
-                    email: state.auth.user.email,
-                    id: state.auth.user.sub
+                if (state.auth.strategy === 'facebook') {
+                    const login = await $axios
+                        .post('/user/login', state.auth.user, {
+                            headers: {
+                                'content-type': 'application/json'
+                            }
+                        })
+                    if (login.data.success === true) {
+                        const tokenData = await $axios.post('/user/token', { user_id: state.auth.user.id }, {
+                            headers: {
+                                'content-type': 'application/json'
+                            }
+                        })
+                        const token = tokenData.headers['set-cookie'][0].split('=')[1].split(';')[0]
+                        app.$cookies.set('jwt', token)
+                    }
+                } else {
+                    const user = {
+                        name: state.auth.user.name,
+                        picture: {
+                            data: {
+                                url: state.auth.user.picture
+                            }
+                        },
+                        email: state.auth.user.email,
+                        id: state.auth.user.sub
+                    }
+                    const login = await $axios
+                        .post('/user/login', user, {
+                            headers: {
+                                'content-type': 'application/json'
+                            }
+                        })
+                    if (login.data.success === true) {
+                        const tokenData = await $axios.post('/user/token', { user_id: state.auth.user.sub }, {
+                            headers: {
+                                'content-type': 'application/json'
+                            }
+                        })
+                        const token = tokenData.headers['set-cookie'][0].split('=')[1].split(';')[0]
+                        app.$cookies.set('jwt', token)
+                    }
                 }
-                $axios
-                    .post('/user/login', user, {
-                        headers: {
-                            'content-type': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        if (response.data.success === true) {
-                            $axios.post('/user/token', { user_id: state.auth.user.sub }, {
-                                headers: {
-                                    'content-type': 'application/json'
-                                }
-                            })
-                                .then(response => {
-                                    const token = response.headers['set-cookie'][0].split('=')[1].split(';')[0]
-                                    app.$cookies.set('jwt', token)
-                                })
-                                .catch(err => {
-                                    console.error(err)
-                                })
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
             }
+        } catch (err) {
+            console.error(err)
         }
     },
     setErrorMsg: ({ commit }, payload = '') => {
