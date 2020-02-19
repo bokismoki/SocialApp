@@ -40,8 +40,10 @@ export const mutations = {
         state.messageNotifications = payload
     },
     REMOVE_MESSAGE_NOTIFICATION: (state, payload) => {
-        const index = state.messageNotifications.findIndex(msg => msg.user_id === payload)
-        state.messageNotifications.splice(index, 1)
+        state.messageNotifications.splice(payload, 1)
+    },
+    ADD_MESSAGE_NOTIFICATION: (state, payload) => {
+        state.messageNotifications.push(payload)
     }
 }
 
@@ -128,7 +130,14 @@ export const actions = {
     setMessageNotifications: ({ commit }, payload) => {
         commit('SET_MESSAGE_NOTIFICATIONS', payload)
     },
-    removeMessageNotification: ({ commit }, payload) => {
-        commit('REMOVE_MESSAGE_NOTIFICATION', payload)
+    removeMessageNotification: ({ getters, commit }, payload) => {
+        const index = getters.messageNotifications.findIndex(msg => msg.user_id === payload)
+        commit('REMOVE_MESSAGE_NOTIFICATION', index)
+    },
+    addMessageNotification: ({ getters, commit }, payload) => {
+        const doesExist = getters.messageNotifications.find(msg => msg.user_id === payload.user_id)
+        if (!doesExist) {
+            commit('ADD_MESSAGE_NOTIFICATION', payload)
+        }
     }
 }

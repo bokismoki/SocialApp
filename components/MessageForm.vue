@@ -56,6 +56,12 @@ export default {
                 ...response.data.message,
                 user_name: this.$auth.user.name
               })
+              this.socket.emit('newMsgNotification', {
+                user_id: this.$auth.user.id
+                  ? this.$auth.user.id
+                  : this.$auth.user.sub,
+                receiver_id: this.receiver_id
+              })
             }
           })
           .catch(err => {
