@@ -28,7 +28,7 @@ exports.getPreviousChatUsers = (req, res) => {
     FROM messages
     JOIN users ON ((users.id = messages.user_id) OR (users.id = messages.receiver_id))
     WHERE (messages.? OR messages.?)
-    GROUP BY name`
+    GROUP BY users.id`
     sql.query(queryGetPreviousChatUsers, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetPreviousChatUsers' })
