@@ -74,7 +74,7 @@ exports.add = (req, res) => {
     const { body_text, user_id, receiver_id } = req.body
     const placeholder = [body_text, user_id, receiver_id]
     const queryAddMessage = `INSERT INTO messages (body_text, user_id, receiver_id)
-                VALUES (?, ?, ?)`
+    VALUES (?, ?, ?)`
     sql.query(queryAddMessage, [...placeholder], (err, result) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryAddMessage' })
@@ -92,6 +92,23 @@ exports.add = (req, res) => {
                     res.send({ success: false, msg: 'Error on queryGetNewMessage' })
                 } else {
                     res.send({ success: true, message: result[0] })
+                }
+            })
+
+            const placeholder2 = [{ user_id }, { receiver_id }, { user_id: receiver_id }, {
+                receiver_id: user_id
+            }]
+            const queryGetMessagesCount = `SELECT id
+            FROM messages WHERE (? AND ?) OR (? AND ?)`
+            sql.query(queryGetMessagesCount, [...placeholder2], (err, result) => {
+                if (err) {
+                    res.send({ success: false, msg: 'Error on queryGetMessagesCount' })
+                } else {
+                    if (result.length > 20) {
+                        const queryDeleteMessage = `DELETE FROM messages
+                        WHERE id = ${result[0].id}`
+                        sql.query(queryDeleteMessage)
+                    }
                 }
             })
         }
