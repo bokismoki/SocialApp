@@ -5,8 +5,12 @@
         class="px-1 placeholder-black text-sm rounded shadow-big border-2 border-gray-300 w-full"
         type="text"
         placeholder="Type a message..."
-        v-model="msg"
+        v-model="bodyText"
       ></textarea>
+      <div
+        class="text-xs opacity-75"
+        :class="{'text-red-600 font-black': isBodyTextOverLimit}"
+      >{{charactersLeft}}</div>
       <button
         class="uppercase text-sm bg-blue-600 w-full text-white mt-2 font-semibold tracking-wide py-1 rounded hover:bg-blue-500"
         type="submit"
@@ -23,18 +27,28 @@ export default {
   props: ['receiver_id'],
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com'),
-      msg: ''
+      socket: io('http://localhost:3000'),
+      bodyText: ''
+    }
+  },
+  computed: {
+    charactersLeft() {
+      if (this.bodyText) {
+        return 255 - this.bodyText.trim().length
+      }
+    },
+    isBodyTextOverLimit() {
+      return this.charactersLeft < 0
     }
   },
   methods: {
     newMsg() {
-      if (this.msg.trim()) {
+      if (this.bodyText.trim() && !this.isBodyTextOverLimit) {
         this.$axios
           .post(
             '/message/add',
             {
-              body_text: this.msg.trim(),
+              body_text: this.bodyText.trim(),
               user_id: this.$auth.user.id
                 ? this.$auth.user.id
                 : this.$auth.user.sub,
@@ -67,7 +81,7 @@ export default {
           .catch(err => {
             console.error(err)
           })
-        this.msg = ''
+        this.bodyText = ''
       }
     },
     listenSocket() {
