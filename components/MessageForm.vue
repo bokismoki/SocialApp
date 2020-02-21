@@ -27,7 +27,7 @@ export default {
   props: ['receiver_id'],
   data() {
     return {
-      socket: io('http://localhost:3000'),
+      socket: io('https://social-app-social.herokuapp.com'),
       bodyText: ''
     }
   },
