@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      socket: io('http://localhost:3000'),
+      socket: io('https://social-app-social.herokuapp.com'),
       receiver_id: '',
       msg: '',
       messages: [],
