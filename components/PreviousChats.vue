@@ -7,7 +7,7 @@
         >{{newChat ? 'Start a new chat' : 'Previous chats'}}</h1>
         <button
           class="bg-blue-600 text-white font-semibold px-3 py-1 rounded"
-          @click="emitNewChat"
+          @click="toggleNewChat"
         >{{ newChat ? 'Old -' : 'New &plus;'}}</button>
       </div>
       <div v-if="!newChat">
@@ -107,9 +107,8 @@ export default {
       })
       return userIsOnline ? true : false
     },
-    emitNewChat() {
+    toggleNewChat() {
       this.newChat = !this.newChat
-      this.$emit('emitNewChat')
     },
     emitReceiverId(id) {
       this.$emit('emitReceiverId', id)

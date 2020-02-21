@@ -9,7 +9,6 @@
           <PreviousChats
             :previousChatUsers="previousChatUsers"
             :receiver_id="receiver_id"
-            @emitNewChat="startNewChat"
             @emitReceiverId="setReceiverId"
             @emitUser="setUser"
             @emitReceiverName="setReceiverName"
@@ -40,7 +39,7 @@ export default {
   },
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com'),
+      socket: io('http://localhost:3000'),
       receiver_id: '',
       msg: '',
       messages: [],
@@ -49,10 +48,6 @@ export default {
     }
   },
   methods: {
-    startNewChat() {
-      this.receiver_id = ''
-      this.messages = []
-    },
     setUser(user) {
       this.receiver_name = user.name
       this.receiver_user = user
