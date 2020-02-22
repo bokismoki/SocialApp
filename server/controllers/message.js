@@ -1,4 +1,5 @@
 const sql = require('../db/mysql')
+const Base64 = require('js-base64').Base64;
 
 exports.getByUser = (req, res) => {
     const user_id = req.params.user_id
@@ -16,7 +17,10 @@ exports.getByUser = (req, res) => {
         if (err) {
             res.send({ success: false, msg: 'Error on queryGetMessages' })
         } else {
-            res.send({ success: true, messages: result })
+            const decodedMsgs = result.map(msg => {
+                return { ...msg, body_text: Base64.decode(msg.body_text) }
+            })
+            res.send({ success: true, messages: decodedMsgs })
         }
     })
 }
@@ -72,7 +76,8 @@ exports.update = (req, res) => {
 
 exports.add = (req, res) => {
     const { body_text, user_id, receiver_id } = req.body
-    const placeholder = [body_text, user_id, receiver_id]
+    const encodedMsg = Base64.encode(body_text)
+    const placeholder = [encodedMsg, user_id, receiver_id]
     const queryAddMessage = `INSERT INTO messages (body_text, user_id, receiver_id)
     VALUES (?, ?, ?)`
     sql.query(queryAddMessage, [...placeholder], (err, result) => {
@@ -91,7 +96,8 @@ exports.add = (req, res) => {
                 if (err) {
                     res.send({ success: false, msg: 'Error on queryGetNewMessage' })
                 } else {
-                    res.send({ success: true, message: result[0] })
+                    const decodedMsg = { ...result[0], body_text: Base64.decode(result[0].body_text) }
+                    res.send({ success: true, message: decodedMsg })
                 }
             })
 
