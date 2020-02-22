@@ -6,6 +6,7 @@
         type="text"
         placeholder="Type a message..."
         v-model="bodyText"
+        @keyup.enter="newMsg"
       ></textarea>
       <div
         class="text-xs opacity-75"
