@@ -21,8 +21,8 @@
         </div>
         <div class="flex items-center mt-1">
           <p class="text-blue-600 font-black mr-1">Followers:</p>
-          <div class="w-8 h-8 bg-blue-600 text-white font-semibold rounded-full flex">
-            <p class="m-auto text-lg">{{followers_count}}</p>
+          <div class="px-2 bg-blue-600 text-white font-semibold rounded flex">
+            <p class="m-auto text-lg h-full">{{followers_count}}</p>
           </div>
         </div>
         <div class="lg:flex lg:items-start lg:mt-10">

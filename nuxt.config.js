@@ -23,8 +23,14 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
-      { name: 'google-site-verification', content: '73HQE2kBuCnwh9759U9zhviRTReXw2MKNrGVpV-lTGA' }
+      { hid: 'description', name: 'description', content: 'Social App - share your thoughts and chat with friends' },
+      { name: 'google-site-verification', content: '73HQE2kBuCnwh9759U9zhviRTReXw2MKNrGVpV-lTGA' },
+      { hid: 'og:title', name: 'og:title', content: 'Social App' },
+      { hid: 'og:locale', name: 'og:locale', content: 'en_EU' },
+      { hid: 'og:url', name: 'og:url', content: process.env.BASE_URL || 'http://localhost:3000' },
+      { hid: 'og:type', name: 'og:type', content: 'website' },
+      { hid: 'og:image', name: 'og:image', content: 'https://cdn.pixabay.com/photo/2018/11/29/21/51/social-media-3846597_960_720.png' },
+      { hid: 'og:description', name: 'og:description', content: 'Social App - share your thoughts and chat with friends' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -43,6 +49,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/vue-social-sharing'
   ],
   /*
   ** Nuxt.js dev-modules
