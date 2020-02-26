@@ -3,19 +3,19 @@
     <social-sharing
       :url="`https://social-app-social.herokuapp.com/post/${post.post_id}`"
       :title='`"${post.body_text}"`'
-      quote="Social app where you can share your thoughts and chat with friends."
+      :quote='`"${post.body_text}"`'
       hashtags="socialappsocial"
       inline-template
     >
       <div class="flex items-center">
         <button class="p-1">
           <network network="facebook">
-            <img class="w-4 h-4" src="~/assets/img/facebook.svg" alt="Facebook Logo" />
+            <img class="w-5 h-5 rounded" src="~/assets/img/facebook.svg" alt="Facebook Logo" />
           </network>
         </button>
         <button class="p-1">
           <network network="twitter">
-            <img class="w-4 h-4" src="~/assets/img/twitter.svg" alt="Twitter Logo" />
+            <img class="w-5 h-5 rounded" src="~/assets/img/twitter.svg" alt="Twitter Logo" />
           </network>
         </button>
       </div>
