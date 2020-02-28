@@ -25,9 +25,11 @@
             <p class="m-auto text-lg h-full">{{followers_count}}</p>
           </div>
         </div>
-        <div class="lg:flex lg:items-start lg:mt-10">
+        <div class="lg:flex lg:mt-10">
           <div class="lg:w-1/3 lg:mr-10">
-            <PostForm @newPost="newPost" />
+            <div class="lg:sticky" style="top: 120px;">
+              <PostForm @newPost="newPost" />
+            </div>
           </div>
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>

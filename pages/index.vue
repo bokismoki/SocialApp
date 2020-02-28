@@ -3,8 +3,10 @@
     <div class="container mx-auto pt-5 pb-16 px-5">
       <div class="max-w-5xl mx-auto lg:flex">
         <div class="lg:mr-10 lg:w-1/3 lg:mt-6">
-          <SearchUser />
-          <PostForm @newPost="newPost" />
+          <div class="lg:sticky" style="top: 120px;">
+            <SearchUser />
+            <PostForm @newPost="newPost" />
+          </div>
         </div>
         <div class="mt-20 lg:mt-0 lg:w-2/3">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Public Posts</h1>
