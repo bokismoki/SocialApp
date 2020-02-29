@@ -78,16 +78,22 @@ export default {
     },
     liked(payload) {
       this.posts[payload].likes_count++
+      this.posts[payload].is_liked = 'yes'
     },
     disliked(payload) {
       this.posts[payload].likes_count--
+      this.posts[payload].is_liked = 'no'
     },
     async updatePagination(index) {
       try {
         if (this.activePaginationIndex !== index) {
           this.activePaginationIndex = index
           this.$store.dispatch('setIsLoading', true)
-          const posts = await this.$axios.get(`/post/get/public/${index}`)
+          const posts = await this.$axios.get(
+            `/post/get/public/${
+              this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
+            }/${index}`
+          )
           const posts_count = await this.$axios.get('/post/get/count/public')
 
           this.posts = posts.data.posts
@@ -101,10 +107,12 @@ export default {
       }
     }
   },
-  async asyncData({ $axios, store }) {
+  async asyncData({ $axios, store, $auth }) {
     try {
       store.dispatch('setIsLoading', true)
-      const posts = await $axios.get('/post/get/public/0')
+      const posts = await $axios.get(
+        `/post/get/public/${$auth.user.id ? $auth.user.id : $auth.user.sub}/0`
+      )
       const posts_count = await $axios.get('/post/get/count/public')
       store.dispatch('setIsLoading', false)
       return {

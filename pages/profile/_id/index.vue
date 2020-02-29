@@ -140,9 +140,11 @@ export default {
     },
     liked(payload) {
       this.posts[payload].likes_count++
+      this.posts[payload].is_liked = 'yes'
     },
     disliked(payload) {
       this.posts[payload].likes_count--
+      this.posts[payload].is_liked = 'no'
     },
     newNotificationFollow() {
       this.$axios
@@ -179,7 +181,9 @@ export default {
           this.activePaginationIndex = index
           this.$store.dispatch('setIsLoading', true)
           const posts = await this.$axios.get(
-            `/post/get/by_user/${this.$route.params.id}/${index}`
+            `/post/get/by_user/${
+              this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
+            }/${this.$route.params.id}/${index}`
           )
           const publicPosts = posts.data.posts.filter(
             post => post.is_private === 0
@@ -211,7 +215,9 @@ export default {
           }`
         )
         const posts = await $axios.get(
-          `/post/get/by_user/${user.data.user.id}/0`
+          `/post/get/by_user/${
+            $auth.user.id ? $auth.user.id : $auth.user.sub
+          }/${user.data.user.id}/0`
         )
         const posts_count = await $axios.get(
           `/post/get/count/by_user/${user.data.user.id}`

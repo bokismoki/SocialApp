@@ -1,11 +1,19 @@
 <template>
   <div class="likes_count">
-    <button class="bg-blue-200 rounded mr-4 px-2 py-1 flex justify-center" @click="likeDislike">
+    <button
+      class="bg-blue-200 rounded mr-4 px-2 py-1 flex justify-center"
+      :class="{'bg-blue-600': post.is_liked === 'yes'}"
+      @click="likeDislike"
+    >
       <div class="relative">
         <div
           class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
         >{{likes_count}}</div>
-        <img class="w-4" src="~/assets/img/like.svg" alt="Gray like icon" />
+        <img
+          class="w-4"
+          :src="post.is_liked === 'yes' ? likeWhiteSrc : likeSrc"
+          alt="Gray like icon"
+        />
       </div>
     </button>
   </div>
@@ -19,7 +27,9 @@ export default {
   props: ['post', 'likes_count', 'index'],
   data() {
     return {
-      socket: io('https://social-app-social.herokuapp.com')
+      socket: io('https://social-app-social.herokuapp.com'),
+      likeWhiteSrc: require('~/assets/img/like_white.svg'),
+      likeSrc: require('~/assets/img/like.svg')
     }
   },
   methods: {

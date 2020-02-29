@@ -61,9 +61,11 @@ export default {
     },
     liked() {
       this.post.likes_count++
+      this.posts[payload].is_liked = 'yes'
     },
     disliked() {
       this.post.likes_count--
+      this.posts[payload].is_liked = 'no'
     },
     deleteComment(payload) {
       this.comments.splice(payload, 1)
@@ -92,7 +94,11 @@ export default {
   async asyncData({ $axios, $auth, params, redirect, store }) {
     try {
       store.dispatch('setIsLoading', true)
-      const post = await $axios.get(`/post/get/by_id/${params.id}`)
+      const post = await $axios.get(
+        `/post/get/by_id/${$auth.user.id ? $auth.user.id : $auth.user.sub}/${
+          params.id
+        }`
+      )
       if (
         ($auth.user.id ? $auth.user.id : $auth.user.sub) !==
         post.data.post.user_id

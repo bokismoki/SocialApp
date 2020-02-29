@@ -92,9 +92,11 @@ export default {
     },
     liked(payload) {
       this.posts[payload].likes_count++
+      this.posts[payload].is_liked = 'yes'
     },
     disliked(payload) {
       this.posts[payload].likes_count--
+      this.posts[payload].is_liked = 'no'
     },
     async updatePagination(index) {
       try {
@@ -103,6 +105,8 @@ export default {
           this.$store.dispatch('setIsLoading', true)
           const posts = await this.$axios.get(
             `/post/get/by_user/${
+              $auth.user.id ? $auth.user.id : $auth.user.sub
+            }/${
               this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub
             }/${index}`
           )
@@ -125,7 +129,9 @@ export default {
         `/user/get/${$auth.user.id ? $auth.user.id : $auth.user.sub}`
       )
       const posts = await $axios.get(
-        `/post/get/by_user/${$auth.user.id ? $auth.user.id : $auth.user.sub}/0`
+        `/post/get/by_user/${$auth.user.id ? $auth.user.id : $auth.user.sub}/${
+          $auth.user.id ? $auth.user.id : $auth.user.sub
+        }/0`
       )
       const posts_count = await $axios.get(
         `/post/get/count/by_user/${

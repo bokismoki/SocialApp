@@ -4,13 +4,13 @@ const router = require('express').Router()
 
 const postController = require('../controllers/post')
 
-router.get('/get/by_user/:id/:limit_index', postController.getByUser)
+router.get('/get/by_user/:visitor_id/:id/:limit_index', postController.getByUser)
 
 router.get('/get/count/by_user/:id', postController.getCountByUser)
 
-router.get('/get/by_id/:id', postController.getById)
+router.get('/get/by_id/:user_id/:id', postController.getById)
 
-router.get('/get/public/:limit_index', postController.getPublic)
+router.get('/get/public/:id/:limit_index', postController.getPublic)
 
 router.get('/get/count/public', postController.getCountPublic)
 
