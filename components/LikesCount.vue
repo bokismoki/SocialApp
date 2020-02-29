@@ -87,7 +87,7 @@ export default {
     newNotificationLike() {
       if (
         (this.$auth.user.id ? this.$auth.user.id : this.$auth.user.sub) !==
-        this.post.user_id
+        this.post.user_id && this.$route.name !== 'profile'
       ) {
         this.$axios
           .post(
