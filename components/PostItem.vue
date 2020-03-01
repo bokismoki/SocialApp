@@ -6,7 +6,13 @@
     </div>
     <p v-if="$route.name !== 'post-id'" class="mt-3 break-words">{{truncate(post.body_text)}}</p>
     <p v-else class="mt-3 break-words">{{post.body_text}}</p>
-    <img v-if="post.body_image" class="mt-2 rounded" :src="post.body_image" alt="Post image" />
+    <img
+      v-if="post.body_image"
+      class="mt-2 rounded cursor-pointer"
+      :src="post.body_image"
+      alt="Post image"
+      @click="openImageModal(post.body_image)"
+    />
     <div class="flex items-center justify-between mt-5">
       <div class="flex items-center">
         <LikesCount
@@ -54,6 +60,9 @@ export default {
     },
     disliked(payload) {
       this.$emit('disliked', payload)
+    },
+    openImageModal(imageSrc) {
+      this.$store.dispatch('setImageSrc', imageSrc)
     }
   }
 }

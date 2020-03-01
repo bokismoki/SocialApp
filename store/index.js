@@ -4,7 +4,8 @@ export const state = () => ({
     isDropdownMenuOpen: false,
     hasNotifications: false,
     onlineUsers: [],
-    messageNotifications: []
+    messageNotifications: [],
+    imageSrc: ''
 })
 
 export const getters = {
@@ -14,7 +15,8 @@ export const getters = {
     hasNotifications: state => state.hasNotifications,
     onlineUsers: state => state.onlineUsers,
     hasMessages: state => Boolean(state.messageNotifications.length),
-    messageNotifications: state => state.messageNotifications
+    messageNotifications: state => state.messageNotifications,
+    imageSrc: state => state.imageSrc
 }
 
 export const mutations = {
@@ -44,6 +46,9 @@ export const mutations = {
     },
     ADD_MESSAGE_NOTIFICATION: (state, payload) => {
         state.messageNotifications.push(payload)
+    },
+    SET_IMAGE_SRC: (state, payload) => {
+        state.imageSrc = payload
     }
 }
 
@@ -139,5 +144,8 @@ export const actions = {
         if (!doesExist) {
             commit('ADD_MESSAGE_NOTIFICATION', payload)
         }
+    },
+    setImageSrc: ({ commit }, payload) => {
+        commit('SET_IMAGE_SRC', payload)
     }
 }

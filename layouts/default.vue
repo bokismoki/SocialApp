@@ -11,6 +11,9 @@
     <div v-if="isLoading">
       <Loader />
     </div>
+    <div v-if="imageSrc">
+      <ImageModal />
+    </div>
   </div>
 </template>
 
@@ -19,11 +22,21 @@ import { mapGetters } from 'vuex'
 import io from 'socket.io-client'
 
 export default {
+  head() {
+    return {
+      bodyAttrs: {
+        class: this.imageSrc
+          ? 'overflow-hidden'
+          : ''
+      }
+    }
+  },
   components: {
     NavBar: () => import('~/components/NavBar'),
     OnlineUsers: () => import('~/components/OnlineUsers'),
     ErrorAlert: () => import('~/components/ErrorAlert'),
-    Loader: () => import('~/components/Loader')
+    Loader: () => import('~/components/Loader'),
+    ImageModal: () => import('~/components/ImageModal')
   },
   data() {
     return {
@@ -31,7 +44,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['errorMsg', 'isLoading', 'onlineUsers'])
+    ...mapGetters(['errorMsg', 'isLoading', 'onlineUsers', 'imageSrc'])
   },
   methods: {
     listenSocket() {
@@ -112,7 +125,4 @@ body {
 </style>
 
 <style scoped>
-.loader_container {
-  background-color: rgba(0, 0, 0, 0.2);
-}
 </style>
