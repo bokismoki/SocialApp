@@ -24,7 +24,7 @@
         />
         <CommentsCount :post="post" :comments_count="comments_count" />
       </div>
-      <div class="flex items-center">
+      <div class="flex items-center" v-if="!post.is_private">
         <p class="text-xs font-semibold">Share:</p>
         <SocialSharing :post="post" />
       </div>
