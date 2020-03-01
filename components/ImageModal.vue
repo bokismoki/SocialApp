@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="m-auto px-5">
-        <img class="w-full rounded border-2 border-white" :src="imageSrc" alt="Post Image" style="max-width: 800px;" />
+        <img class="image w-full rounded border-2 border-white" :src="imageSrc" alt="Post Image" />
       </div>
     </div>
   </div>
@@ -33,5 +33,9 @@ export default {
 <style scoped>
 .modal_bg {
   background-color: rgba(0, 0, 0, 0.7);
+}
+.image {
+  max-width: 800px;
+  max-height: 60vh;
 }
 </style>
