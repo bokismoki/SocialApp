@@ -14,10 +14,20 @@
           >
             <img :src="msg.user_image" class="h-full rounded-full border-2 border-blue-300" alt />
           </div>
-          <p
-            class="text-xs font-semibold rounded mx-2 px-2 py-1 break-words max-w-full"
-            :class="{'bg-blue-600 text-white': msg.user_id === ($auth.user.id ? $auth.user.id : $auth.user.sub), 'bg-gray-500': msg.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)}"
-          >{{msg.body_text}}</p>
+          <div class="relative">
+            <div
+              v-if="msg.user_id === ($auth.user.id ? $auth.user.id : $auth.user.sub)"
+              class="triangle-left absolute left-0 top-0 w-0 h-0 mt-2 border-transparent border-t-4 border-b-4 border-r-8"
+            ></div>
+            <p
+              class="text-xs font-semibold rounded mx-2 px-2 py-1 break-words max-w-full"
+              :class="{'bg-blue-600 text-white': msg.user_id === ($auth.user.id ? $auth.user.id : $auth.user.sub), 'bg-gray-500': msg.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)}"
+            >{{msg.body_text}}</p>
+            <div
+              v-if="msg.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)"
+              class="triangle-right absolute right-0 top-0 w-0 h-0 mt-2 border-transparent border-t-4 border-b-4 border-l-8"
+            ></div>
+          </div>
           <div
             v-if="msg.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)"
             class="user_image h-8 self-start"
@@ -47,5 +57,11 @@ export default {
 }
 .user_image {
   min-width: 2em;
+}
+.triangle-left {
+  border-right-color: #3182ce;
+}
+.triangle-right {
+  border-left-color: #a0aec0;
 }
 </style>
