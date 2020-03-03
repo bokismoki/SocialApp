@@ -76,47 +76,51 @@ exports.update = (req, res) => {
 
 exports.add = (req, res) => {
     const { body_text, user_id, receiver_id } = req.body
-    const encodedMsg = Base64.encode(body_text)
-    const placeholder = [encodedMsg, user_id, receiver_id]
-    const queryAddMessage = `INSERT INTO messages (body_text, user_id, receiver_id)
-    VALUES (?, ?, ?)`
-    sql.query(queryAddMessage, [...placeholder], (err, result) => {
-        if (err) {
-            res.send({ success: false, msg: 'Error on queryAddMessage' })
-        } else {
-            const id = result.insertId
-            const queryGetNewMessage = `SELECT m.id AS message_id, m.body_text,
-            u.id AS user_id, u.image AS user_image,
-            r.id AS receiver_id, r.image AS receiver_image
-            FROM messages m
-            JOIN users u ON u.id = m.user_id
-            JOIN users r ON r.id = m.receiver_id
-            WHERE m.id = ${id}`
-            sql.query(queryGetNewMessage, (err, result) => {
-                if (err) {
-                    res.send({ success: false, msg: 'Error on queryGetNewMessage' })
-                } else {
-                    const decodedMsg = { ...result[0], body_text: Base64.decode(result[0].body_text) }
-                    res.send({ success: true, message: decodedMsg })
-                }
-            })
-
-            const placeholder2 = [{ user_id }, { receiver_id }, { user_id: receiver_id }, {
-                receiver_id: user_id
-            }]
-            const queryGetMessagesCount = `SELECT id
-            FROM messages WHERE (? AND ?) OR (? AND ?)`
-            sql.query(queryGetMessagesCount, [...placeholder2], (err, result) => {
-                if (err) {
-                    res.send({ success: false, msg: 'Error on queryGetMessagesCount' })
-                } else {
-                    if (result.length > 20) {
-                        const queryDeleteMessage = `DELETE FROM messages
-                        WHERE id = ${result[0].id}`
-                        sql.query(queryDeleteMessage)
+    if (body_text.length > 255) {
+        res.send({ success: false, msg: 'Message too long (max 255 chars allowed)' })
+    } else {
+        const encodedMsg = Base64.encode(body_text)
+        const placeholder = [encodedMsg, user_id, receiver_id]
+        const queryAddMessage = `INSERT INTO messages (body_text, user_id, receiver_id)
+        VALUES (?, ?, ?)`
+        sql.query(queryAddMessage, [...placeholder], (err, result) => {
+            if (err) {
+                res.send({ success: false, msg: 'Error on queryAddMessage' })
+            } else {
+                const id = result.insertId
+                const queryGetNewMessage = `SELECT m.id AS message_id, m.body_text,
+                u.id AS user_id, u.image AS user_image,
+                r.id AS receiver_id, r.image AS receiver_image
+                FROM messages m
+                JOIN users u ON u.id = m.user_id
+                JOIN users r ON r.id = m.receiver_id
+                WHERE m.id = ${id}`
+                sql.query(queryGetNewMessage, (err, result) => {
+                    if (err) {
+                        res.send({ success: false, msg: 'Error on queryGetNewMessage' })
+                    } else {
+                        const decodedMsg = { ...result[0], body_text: Base64.decode(result[0].body_text) }
+                        res.send({ success: true, message: decodedMsg })
                     }
-                }
-            })
-        }
-    })
+                })
+
+                const placeholder2 = [{ user_id }, { receiver_id }, { user_id: receiver_id }, {
+                    receiver_id: user_id
+                }]
+                const queryGetMessagesCount = `SELECT id
+                FROM messages WHERE (? AND ?) OR (? AND ?)`
+                sql.query(queryGetMessagesCount, [...placeholder2], (err, result) => {
+                    if (err) {
+                        res.send({ success: false, msg: 'Error on queryGetMessagesCount' })
+                    } else {
+                        if (result.length > 20) {
+                            const queryDeleteMessage = `DELETE FROM messages
+                            WHERE id = ${result[0].id}`
+                            sql.query(queryDeleteMessage)
+                        }
+                    }
+                })
+            }
+        })
+    }
 }
