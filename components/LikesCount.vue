@@ -8,7 +8,7 @@
       <div class="relative">
         <div
           class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
-        >{{likes_count}}</div>
+        >{{likes_count > 99 ? 99 : likes_count}}</div>
         <img
           class="w-4"
           :src="post.is_liked === 'yes' ? likeWhiteSrc : likeSrc"

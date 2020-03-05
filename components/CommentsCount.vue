@@ -7,7 +7,7 @@
       <div class="relative">
         <div
           class="count absolute text-xs font-black text-red-800 bg-white border border-gray-500 rounded-full w-5 h-5 flex justify-center"
-        >{{comments_count}}</div>
+        >{{comments_count > 99 ? 99 : comments_count}}</div>
         <img class="w-4" src="~/assets/img/comments.svg" alt="Gray comments icon" />
       </div>
     </nuxt-link>
