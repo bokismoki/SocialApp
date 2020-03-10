@@ -5,7 +5,7 @@
     <div v-if="$route.name !== 'login'">
       <OnlineUsers :onlineUsers="onlineUsers" />
     </div>
-    <div v-if="errorMsg">
+    <div v-if="errorMsg || $nuxt.isOffline">
       <ErrorAlert />
     </div>
     <div v-if="isLoading">

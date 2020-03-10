@@ -1,6 +1,6 @@
 <template>
   <div class="error_alert fixed z-50 bg-red-600 w-full text-right text-white font-semibold p-2">
-    <p>{{errorMsg}}</p>
+    <p>{{errorMsg || 'You are offline...'}}</p>
   </div>
 </template>
 
