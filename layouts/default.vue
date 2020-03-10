@@ -25,9 +25,7 @@ export default {
   head() {
     return {
       bodyAttrs: {
-        class: this.imageSrc
-          ? 'overflow-hidden'
-          : ''
+        class: this.imageSrc ? 'overflow-hidden' : ''
       }
     }
   },

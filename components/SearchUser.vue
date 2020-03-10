@@ -17,6 +17,7 @@
           <input
             class="px-1 placeholder-black text-sm rounded border-2 border-gray-300"
             type="search"
+            placeholder="User name..."
             id="search"
             v-model="searchValue"
             @input="search"

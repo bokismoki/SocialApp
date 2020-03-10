@@ -10,17 +10,19 @@
         </div>
         <div class="mt-20 lg:mt-0 lg:w-2/3">
           <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">Public Posts</h1>
-          <div v-for="(post, index) in posts" :key="post.post_id">
-            <PostItem
-              :post="post"
-              :index="index"
-              :likes_count="post.likes_count"
-              :comments_count="post.comments_count"
-              @liked="liked"
-              @disliked="disliked"
-              @deletePost="deletePost"
-            />
-          </div>
+          <transition-group name="slide">
+            <div v-for="(post, index) in posts" :key="post.post_id">
+              <PostItem
+                :post="post"
+                :index="index"
+                :likes_count="post.likes_count"
+                :comments_count="post.comments_count"
+                @liked="liked"
+                @disliked="disliked"
+                @deletePost="deletePost"
+              />
+            </div>
+          </transition-group>
           <div>
             <button
               class="bg-blue-700 text-white mx-1 px-2 rounded-sm font-semibold"
@@ -135,5 +137,17 @@ export default {
 */
 .home {
   margin-top: 80px;
+}
+.slide-leave-active,
+.slide-enter-active {
+  transition: transform 500ms, opacity 500ms;
+}
+.slide-enter {
+  transform: translate(20%, 0);
+  opacity: 0;
+}
+.slide-leave-to {
+  transform: translate(5%, 0);
+  opacity: 0;
 }
 </style>

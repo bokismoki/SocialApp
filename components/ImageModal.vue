@@ -2,7 +2,7 @@
   <div class="image_modal">
     <div class="modal_bg fixed w-screen min-h-screen top-0 left-0 z-50 flex" @click.self="closeImageModal">
       <div class="absolute top-0 right-0 mt-5 mr-5" @click="closeImageModal">
-        <button class="flex items-center bg-blue-600 px-2 rounded">
+        <button class="flex items-center bg-blue-600 px-2 rounded hover:bg-blue-500">
           <p class="text-white font-semibold">Close</p>
           <img class="w-10 h-10" src="~/assets/img/cross.svg" alt="Cross Icon" />
         </button>

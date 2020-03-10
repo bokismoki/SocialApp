@@ -71,5 +71,6 @@ export default {
 <style scoped>
 img {
   max-width: 75%;
+  max-height: 500px;
 }
 </style>

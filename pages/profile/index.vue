@@ -34,18 +34,20 @@
           <div class="mt-20 lg:w-2/3 lg:-mt-6">
             <h1 class="uppercase text-gray-800 font-semibold text-2xl mb-5">My Posts</h1>
             <h1 v-if="posts.length === 0">No posts to display, please add one.</h1>
-            <div v-for="(post, index) in posts" :key="post.id">
-              <PostItem
-                :post="post"
-                :user="user"
-                :index="index"
-                :likes_count="post.likes_count"
-                :comments_count="post.comments_count"
-                @liked="liked"
-                @disliked="disliked"
-                @deletePost="deletePost"
-              />
-            </div>
+            <transition-group name="slide">
+              <div v-for="(post, index) in posts" :key="post.post_id">
+                <PostItem
+                  :post="post"
+                  :user="user"
+                  :index="index"
+                  :likes_count="post.likes_count"
+                  :comments_count="post.comments_count"
+                  @liked="liked"
+                  @disliked="disliked"
+                  @deletePost="deletePost"
+                />
+              </div>
+            </transition-group>
             <div>
               <button
                 class="bg-blue-700 text-white mx-1 px-2 rounded-sm font-semibold"
@@ -166,5 +168,17 @@ export default {
 .profile_image {
   bottom: -30%;
   left: 10%;
+}
+.slide-leave-active,
+.slide-enter-active {
+  transition: transform 500ms, opacity 500ms;
+}
+.slide-enter {
+  transform: translate(20%, 0);
+  opacity: 0;
+}
+.slide-leave-to {
+  transform: translate(5%, 0);
+  opacity: 0;
 }
 </style>

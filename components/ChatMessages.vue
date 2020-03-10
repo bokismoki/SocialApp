@@ -14,7 +14,10 @@
           >
             <img :src="msg.user_image" class="h-full rounded-full border-2 border-blue-300" alt />
           </div>
-          <div class="relative">
+          <div
+            class="relative"
+            :class="{'ml-2': msg.user_id === ($auth.user.id ? $auth.user.id : $auth.user.sub), 'mr-2': msg.user_id !== ($auth.user.id ? $auth.user.id : $auth.user.sub)}"
+          >
             <div
               v-if="msg.user_id === ($auth.user.id ? $auth.user.id : $auth.user.sub)"
               class="triangle-left absolute left-0 top-0 w-0 h-0 mt-2 border-transparent border-t-4 border-b-4 border-r-8"
