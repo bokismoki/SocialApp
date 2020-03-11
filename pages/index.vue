@@ -140,7 +140,7 @@ export default {
 }
 .slide-leave-active,
 .slide-enter-active {
-  transition: transform 500ms, opacity 500ms;
+  transition: transform 250ms, opacity 250ms;
 }
 .slide-enter {
   transform: translate(20%, 0);
@@ -149,5 +149,8 @@ export default {
 .slide-leave-to {
   transform: translate(5%, 0);
   opacity: 0;
+}
+.slide-enter-active {
+  transition-delay: 250ms;
 }
 </style>
