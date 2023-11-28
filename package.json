@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@nuxtjs/auth": "^4.8.5",
-    "@nuxtjs/axios": "^5.9.5",
+    "@nuxtjs/axios": "^5.11.0",
     "body-parser": "^1.19.0",
     "cookie-universal-nuxt": "^2.1.1",
     "cross-env": "^7.0.0",
@@ -22,7 +22,7 @@
     "js-base64": "^2.5.2",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
-    "nuxt": "^2.11.0",
+    "nuxt": "^3.0.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "vue-social-sharing": "^2.4.7"
