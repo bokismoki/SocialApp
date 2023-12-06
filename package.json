@@ -23,8 +23,8 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "nuxt": "^2.11.0",
-    "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0",
+    "socket.io": "^3.0.5",
+    "socket.io-client": "^3.0.5",
     "vue-social-sharing": "^2.4.7"
   },
   "devDependencies": {
